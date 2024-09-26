@@ -63,6 +63,13 @@ export const layoutRoutes: Routes = [
               ),
           },
           {
+            path: 'user-management',
+            loadChildren: () =>
+              import('../pages/user/user.module').then(
+                (m) => m.UserModule
+              ),
+          },
+          {
             path: 'data-validation',
             loadChildren: () =>
               import('../pages/data-validation/data-validation.module').then(
