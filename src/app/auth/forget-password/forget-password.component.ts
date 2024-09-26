@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LayoutService } from '../../layout/service/app.layout.service';
-import { ForgetPassword } from '../../layout/api/forget-passwordModel';
+import { ForgetPassword } from '../model/forget-passwordModel';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({

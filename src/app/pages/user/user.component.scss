@@ -1,0 +1,76 @@
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping */
+  }
+  
+  .flex-container .search-container {
+    flex-grow: 1;
+  }
+  
+  @media (max-width: 600px) {
+    .flex-container {
+      flex-direction: column; /* Stack vertically on small screens */
+      align-items: flex-start; /* Align items to the left */
+    }
+  
+    .flex-container button {
+      width: 77%; /* Full width button on small screens */
+      margin-bottom: 10px; /* Add space between button and input */
+    }
+  
+    .flex-container .search-container {
+      width: 100%; /* Full width input container on small screens */
+    }
+  
+    .flex-container .search-container input {
+      width: 100%; /* Full width input field */
+    }
+  }
+
+
+
+  .errors{
+    color: red;
+    font-size: 14px
+  }
+  
+
+  .notification {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    font-size: 18px;
+    z-index: 1000;
+    display: none; /* Hidden by default */
+}
+
+.success {
+    background-color: #4CAF50; /* Success color (green) */
+    color: white;
+}
+
+.error {
+    background-color: #f44336; /* Error color (red) */
+}
+
+/* Add some animation */
+@keyframes slide-down {
+    from {
+        top: -50px;
+        opacity: 0;
+    }
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+.notification.active {
+    display: block;
+    animation: slide-down 0.5s ease-in-out;
+}

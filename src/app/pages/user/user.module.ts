@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserComponent } from './user.component';
 import { RouterModule, Routes } from '@angular/router';
-import { SharedModule } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -18,14 +17,14 @@ import { DialogModule } from 'primeng/dialog';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
-import { UserService } from '../../shared/services/user.service';
+import { BadgeModule } from 'primeng/badge';  // For p-badge
+import { UserService } from './service/user.service';
 
 export const userRoutes: Routes = [
   {
     path: '',
     component: UserComponent
   },
-
 ];
 
 @NgModule({
@@ -34,7 +33,6 @@ export const userRoutes: Routes = [
   ],
   imports: [
     CommonModule,
-    SharedModule,
     TableModule,
     ButtonModule,
     InputTextModule,
@@ -51,10 +49,9 @@ export const userRoutes: Routes = [
     ReactiveFormsModule,
     FormsModule,
     TagModule,
+    BadgeModule,
     RouterModule.forChild(userRoutes)
   ],
   providers: [UserService]  // Register the service here
-
 })
-
 export class UserModule { }

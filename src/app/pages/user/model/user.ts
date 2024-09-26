@@ -3,6 +3,8 @@ export interface User {
     name?: string;
     role?: string;
     email?: string;
+    password?: string;
+    cfPassword?: string;
     inventoryStatus?: string;
     date?: string | Date;
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { LayoutService } from '../../layout/service/app.layout.service';
 import { Router } from '@angular/router';
 import { SnackbarService } from '../../shared/services/snackbar.service';
-import { LoginModel } from '../../layout/api/loginModel';
+import { LoginModel } from '../model/loginModel';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({

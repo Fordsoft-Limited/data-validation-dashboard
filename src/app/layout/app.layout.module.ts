@@ -76,6 +76,13 @@ export const layoutRoutes: Routes = [
                 (m) => m.DataValidationModule
               ),
           },
+          {
+            path: 'data-table',
+            loadChildren: () =>
+              import('../pages/test-data-table/test-data-table.module').then(
+                (m) => m.TestDataTableModule
+              ),
+          },
     ]
     },
 

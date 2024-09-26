@@ -10,7 +10,6 @@ import { FormsModule } from '@angular/forms';
 import { RippleModule } from 'primeng/ripple';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
-
 export const securityRoutes: Routes = [
   {
     path: '',
