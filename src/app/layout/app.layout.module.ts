@@ -67,11 +67,27 @@ export const layoutRoutes: Routes = [
               ),
           },
           {
+            path: 'user-management',
+            data:{breadcrumb: 'User Management'},
+            loadChildren: () =>
+              import('../pages/user/user.module').then(
+                (m) => m.UserModule
+              ),
+          },
+          {
             path: 'data-validation',
             data:{breadcrumb: 'Data Validation'},
             loadChildren: () =>
               import('../pages/data-validation/data-validation.module').then(
                 (m) => m.DataValidationModule
+              ),
+          },
+          {
+            path: 'data-table',
+            data:{breadcrumb: 'Data Table'},
+            loadChildren: () =>
+              import('../pages/test-data-table/test-data-table.module').then(
+                (m) => m.TestDataTableModule
               ),
           },
 

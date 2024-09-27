@@ -21,10 +21,10 @@ export class AppMenuComponent implements OnInit {
                  {label: 'Reports', icon: 'pi pi-fw pi-file', routerLink: ['/app/reports'] },
                  {label: 'Processed Data', icon: 'pi pi-fw pi-folder', routerLink: ['/app/processed-data'] },
                  {label: 'Checker', icon: 'pi pi-fw pi-check-square', routerLink: ['/app/checkers'] },
-                 {label: 'Users Management', icon: 'pi pi-fw pi-users', routerLink: ['/app/users-management'] },
+                 {label: 'User Management', icon: 'pi pi-fw pi-users', routerLink: ['/app/user-management'] },
                  {label: 'Data Validation', icon: 'pi pi-fw pi-sitemap', routerLink: ['/app/data-validation'] },
                  {label: 'Settings', icon: 'pi pi-fw pi-cog', routerLink: ['/app/settings'] },
-                //  {label: 'QRCode Scan Data', icon: 'pi pi-fw pi-qrcode', routerLink: ['qr-codes'] },
+                 {label: 'Data table', icon: 'pi pi-fw pi-qrcode', routerLink: ['data-table'] },
              ]
          },
 

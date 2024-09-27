@@ -1,0 +1,251 @@
+<div class="card">
+  <p-toast></p-toast>
+  
+  <p-table [value]="users" dataKey="id" editMode="row" [tableStyle]="{'min-width': '100rem'}"
+      #dt1
+      [(selection)]="selectedUsers"
+      dataKey="id"
+      [rowHover]="true"
+      [rows]="5"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [loading]="loading"
+      [paginator]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [filterDelay]="0"
+      [globalFilterFields]="['name', 'role', 'email', 'status']"
+  >
+  <ng-template pTemplate="caption">
+      <div class="flex-container">
+          <button pButton pRipple label="Add New User" icon="pi pi-plus" class="p-button-secondary p-button-outlined mr-2" (click)="openNew()"></button>
+        
+          <div class="p-input-icon-left">
+            <i class="pi pi-search" style="margin-top: -3px;"></i>
+            <input pInputText type="text" [(ngModel)]="searchValue" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Keyword Search">
+          </div>
+        </div>
+  </ng-template>
+  
+      <ng-template pTemplate="header">
+          <tr>
+              <th style="width: 10%">
+                  <p-tableHeaderCheckbox ></p-tableHeaderCheckbox>
+              </th>
+              <th style="width:20%">
+                  Name
+              </th>
+              <th style="width:20%">Email
+                  
+              </th>
+              <th style="width:20%">Role
+                 
+              </th>
+              <th style="width: 20%">Status
+                 
+              </th>
+             
+              <th style="min-width: 20rem">
+                  <div class="flex justify-content-between align-items-center">
+                      Date
+                  </div>
+              </th>
+
+              <th style="width:20%"></th>
+             
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user let-editing="editing" let-ri="rowIndex">
+          <tr [pEditableRow]="user">
+              <td>
+                  <p-tableCheckbox [value]="user"></p-tableCheckbox>
+              </td>
+              <td>
+                  
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <input 
+                              pInputText type="text" 
+                              [(ngModel)]="user.name" />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{user.name}}
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <input 
+                              pInputText type="text" 
+                              [(ngModel)]="user.email" 
+                              required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{user.email}}
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <input 
+                              pInputText type="text" 
+                              [(ngModel)]="user.role" 
+                              required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{user.role}}
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-dropdown 
+                              [options]="statuses" 
+                              appendTo="body" 
+                              [(ngModel)]="user.inventoryStatus">
+                          </p-dropdown>    
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          <p-badge [value]="user.inventoryStatus" [severity]="getSeverity(user.inventoryStatus)"></p-badge> 
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <input 
+                              pInputText type="text" 
+                              [(ngModel)]="user.date" />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{user.date | date: 'MM/dd/yyyy'}}
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+          <div style="margin-left: -280px;" class="flex align-items-center justify-content-center gap-2">
+              <button 
+                  *ngIf="!editing" 
+                  pButton 
+                  pRipple 
+                  type="button" 
+                  pInitEditableRow 
+                  icon="pi pi-pencil" 
+                  (click)="onRowEditInit(user)" 
+                  class="p-button-rounded p-button-text">
+              </button>
+              <button 
+                  *ngIf="editing" 
+                  pButton 
+                  pRipple 
+                  type="button" 
+                  pSaveEditableRow 
+                  icon="pi pi-check" 
+                  (click)="onRowEditSave(user)" 
+                  class="p-button-rounded p-button-text p-button-success mr-2">
+              </button>
+              <button 
+                  *ngIf="editing" 
+                  pButton pRipple 
+                  type="button" 
+                  pCancelEditableRow 
+                  icon="pi pi-times" 
+                  (click)="onRowEditCancel(user, ri)" 
+                  class="p-button-rounded p-button-text p-button-danger">
+              </button>
+          </div>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+
+
+  <p-dialog 
+  [(visible)]="userDialog" 
+  [style]="{ width: '450px' }" 
+  header="User Details" 
+  [modal]="true" 
+  styleClass="p-fluid">
+  <ng-template pTemplate="content">
+      <form [formGroup]="userForm">
+          <div class="col-12">
+              <div class="p-fluid p-formgrid grid">
+
+                  <!-- <div *ngIf="userAddedSuccess" class="notification success">
+                      User added successfully!
+                  </div> -->
+
+                  <div class="field col-12 md:col-12">
+                      <label [attr.for]="'name'">Name</label>
+                      <input pInputText id="name" type="text" class="form-control" formControlName="name"  required/>
+
+                      <div class="mt-2" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
+                          <span class="errors" *ngIf="name?.errors?.['required']">*Name is Required.</span>
+                          <span class="errors" *ngIf="name?.errors?.['pattern']">*Enter only characters.</span>
+
+                      </div>
+                  </div>
+
+                  <div class="field col-12 md:col-12">
+                      <label [attr.for]="'email'">Email</label>
+                      <input pInputText id="email" type="email"  class="form-control" formControlName="email"  required/>
+                      <div class="mt-2" *ngIf="email?.invalid && (email?.touched || email?.dirty)">
+                          <span class="errors" *ngIf="email?.errors?.['required']">*Email is Required.</span>
+                          <span class="errors" *ngIf="email?.errors?.['pattern']">*Enter a valid email address.</span>
+
+                      </div>
+                  </div>
+
+                  <div class="field col-12 md:col-12">
+                      <label [attr.for]="'role'">Role</label>
+                      <p-multiSelect
+                          [options]="role"
+                          formControlName="role"
+                          class="form-control"
+                          defaultLabel="Select a Role"
+                          optionLabel="name"
+                          display="chip" 
+                      ></p-multiSelect>
+                      <!-- <div class="mt-2" *ngIf="role?.invalid && (role?.touched || role?.dirty)">
+                          <span class="error" *ngIf="role?.errors?.['required']">*Role is Required.</span>
+                      </div> -->
+                  </div>
+
+                  <div class="field col-6 md:col-6">
+                      <label [attr.for]="'password'">Password</label>
+                      <input pInputText id="password" type="password"  class="form-control" formControlName="password" required/>
+                      <div class="mt-2" *ngIf="password?.invalid && (password?.touched || password?.dirty)">
+                          <span class="errors" *ngIf="password?.errors?.['required']">*Password is required.</span>
+                          <span class="errors" *ngIf="password?.errors?.['minlength']">*Password must be at least 4 characters long.</span>
+                        </div>
+                  </div>
+
+                  <div class="field col-6 md:col-6">
+                      <label [attr.for]="'cfPassword'">Confirm Password</label>
+                      <input pInputText id="cfPassword" type="password"  class="form-control" formControlName="cfPassword" required />
+                      <div class="mt-2" *ngIf="cfPassword?.invalid && (cfPassword?.touched || cfPassword?.dirty)">
+                          <span class="errors" *ngIf="cfPassword?.errors?.['required']">*Confirm Password is required.</span>
+                          <span class="errors" *ngIf="userForm?.errors?.['passwordMismatch']">*Passwords do not match.</span>
+                        </div>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+      <p-button
+          label="Save" 
+          [text]="true" 
+          [disabled]="userForm.invalid"
+          (onClick)="addUser()">
+      </p-button>
+  </ng-template>
+</p-dialog>
+
+
+
+</div>
+
