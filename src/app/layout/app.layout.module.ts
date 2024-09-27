@@ -36,6 +36,7 @@ export const layoutRoutes: Routes = [
       children: [
         {
             path: '',
+            data:{breadcrumb: 'Dashboard'},
             loadChildren: () =>
               import('../pages/dashboard/dashboard.module').then(
                 (m) => m.DashboardModule
@@ -43,6 +44,7 @@ export const layoutRoutes: Routes = [
           },
           {
             path: 'reports',
+            data:{breadcrumb: 'Reports'},
             loadChildren: () =>
               import('../pages/reports/reports.module').then(
                 (m) => m.ReportsModule
@@ -50,6 +52,7 @@ export const layoutRoutes: Routes = [
           },
           {
             path: 'processed-data',
+            data:{breadcrumb: 'Processed Data'},
             loadChildren: () =>
               import('../pages/processed-data/processed-data.module').then(
                 (m) => m.ProcessedDataModule
@@ -57,6 +60,7 @@ export const layoutRoutes: Routes = [
           },
           {
             path: 'checkers',
+            data:{breadcrumb: 'Checkers'},
             loadChildren: () =>
               import('../pages/checker/checker.module').then(
                 (m) => m.CheckerModule
@@ -64,9 +68,19 @@ export const layoutRoutes: Routes = [
           },
           {
             path: 'data-validation',
+            data:{breadcrumb: 'Data Validation'},
             loadChildren: () =>
               import('../pages/data-validation/data-validation.module').then(
                 (m) => m.DataValidationModule
+              ),
+          },
+
+          {
+            path:'settings',
+            data:{breadcrumb: 'Settings'},
+            loadChildren: () =>
+              import('../pages/settings/settings.module').then(
+                (m) => m.SettingsModule
               ),
           },
     ]
