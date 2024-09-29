@@ -1,0 +1,109 @@
+<div class="grid">
+
+    <div class="col-12 mt-2">
+        <h3>Account Settings</h3>
+    </div>
+
+    <div class="col-12 -mt-4">
+        <p-tabView [style]="{'background-color': 'transparent'}">
+            <p-tabPanel header="Profile" leftIcon="pi pi-user">
+                <!-- [headerStyle]='{"width": "250px"}' -->
+                <div class="settings-container">
+                    <div class="profile-content">
+                        <div class="image-upload-section">
+                            <div class="image-container" *ngIf="!imageUrl">
+                                <i class="pi pi-camera" style="font-size: 1.5rem"></i>
+                            </div>
+                            <div class="image-preview" *ngIf="imageUrl">
+                                <img [src]="imageUrl" alt="Profile Image" class="profile-image" />
+                            </div>
+
+
+                            <!-- PrimeNG FileUpload component -->
+                            <p-fileUpload #fileInput mode="basic" accept="image/*" [maxFileSize]="1000000"
+                                (onSelect)="onImageSelect($event)" [auto]="false" [customUpload]="true"
+                                (uploadHandler)="onUpload($event)" chooseLabel="Upload Image"
+                                class="file-upload"></p-fileUpload>
+
+                            <button pButton (click)="cancelUpload()" class="p-button-danger">Cancel Upload</button>
+                        </div>
+
+                        <!-- Profile Edit Form -->
+                        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+                            <!-- Name Input -->
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input id="name" type="text" pInputText placeholder="Enter your name" class="input-text"
+                                    formControlName="name" />
+                            </div>
+
+                            <!-- Email Input -->
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input id="email" type="email" pInputText placeholder="Enter your email"
+                                    formControlName="email" class="input-text" />
+                            </div>
+
+                            <!-- Phone Number Input -->
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input id="phone" type="tel" pInputText placeholder="Enter your phone number"
+                                    formControlName="phone" class="input-text" />
+                            </div>
+
+                            <!-- Save Button -->
+                            <button pButton label="Save Changes" icon="pi pi-check" class="p-button-success"></button>
+                        </form>
+                    </div>
+                </div>
+
+
+            </p-tabPanel>
+            <p-tabPanel header="Change Password" leftIcon="pi pi-sync">
+                <div class="settings-container mt-4">
+                    <div class="max-w-19rem">
+                        <form [formGroup]="passwordForm" (ngSubmit)="handlePasswordChange()">
+                            <div class="form-group flex flex-column gap-2">
+                                <label for="">Current Password</label>
+                                <p-password  [toggleMask]="true" class="w-full custom-password" [feedback]="false" formControlName="currentPassword" />
+                                <small *ngIf="passwordForm.get('currentPassword')?.touched && passwordForm.get('currentPassword')?.invalid" class="p-error">
+                                    Current Password is required and must be at least 6 characters.
+                                  </small>
+                                
+                            </div>
+                            <div class="form-group flex flex-column gap-2">
+                                <label for="">New Password</label>
+                                <p-password [toggleMask]="true" class="w-full custom-password"  formControlName="newPassword" />
+                                <small *ngIf="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.invalid" class="p-error">
+                                    New Password is required and must be at least 6 characters.
+                                  </small>
+                            </div>
+                            <div class="form-group flex flex-column gap-2">
+                                <label for="">Comfirm New Password</label>
+                                <p-password [toggleMask]="true" class="w-full custom-password" formControlName="confirmPassword"/>
+                                <small  *ngIf="passwordForm.errors?.['mismatch'] && passwordForm.get('confirmPassword')?.touched"
+                                class="p-error">
+                                    Passwords do not match.
+                                 </small>
+                            </div>
+    
+                            <button pButton label=" Change Password"  class="p-button w-full" type="submit"></button>
+                        </form>
+                    </div>
+                   
+                </div>
+            </p-tabPanel>
+            <!-- <p-tabPanel header="Header III">
+                <p>
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
+                    deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
+                    provident, similique sunt in culpa
+                    qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis
+                    est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil
+                    impedit quo minus.
+                </p>
+            </p-tabPanel> -->
+        </p-tabView>
+    </div>
+
+</div>

@@ -9,7 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
 import { CarouselModule } from 'primeng/carousel';
-// import { ChartModule } from 'primeng/chart';
+import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ChipsModule } from 'primeng/chips';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -50,7 +50,7 @@ import { DataTableComponent } from './data-table/data-table.component';
     CalendarModule,
     CardModule,
     CarouselModule,
-    // ChartModule,
+    ChartModule,
     CheckboxModule,
     ChipsModule,
     ConfirmDialogModule,
@@ -87,7 +87,7 @@ import { DataTableComponent } from './data-table/data-table.component';
     CalendarModule,
     CardModule,
     CarouselModule,
-    // ChartModule,
+    ChartModule,
     CheckboxModule,
     ChipsModule,
     ConfirmDialogModule,

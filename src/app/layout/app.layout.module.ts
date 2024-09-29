@@ -36,6 +36,7 @@ export const layoutRoutes: Routes = [
       children: [
         {
             path: '',
+            data:{breadcrumb: 'Dashboard'},
             loadChildren: () =>
               import('../pages/dashboard/dashboard.module').then(
                 (m) => m.DashboardModule
@@ -43,6 +44,7 @@ export const layoutRoutes: Routes = [
           },
           {
             path: 'reports',
+            data:{breadcrumb: 'Reports'},
             loadChildren: () =>
               import('../pages/reports/reports.module').then(
                 (m) => m.ReportsModule
@@ -50,6 +52,7 @@ export const layoutRoutes: Routes = [
           },
           {
             path: 'processed-data',
+            data:{breadcrumb: 'Processed Data'},
             loadChildren: () =>
               import('../pages/processed-data/processed-data.module').then(
                 (m) => m.ProcessedDataModule
@@ -57,13 +60,23 @@ export const layoutRoutes: Routes = [
           },
           {
             path: 'checkers',
+            data:{breadcrumb: 'Checkers'},
             loadChildren: () =>
               import('../pages/checker/checker.module').then(
                 (m) => m.CheckerModule
               ),
           },
           {
+            path: 'user-management',
+            data:{breadcrumb: 'User Management'},
+            loadChildren: () =>
+              import('../pages/user/user.module').then(
+                (m) => m.UserModule
+              ),
+          },
+          {
             path: 'data-validation',
+            data:{breadcrumb: 'Data Validation'},
             loadChildren: () =>
               import('../pages/data-validation/data-validation.module').then(
                 (m) => m.DataValidationModule
@@ -71,9 +84,19 @@ export const layoutRoutes: Routes = [
           },
           {
             path: 'data-table',
+            data:{breadcrumb: 'Data Table'},
             loadChildren: () =>
               import('../pages/test-data-table/test-data-table.module').then(
                 (m) => m.TestDataTableModule
+              ),
+          },
+
+          {
+            path:'settings',
+            data:{breadcrumb: 'Settings'},
+            loadChildren: () =>
+              import('../pages/settings/settings.module').then(
+                (m) => m.SettingsModule
               ),
           },
     ]

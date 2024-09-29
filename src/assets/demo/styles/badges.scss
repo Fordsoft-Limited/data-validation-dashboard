@@ -40,6 +40,34 @@
     }
 }
 
+.bulk-badge {
+    border-radius: var(--border-radius);
+    padding: .25em .5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px;
+
+    &.status-completed {
+        background: var(--green-200);
+        color: var(--green-800);
+    }
+
+    &.status-failed {
+        background: var(--pink-200);
+        color: var(--pink-800);
+    }
+
+    &.status-inprogress {
+        background: var(--yellow-200);
+        color: var(--yellow-800);
+    }
+
+    &.status-pending {
+        background: var(--yellow-200);
+        color: var(--yellow-800);
+    }
+}
 .customer-badge {
     border-radius: var(--border-radius);
     padding: .25em .5rem;
