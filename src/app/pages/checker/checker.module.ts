@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CheckerComponent } from './checker.component';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'primeng/api';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 export const checkRoutes: Routes = [
   {
@@ -19,7 +20,9 @@ export const checkRoutes: Routes = [
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule.forChild(checkRoutes)
+    RouterModule.forChild(checkRoutes),
+    ReactiveFormsModule,
+    FormsModule,
   ]
 })
 export class CheckerModule { }

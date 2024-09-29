@@ -1,1 +1,98 @@
-<p>data-validation works!</p>
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+              <button pButton pRipple label="Review" icon="pi pi-check" class="p-button-success mr-2" (click)="goToReviewPage()" [disabled]="!selectedRecords || !selectedRecords.length"></button>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="right">
+          <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="exportSelectedRecords()"></button>
+        </ng-template>
+    </p-toolbar>
+
+      <p-table #dt [value]="records" [globalFilterFields]="['customerId', 'cin', 'statusCode']" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedRecords" selectionMode="multiple" [rowHover]="true" dataKey="customerId">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Data Approval/Review</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." class="w-full sm:w-auto"/>
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="customerId">Customer ID <p-sortIcon field="customerId"></p-sortIcon></th>
+            <th pSortableColumn="cin">CIN <p-sortIcon field="cin"></p-sortIcon></th>
+            <th pSortableColumn="statusCode">Status <p-sortIcon field="statusCode"></p-sortIcon></th>
+            <th>Action </th>
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-record>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="record"></p-tableCheckbox>
+            </td>
+            <td>{{record.customerId}}</td>
+            <td>{{record.cin}}</td>
+            <td>
+              <span [class]="'statusCode-' + record.statusCode.toLowerCase()">{{record.statusCode}}</span>
+
+            </td>
+            <td>
+              <div class="flex ">
+
+              </div>
+              <div class="my-2 right">
+
+
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" ></button>
+                <button pButton pRipple  icon="pi pi-trash" class="p-button-danger" (click)="rejectRecord(record)"></button>
+
+            </div>
+            </td>
+          </tr>
+        </ng-template>
+
+      </p-table>
+    </div>
+
+    <p-dialog [(visible)]="reviewDialog" header="Review Record" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="comments">Comments</label>
+          <textarea id="comments" pInputTextarea [(ngModel)]="comments" rows="3" cols="20"></textarea>
+        </div>
+        <div class="field">
+          <button pButton pRipple label="Approve" icon="pi pi-check" (click)="approveRecord()"></button>
+          <button pButton pRipple label="Reject" icon="pi pi-times"></button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" (click)="hideReviewDialog()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="rejectDialog" header="Reject Record" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="rejectReason">Reason for Rejection</label>
+          <input type="text" pInputText id="rejectReason" [(ngModel)]="rejectReason" required />
+        </div>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" (click)="hideRejectDialog()"></button>
+        <button pButton pRipple label="Reject" icon="pi pi-check" (click)="confirmReject()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>

@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrl: './checker.component.scss'
 })
 export class CheckerComponent {
-
+  value: any;
 }

@@ -16,7 +16,6 @@ import { SharedModule } from './shared/shared.module';
     AppLayoutModule,
     BrowserModule,
     BrowserAnimationsModule,
-    SharedModule
   ],
   providers: [
 

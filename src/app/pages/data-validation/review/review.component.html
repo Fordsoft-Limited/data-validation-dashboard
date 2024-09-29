@@ -1,0 +1,218 @@
+<div class="grid">
+  <div class="col-12 md:col-6">
+    <div class="card h-full">
+      <h5>Selected Records</h5>
+      <div class="selected-records-list">
+        <div *ngFor="let record of selectedRecords" class="flex align-items-center mt-4 justify-content-between">
+          <div class="flex w-7 align-items-center justify-content-between">
+            <span class="font-medium">{{ record.customerId }}</span>
+            <span class="text-color-secondary">{{ record.cin }}</span>
+          </div>
+          <button pButton label="Reject" class="p-button-danger" (click)="rejectRecord(record)"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 md:col-6">
+    <div class="card h-full">
+      <h5>Record Details</h5>
+      <div *ngIf="currentRecord" class="p-formgrid grid">
+        <div class="field col">
+          <label for="customerId">Customer ID</label>
+          <input pInputText id="customerId" [(ngModel)]="currentRecord.customerId" required />
+        </div>
+        <div class="field col">
+          <label for="cin">CIN</label>
+          <input pInputText id="cin" [(ngModel)]="currentRecord.cin" required />
+        </div>
+        <div class="field col">
+          <label for="fullName">Full Name</label>
+          <input pInputText id="fullName" [(ngModel)]="currentRecord.customerFullName" required />
+        </div>
+        <div class="field col">
+          <label for="accountNo">Account No</label>
+          <input pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+        </div>
+        <div class="field col">
+          <label for="meterNo">Meter No</label>
+          <input pInputText id="meterNo" [(ngModel)]="currentRecord.meterNo" required />
+        </div>
+        <div class="field col">
+          <label for="address">Address</label>
+          <input pInputText id="address" [(ngModel)]="currentRecord.address" required />
+        </div>
+        <div class="field col">
+          <label for="city">City</label>
+          <input pInputText id="city" [(ngModel)]="currentRecord.city" required />
+        </div>
+        <div class="field col">
+          <label for="lga">LGA</label>
+          <input pInputText id="lga" [(ngModel)]="currentRecord.lga" required />
+        </div>
+        <div class="field col">
+          <label for="state">State</label>
+          <input pInputText id="state" [(ngModel)]="currentRecord.state" required />
+        </div>
+        <div class="field col">
+          <label for="nearestLandmark">Nearest Landmark</label>
+          <input pInputText id="nearestLandmark" [(ngModel)]="currentRecord.nearestLandmark" required />
+        </div>
+        <div class="field col">
+          <label for="setupDate">Setup Date</label>
+          <input pInputText id="setupDate" [(ngModel)]="currentRecord.setupDate" required />
+        </div>
+        <div class="field col">
+          <label for="latitude">Latitude</label>
+          <input pInputText id="latitude" [(ngModel)]="currentRecord.latitude" required />
+        </div>
+        <div class="field col">
+          <label for="longitude">Longitude</label>
+          <input pInputText id="longitude" [(ngModel)]="currentRecord.longitude" required />
+        </div>
+        <div class="field col">
+          <label for="applicationDate">Application Date</label>
+          <input pInputText id="applicationDate" [(ngModel)]="currentRecord.applicationDate" required />
+        </div>
+        <div class="field col">
+          <label for="mobile">Mobile</label>
+          <input pInputText id="mobile" [(ngModel)]="currentRecord.mobile" required />
+        </div>
+        <div class="field col">
+          <label for="email">Email</label>
+          <input pInputText id="email" [(ngModel)]="currentRecord.email" required />
+        </div>
+        <div class="field col">
+          <label for="statusCode">Status Code</label>
+          <p-dropdown
+            id="statusCode"
+            [(ngModel)]="currentRecord.statusCode"
+            [options]="statusCodes"
+            placeholder="Select Status Code"
+            required>
+          </p-dropdown>
+        </div>
+        <div class="field col">
+          <label for="accountType">Account Type</label>
+          <p-dropdown
+            id="accountType"
+            [(ngModel)]="currentRecord.accountType"
+            [options]="accountTypes"
+            placeholder="Select Account Type"
+            required>
+          </p-dropdown>
+        </div>
+        <div class="field col">
+          <label for="currentTariffCode">Current Tariff Code</label>
+          <input pInputText id="currentTariffCode" [(ngModel)]="currentRecord.currentTariffCode" required />
+        </div>
+        <div class="field col">
+          <label for="correctTariffCode">Correct Tariff Code</label>
+          <input pInputText id="correctTariffCode" [(ngModel)]="currentRecord.correctTariffCode" required />
+        </div>
+        <div class="field col">
+          <label for="tariffClass">Tariff Class</label>
+          <input pInputText id="tariffClass" [(ngModel)]="currentRecord.tariffClass" required />
+        </div>
+        <div class="field col">
+          <label for="feeder">Feeder</label>
+          <input pInputText id="feeder" [(ngModel)]="currentRecord.feeder" required />
+        </div>
+        <div class="field col">
+          <label for="feederId">Feeder ID</label>
+          <input pInputText id="feederId" [(ngModel)]="currentRecord.feederId" required />
+        </div>
+        <div class="field col">
+          <label for="serviceCenter">Service Center</label>
+          <input pInputText id="serviceCenter" [(ngModel)]="currentRecord.serviceCenter" required />
+        </div>
+        <div class="field col">
+          <label for="distributionName">Distribution Name</label>
+          <input pInputText id="distributionName" [(ngModel)]="currentRecord.distributionName" required />
+        </div>
+        <div class="field col">
+          <label for="dssId">DSS ID</label>
+          <input pInputText id="dssId" [(ngModel)]="currentRecord.dssId" required />
+        </div>
+        <div class="field col">
+          <label for="ltPoleId">LT Pole ID</label>
+          <input pInputText id="ltPoleId" [(ngModel)]="currentRecord.ltPoleId" required />
+        </div>
+        <div class="field col">
+          <label for="serviceWire">Service Wire</label>
+          <input pInputText id="serviceWire" [(ngModel)]="currentRecord.serviceWire" required />
+        </div>
+        <div class="field col">
+          <label for="upriser">Upriser</label>
+          <input pInputText id="upriser" [(ngModel)]="currentRecord.upriser" required />
+        </div>
+        <div class="field col">
+          <label for="region">Region</label>
+          <input pInputText id="region" [(ngModel)]="currentRecord.region" required />
+        </div>
+        <div class="field col">
+          <label for="businessHub">Business Hub</label>
+          <input pInputText id="businessHub" [(ngModel)]="currentRecord.businessHub" required />
+        </div>
+        <div class="field col">
+          <label for="accountCategory">Account Category</label>
+          <input pInputText id="accountCategory" [(ngModel)]="currentRecord.accountCategory" required />
+        </div>
+        <div class="field col">
+          <label for="connectionType">Connection Type</label>
+          <input pInputText id="connectionType" [(ngModel)]="currentRecord.connectionType" required />
+        </div>
+        <div class="field col">
+          <label for="custNatureOfBusiness">Nature of Business</label>
+          <input pInputText id="custNatureOfBusiness" [(ngModel)]="currentRecord.custNatureOfBusiness" required />
+        </div>
+        <div class="field col">
+          <label for="customerNIN">Customer NIN</label>
+          <input pInputText id="customerNIN" [(ngModel)]="currentRecord.customerNIN" required />
+        </div>
+        <div class="field col">
+          <label for="supplyType">Supply Type</label>
+          <p-dropdown
+            id="supplyType"
+            [(ngModel)]="currentRecord.customerSupplyType"
+            [options]="supplyTypes"
+            placeholder="Select Supply Type"
+            required>
+          </p-dropdown>
+        </div>
+
+
+      </div>
+      <div class="flex justify-content-between">
+        <button pButton label="Previous" (click)="previousRecord()" [disabled]="isFirstRecord()"></button>
+        <button pButton label="Next" (click)="nextRecord()" [disabled]="isLastRecord()"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Dialog -->
+  <p-dialog header="Review Record" [(visible)]="reviewDialog" modal="modal" [closable]="false">
+    <div class="p-field">
+
+    </div>
+    <div class="field col">
+      <label>Comments</label>
+      <textarea pInputTextarea [(ngModel)]="comments" rows="5"></textarea>
+    </div>
+    <div class="p-mt-2">
+      <button pButton label="Approve" class="p-button-success" (click)="confirmReview()"></button>
+      <button pButton label="Cancel" class="p-button-secondary" (click)="cancelReview()"></button>
+    </div>
+  </p-dialog>
+
+  <!-- Reject Dialog -->
+  <p-dialog header="Reject Record" [(visible)]="rejectDialog" modal="modal" [closable]="false">
+    <div class="field col">
+      <label>Reason for Rejection</label>
+      <textarea pInputTextarea [(ngModel)]="rejectReason" rows="5"></textarea>
+    </div>
+    <div class="p-mt-2">
+      <button pButton label="Confirm" class="p-button-danger" (click)="confirmReject()"></button>
+      <button pButton label="Cancel" class="p-button-secondary" (click)="cancelReject()"></button>
+    </div>
+  </p-dialog>
+</div>

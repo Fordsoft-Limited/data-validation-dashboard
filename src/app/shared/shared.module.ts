@@ -77,6 +77,7 @@ import { DataTableComponent } from './data-table/data-table.component';
     TooltipModule,
     TreeModule,
     TreeTableModule,
+
   ],
   exports: [
     CommonModule,
