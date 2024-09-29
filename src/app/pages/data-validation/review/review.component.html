@@ -3,7 +3,7 @@
     <div class="card h-full">
       <h5>Selected Records</h5>
       <div class="selected-records-list">
-        <div *ngFor="let record of selectedRecords" class="flex align-items-center mt-4 justify-content-between">
+        <div *ngFor="let record of selectedRecords ; let i = index" (click)="currentIndex = i; currentRecord = record" class="flex align-items-center mt-4 justify-content-between">
           <div class="flex w-7 align-items-center justify-content-between">
             <span class="font-medium">{{ record.customerId }}</span>
             <span class="text-color-secondary">{{ record.cin }}</span>
@@ -19,67 +19,67 @@
       <div *ngIf="currentRecord" class="p-formgrid grid">
         <div class="field col">
           <label for="customerId">Customer ID</label>
-          <input pInputText id="customerId" [(ngModel)]="currentRecord.customerId" required />
+          <input [disabled]="true"  pInputText id="customerId" [(ngModel)]="currentRecord.customerId" required />
         </div>
         <div class="field col">
           <label for="cin">CIN</label>
-          <input pInputText id="cin" [(ngModel)]="currentRecord.cin" required />
+          <input [disabled]="true" pInputText id="cin" [(ngModel)]="currentRecord.cin" required />
         </div>
         <div class="field col">
           <label for="fullName">Full Name</label>
-          <input pInputText id="fullName" [(ngModel)]="currentRecord.customerFullName" required />
+          <input [disabled]="true" pInputText id="fullName" [(ngModel)]="currentRecord.customerFullName" required />
         </div>
         <div class="field col">
           <label for="accountNo">Account No</label>
-          <input pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+          <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
         </div>
         <div class="field col">
           <label for="meterNo">Meter No</label>
-          <input pInputText id="meterNo" [(ngModel)]="currentRecord.meterNo" required />
+          <input [disabled]="true" pInputText id="meterNo" [(ngModel)]="currentRecord.meterNo" required />
         </div>
         <div class="field col">
           <label for="address">Address</label>
-          <input pInputText id="address" [(ngModel)]="currentRecord.address" required />
+          <input [disabled]="true" pInputText id="address" [(ngModel)]="currentRecord.address" required />
         </div>
         <div class="field col">
           <label for="city">City</label>
-          <input pInputText id="city" [(ngModel)]="currentRecord.city" required />
+          <input [disabled]="true" pInputText id="city" [(ngModel)]="currentRecord.city" required />
         </div>
         <div class="field col">
           <label for="lga">LGA</label>
-          <input pInputText id="lga" [(ngModel)]="currentRecord.lga" required />
+          <input [disabled]="true" pInputText id="lga" [(ngModel)]="currentRecord.lga" required />
         </div>
         <div class="field col">
           <label for="state">State</label>
-          <input pInputText id="state" [(ngModel)]="currentRecord.state" required />
+          <input [disabled]="true" pInputText id="state" [(ngModel)]="currentRecord.state" required />
         </div>
         <div class="field col">
           <label for="nearestLandmark">Nearest Landmark</label>
-          <input pInputText id="nearestLandmark" [(ngModel)]="currentRecord.nearestLandmark" required />
+          <input [disabled]="true" pInputText id="nearestLandmark" [(ngModel)]="currentRecord.nearestLandmark" required />
         </div>
         <div class="field col">
           <label for="setupDate">Setup Date</label>
-          <input pInputText id="setupDate" [(ngModel)]="currentRecord.setupDate" required />
+          <input [disabled]="true" pInputText id="setupDate" [(ngModel)]="currentRecord.setupDate" required />
         </div>
         <div class="field col">
           <label for="latitude">Latitude</label>
-          <input pInputText id="latitude" [(ngModel)]="currentRecord.latitude" required />
+          <input [disabled]="true" pInputText id="latitude" [(ngModel)]="currentRecord.latitude" required />
         </div>
         <div class="field col">
           <label for="longitude">Longitude</label>
-          <input pInputText id="longitude" [(ngModel)]="currentRecord.longitude" required />
+          <input [disabled]="true" pInputText id="longitude" [(ngModel)]="currentRecord.longitude" required />
         </div>
         <div class="field col">
           <label for="applicationDate">Application Date</label>
-          <input pInputText id="applicationDate" [(ngModel)]="currentRecord.applicationDate" required />
+          <input [disabled]="true" pInputText id="applicationDate" [(ngModel)]="currentRecord.applicationDate" required />
         </div>
         <div class="field col">
           <label for="mobile">Mobile</label>
-          <input pInputText id="mobile" [(ngModel)]="currentRecord.mobile" required />
+          <input [disabled]="true" pInputText id="mobile" [(ngModel)]="currentRecord.mobile" required />
         </div>
         <div class="field col">
           <label for="email">Email</label>
-          <input pInputText id="email" [(ngModel)]="currentRecord.email" required />
+          <input [disabled]="true" pInputText id="email" [(ngModel)]="currentRecord.email" required />
         </div>
         <div class="field col">
           <label for="statusCode">Status Code</label>
@@ -103,71 +103,71 @@
         </div>
         <div class="field col">
           <label for="currentTariffCode">Current Tariff Code</label>
-          <input pInputText id="currentTariffCode" [(ngModel)]="currentRecord.currentTariffCode" required />
+          <input [disabled]="true" pInputText id="currentTariffCode" [(ngModel)]="currentRecord.currentTariffCode" required />
         </div>
         <div class="field col">
           <label for="correctTariffCode">Correct Tariff Code</label>
-          <input pInputText id="correctTariffCode" [(ngModel)]="currentRecord.correctTariffCode" required />
+          <input [disabled]="true" pInputText id="correctTariffCode" [(ngModel)]="currentRecord.correctTariffCode" required />
         </div>
         <div class="field col">
           <label for="tariffClass">Tariff Class</label>
-          <input pInputText id="tariffClass" [(ngModel)]="currentRecord.tariffClass" required />
+          <input [disabled]="true" pInputText id="tariffClass" [(ngModel)]="currentRecord.tariffClass" required />
         </div>
         <div class="field col">
           <label for="feeder">Feeder</label>
-          <input pInputText id="feeder" [(ngModel)]="currentRecord.feeder" required />
+          <input [disabled]="true" pInputText id="feeder" [(ngModel)]="currentRecord.feeder" required />
         </div>
         <div class="field col">
           <label for="feederId">Feeder ID</label>
-          <input pInputText id="feederId" [(ngModel)]="currentRecord.feederId" required />
+          <input [disabled]="true" pInputText id="feederId" [(ngModel)]="currentRecord.feederId" required />
         </div>
         <div class="field col">
           <label for="serviceCenter">Service Center</label>
-          <input pInputText id="serviceCenter" [(ngModel)]="currentRecord.serviceCenter" required />
+          <input [disabled]="true" pInputText id="serviceCenter" [(ngModel)]="currentRecord.serviceCenter" required />
         </div>
         <div class="field col">
           <label for="distributionName">Distribution Name</label>
-          <input pInputText id="distributionName" [(ngModel)]="currentRecord.distributionName" required />
+          <input [disabled]="true" pInputText id="distributionName" [(ngModel)]="currentRecord.distributionName" required />
         </div>
         <div class="field col">
           <label for="dssId">DSS ID</label>
-          <input pInputText id="dssId" [(ngModel)]="currentRecord.dssId" required />
+          <input [disabled]="true" pInputText id="dssId" [(ngModel)]="currentRecord.dssId" required />
         </div>
         <div class="field col">
           <label for="ltPoleId">LT Pole ID</label>
-          <input pInputText id="ltPoleId" [(ngModel)]="currentRecord.ltPoleId" required />
+          <input [disabled]="true" pInputText id="ltPoleId" [(ngModel)]="currentRecord.ltPoleId" required />
         </div>
         <div class="field col">
           <label for="serviceWire">Service Wire</label>
-          <input pInputText id="serviceWire" [(ngModel)]="currentRecord.serviceWire" required />
+          <input [disabled]="true" pInputText id="serviceWire" [(ngModel)]="currentRecord.serviceWire" required />
         </div>
         <div class="field col">
           <label for="upriser">Upriser</label>
-          <input pInputText id="upriser" [(ngModel)]="currentRecord.upriser" required />
+          <input [disabled]="true" pInputText id="upriser" [(ngModel)]="currentRecord.upriser" required />
         </div>
         <div class="field col">
           <label for="region">Region</label>
-          <input pInputText id="region" [(ngModel)]="currentRecord.region" required />
+          <input [disabled]="true" pInputText id="region" [(ngModel)]="currentRecord.region" required />
         </div>
         <div class="field col">
           <label for="businessHub">Business Hub</label>
-          <input pInputText id="businessHub" [(ngModel)]="currentRecord.businessHub" required />
+          <input [disabled]="true" pInputText id="businessHub" [(ngModel)]="currentRecord.businessHub" required />
         </div>
         <div class="field col">
           <label for="accountCategory">Account Category</label>
-          <input pInputText id="accountCategory" [(ngModel)]="currentRecord.accountCategory" required />
+          <input [disabled]="true" pInputText id="accountCategory" [(ngModel)]="currentRecord.accountCategory" required />
         </div>
         <div class="field col">
           <label for="connectionType">Connection Type</label>
-          <input pInputText id="connectionType" [(ngModel)]="currentRecord.connectionType" required />
+          <input [disabled]="true" pInputText id="connectionType" [(ngModel)]="currentRecord.connectionType" required />
         </div>
         <div class="field col">
           <label for="custNatureOfBusiness">Nature of Business</label>
-          <input pInputText id="custNatureOfBusiness" [(ngModel)]="currentRecord.custNatureOfBusiness" required />
+          <input [disabled]="true" pInputText id="custNatureOfBusiness" [(ngModel)]="currentRecord.custNatureOfBusiness" required />
         </div>
         <div class="field col">
           <label for="customerNIN">Customer NIN</label>
-          <input pInputText id="customerNIN" [(ngModel)]="currentRecord.customerNIN" required />
+          <input [disabled]="true" pInputText id="customerNIN" [(ngModel)]="currentRecord.customerNIN" required />
         </div>
         <div class="field col">
           <label for="supplyType">Supply Type</label>
