@@ -206,13 +206,15 @@
 
   <!-- Reject Dialog -->
   <p-dialog header="Reject Record" [(visible)]="rejectDialog" modal="modal" [closable]="false">
-    <div class="field col">
-      <label>Reason for Rejection</label>
+    <label for=""> <label>Reason for Rejection</label></label>
+    <div class="field mt-2">
+
       <textarea pInputTextarea [(ngModel)]="rejectReason" rows="5"></textarea>
     </div>
-    <div class="p-mt-2">
+    <div class="p-mt-2 flex justify-content-between">
       <button pButton label="Confirm" class="p-button-danger" (click)="confirmReject()"></button>
       <button pButton label="Cancel" class="p-button-secondary" (click)="cancelReject()"></button>
     </div>
   </p-dialog>
+
 </div>
