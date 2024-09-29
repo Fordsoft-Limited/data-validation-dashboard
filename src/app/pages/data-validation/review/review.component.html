@@ -1,6 +1,6 @@
 <div class="grid">
   <div class="col-12 md:col-6">
-    <div class="card h-full">
+    <div class="card h-auto">
       <h5>Selected Records</h5>
       <div class="selected-records-list">
         <div *ngFor="let record of selectedRecords ; let i = index" (click)="currentIndex = i; currentRecord = record" class="flex align-items-center mt-4 justify-content-between">
