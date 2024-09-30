@@ -6,9 +6,9 @@
       <p-toolbar styleClass="mb-4">
 
         <ng-template pTemplate="left">
-          <p-fileUpload mode="basic" name="file" accept=".xlsx" [auto]="false" label="Upload Batch"
-          (onSelect)="onFileSelect($event)" (onUpload)="onUpload()" ></p-fileUpload>
-      <button pButton pRipple label="Upload" icon="pi pi-upload" (click)="onUpload()"></button>
+          <p-fileUpload pRipple  mode="basic" name="file" accept=".xlsx" [auto]="false" label="Upload Batch"
+          (onSelect)="onFileSelect($event)" ></p-fileUpload>
+
         </ng-template>
 
         <ng-template pTemplate="right">
@@ -31,7 +31,7 @@
         <ng-template pTemplate="body" let-batch>
           <tr>
             <td>{{batch.batchCode}}</td>
-            <td>{{batch.startDate | date}}</td>
+            <td>{{batch.startDate ? (batch.endDate | date) : 'N/A'}}</td>
             <td>{{batch.endDate ? (batch.endDate | date) : 'N/A'}}</td>
             <td>{{batch.status}}</td>
             <td>{{batch.uploadedBy}}</td>

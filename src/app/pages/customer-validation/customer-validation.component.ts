@@ -17,6 +17,7 @@ export class CustomerValidationComponent {
 
   uploading: boolean = false;
   hasErrors: boolean = false; // To track if there are any errors
+  errorLogs: string[] = []; // Array to store error logs
 
   constructor(private messageService: MessageService) {}
 
@@ -44,27 +45,42 @@ export class CustomerValidationComponent {
   }
 
   onFileSelect(event: any) {
-    console.log('Selected file:', event.files[0]);
-    this.hasErrors = false; // Reset error state when a new file is selected
-  }
-
-  onUpload() {
-    if (this.uploading) {
-      this.messageService.add({ severity: 'warn', summary: 'Upload in Progress', detail: 'Please wait for the current upload to finish.' });
+    const file = event.files[0];
+    if (!file) {
+      this.messageService.add({ severity: 'error', summary: 'File Selection', detail: 'No file selected!' });
       return;
     }
 
-    // Simulate the upload process
-    this.uploading = true;
+    this.uploadFile(file);
+  }
 
-    // Here, you would typically handle your actual file upload logic
+  uploadFile(file: File) {
+    this.uploading = true;
+    this.hasErrors = false;
+    this.errorLogs = []; // Reset error logs
+
+    // Simulate reading and processing of the file
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const content = e.target.result;
+      this.processFileContent(content);
+    };
+
+    reader.onerror = () => {
+      this.uploading = false;
+      this.messageService.add({ severity: 'error', summary: 'File Error', detail: 'Error reading file!' });
+    };
+
+    reader.readAsText(file);
+  }
+
+  processFileContent(content: string) {
+    // Simulate backend validation
     setTimeout(() => {
       this.uploading = false;
+      const isValid = Math.random() > 0.5; // Randomly decide if validation succeeds or fails
 
-      // Simulate a response from backend (for demo purposes)
-      const success = Math.random() > 0.5; // Randomly determine success or failure
-
-      if (success) {
+      if (isValid) {
         this.messageService.add({ severity: 'success', summary: 'Batch Uploaded', detail: 'Upload completed successfully.' });
         this.batches.push({
           batchCode: `BATCH${this.batches.length + 1}`,
@@ -73,18 +89,27 @@ export class CustomerValidationComponent {
           status: 'Pending',
           uploadedBy: 'User'
         });
-        this.hasErrors = false; // No errors on successful upload
+        this.hasErrors = false;
       } else {
         this.messageService.add({ severity: 'error', summary: 'Upload Failed', detail: 'Validation issues detected. Please check the logs.' });
-        this.hasErrors = true; // Set error state if there are validation issues
+        this.errorLogs = [
+          'Row 5: Invalid Customer ID',
+          'Row 10: Missing required field'
+        ]; // Simulate some validation errors
+        this.hasErrors = true;
       }
     }, 3000);
   }
 
   downloadErrorLogs() {
-    // Logic to download error logs
-    const errorLog = 'Row,Error\n5,Invalid Customer ID\n10,Missing required field';
-    const blob = new Blob([errorLog], { type: 'text/csv;charset=utf-8;' });
+    if (!this.hasErrors || this.errorLogs.length === 0) {
+      this.messageService.add({ severity: 'warn', summary: 'No Errors', detail: 'There are no errors to download.' });
+      return;
+    }
+
+    // Convert error logs to CSV format
+    const errorLogContent = 'Row,Error\n' + this.errorLogs.join('\n');
+    const blob = new Blob([errorLogContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
 
@@ -94,5 +119,15 @@ export class CustomerValidationComponent {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  onUpload() {
+    if (this.uploading) {
+      this.messageService.add({ severity: 'warn', summary: 'Upload in Progress', detail: 'Please wait for the current upload to finish.' });
+      return;
+    }
+
+    this.messageService.add({ severity: 'info', summary: 'File Selection', detail: 'Please select a file to upload.' });
+    // You can trigger the file input programmatically if needed here
   }
 }
