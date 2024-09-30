@@ -1,62 +1,98 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-customer-validation',
   templateUrl: './customer-validation.component.html',
-  styleUrls: ['./customer-validation.component.scss'], // Fixed typo here from styleUrl to styleUrls
+  styleUrls: ['./customer-validation.component.scss'],
   providers: [MessageService]
 })
 export class CustomerValidationComponent {
 
   batches = [
-    { batchCode: 'BATCH001', startDate: new Date('2024-09-15'), endDate: null, status: 'Pending', uploadedBy: 'Admin' },
-    { batchCode: 'BATCH002', startDate: new Date('2024-09-16'), endDate: new Date('2024-09-17'), status: 'Completed', uploadedBy: 'Reviewer' },
+    { batchCode: 'BATCH001', startDate: new Date(), endDate: null, status: 'Pending', uploadedBy: 'Admin' },
+    { batchCode: 'BATCH002', startDate: new Date(), endDate: new Date(), status: 'Completed', uploadedBy: 'Reviewer' },
     // More sample data...
   ];
-  @ViewChild('dt') dt!: Table; // Add this line to define dt
-
 
   uploading: boolean = false;
+  hasErrors: boolean = false; // To track if there are any errors
 
   constructor(private messageService: MessageService) {}
 
   exportData() {
-    // Logic to export the table data as CSV or Excel
-    console.log('Exporting batch data...');
-    // Implement your export logic here
-    this.messageService.add({ severity: 'info', summary: 'Exporting', detail: 'Exporting batch data as CSV/Excel...' });
+    const csvContent = this.convertToCSV(this.batches);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'batch_history.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  convertToCSV(batches: any[]): string {
+    const header = 'Batch Code,Start Date,End Date,Status,Uploaded By\n';
+    const rows = batches.map(batch =>
+      `${batch.batchCode},${batch.startDate.toISOString()},${batch.endDate ? batch.endDate.toISOString() : ''},${batch.status},${batch.uploadedBy}`
+    ).join('\n');
+
+    return header + rows;
   }
 
   onFileSelect(event: any) {
-    // Handle file selection
     console.log('Selected file:', event.files[0]);
-    this.messageService.add({ severity: 'info', summary: 'File Selected', detail: event.files[0].name });
+    this.hasErrors = false; // Reset error state when a new file is selected
   }
 
-  onUpload(event: any) {
+  onUpload() {
+    if (this.uploading) {
+      this.messageService.add({ severity: 'warn', summary: 'Upload in Progress', detail: 'Please wait for the current upload to finish.' });
+      return;
+    }
+
+    // Simulate the upload process
     this.uploading = true;
-    // Simulate file upload and real-time validation feedback
+
+    // Here, you would typically handle your actual file upload logic
     setTimeout(() => {
       this.uploading = false;
 
-      // Simulate real-time feedback for batch upload
-      this.showSuccess('Batch uploaded successfully.');
-      // Here you would typically call your backend API to upload and validate the data
+      // Simulate a response from backend (for demo purposes)
+      const success = Math.random() > 0.5; // Randomly determine success or failure
 
-      // Simulating additional feedback messages
-      this.showSuccess('Record 1 successfully validated.');
-      this.showError('Row 5: Invalid Customer ID.');
+      if (success) {
+        this.messageService.add({ severity: 'success', summary: 'Batch Uploaded', detail: 'Upload completed successfully.' });
+        this.batches.push({
+          batchCode: `BATCH${this.batches.length + 1}`,
+          startDate: new Date(),
+          endDate: null,
+          status: 'Pending',
+          uploadedBy: 'User'
+        });
+        this.hasErrors = false; // No errors on successful upload
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'Upload Failed', detail: 'Validation issues detected. Please check the logs.' });
+        this.hasErrors = true; // Set error state if there are validation issues
+      }
     }, 3000);
   }
 
-  // Real-time feedback for each validation
-  showSuccess(message: string) {
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: message });
-  }
+  downloadErrorLogs() {
+    // Logic to download error logs
+    const errorLog = 'Row,Error\n5,Invalid Customer ID\n10,Missing required field';
+    const blob = new Blob([errorLog], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
 
-  showError(message: string) {
-    this.messageService.add({ severity: 'error', summary: 'Error', detail: message });
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'error_logs.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 }
