@@ -83,6 +83,14 @@ export const layoutRoutes: Routes = [
               ),
           },
           {
+            path: 'customer-validation',
+            data:{breadcrumb: 'Customer Validation'},
+            loadChildren: () =>
+              import('../pages/customer-validation/customer-validation.module').then(
+                (m) => m.CustomerValidationModule
+              ),
+          },
+          {
             path: 'data-table',
             data:{breadcrumb: 'Data Table'},
             loadChildren: () =>

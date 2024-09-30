@@ -1,0 +1,51 @@
+<div class="grid"></div>
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <div class="my-2">
+              <p-fileUpload mode="basic" name="file" accept=".xlsx" [auto]="false" label="Upload Batch"
+                  (onSelect)="onFileSelect($event)" (onUpload)="onUpload($event)"></p-fileUpload>
+
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="right">
+          <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
+        </ng-template>
+    </p-toolbar>
+
+    <p-table [value]="batches" [paginator]="true" [rows]="10" sortMode="multiple">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="batchCode">Batch Code <p-sortIcon field="batchCode"></p-sortIcon></th>
+          <th pSortableColumn="startDate">Start Date <p-sortIcon field="startDate"></p-sortIcon></th>
+          <th pSortableColumn="endDate">End Date <p-sortIcon field="endDate"></p-sortIcon></th>
+          <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+          <th pSortableColumn="uploadedBy">Uploaded By <p-sortIcon field="uploadedBy"></p-sortIcon></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-batch>
+        <tr>
+          <td>{{batch.batchCode}}</td>
+          <td>{{batch.startDate | date}}</td>
+          <td>{{batch.endDate | date}}</td>
+          <td>{{batch.status}}</td>
+          <td>{{batch.uploadedBy}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    </div>
+
+    <!-- Progress Bar and Toast for Real-time Feedback -->
+    <div class="p-col-12">
+      <p-progressBar *ngIf="uploading" mode="indeterminate"></p-progressBar>
+    </div>
+
+    <p-toast></p-toast> <!-- For success and error messages -->
+  </div>
+
+
