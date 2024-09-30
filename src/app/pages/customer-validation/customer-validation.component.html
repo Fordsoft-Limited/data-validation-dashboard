@@ -4,11 +4,15 @@
       <p-toast></p-toast>
 
       <p-toolbar styleClass="mb-4">
+
         <ng-template pTemplate="left">
-          <button pButton pRipple label="Export" icon="pi pi-download" class="p-button-help" (click)="exportData()"></button>
           <p-fileUpload mode="basic" name="file" accept=".xlsx" [auto]="false" label="Upload Batch"
-              (onSelect)="onFileSelect($event)" (onUpload)="onUpload()" ></p-fileUpload>
-          <button pButton pRipple label="Upload" icon="pi pi-upload" (click)="onUpload()"></button>
+          (onSelect)="onFileSelect($event)" (onUpload)="onUpload()" ></p-fileUpload>
+      <button pButton pRipple label="Upload" icon="pi pi-upload" (click)="onUpload()"></button>
+        </ng-template>
+
+        <ng-template pTemplate="right">
+          <button pButton pRipple label="Export" icon="pi pi-download" class="p-button-help" (click)="exportData()"></button>
         </ng-template>
       </p-toolbar>
 
