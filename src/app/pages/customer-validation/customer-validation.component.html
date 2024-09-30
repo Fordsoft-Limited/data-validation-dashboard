@@ -4,37 +4,71 @@
       <p-toast></p-toast>
 
       <p-toolbar styleClass="mb-4">
-
         <ng-template pTemplate="left">
-          <p-fileUpload pRipple  mode="basic" name="file" accept=".xlsx" [auto]="false" label="Upload Batch"
-          (onSelect)="onFileSelect($event)" ></p-fileUpload>
-
+          <p-fileUpload
+            pRipple
+            mode="basic"
+            name="file"
+            accept=".xlsx"
+            [auto]="false"
+            label="Upload Batch"
+            (onSelect)="onFileSelect($event)"
+          ></p-fileUpload>
         </ng-template>
 
+        <ng-container pTemplate="center" *ngIf="hasErrors">
+          <button
+            pButton
+            label="Download Error Logs"
+            (click)="downloadErrorLogs()"
+          ></button>
+        </ng-container>
+
         <ng-template pTemplate="right">
-          <button pButton pRipple label="Export" icon="pi pi-download" class="p-button-help" (click)="exportData()"></button>
+          <button
+            pButton
+            pRipple
+            label="Export"
+            icon="pi pi-download"
+            class="p-button-help"
+            (click)="exportData()"
+          ></button>
         </ng-template>
       </p-toolbar>
 
-
-      <p-table [value]="batches" [paginator]="true" [rows]="10" sortMode="multiple">
+      <p-table
+        [value]="batches"
+        [paginator]="true"
+        [rows]="10"
+        sortMode="multiple"
+      >
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="batchCode">Batch Code <p-sortIcon field="batchCode"></p-sortIcon></th>
-            <th pSortableColumn="startDate">Start Date <p-sortIcon field="startDate"></p-sortIcon></th>
-            <th pSortableColumn="endDate">End Date <p-sortIcon field="endDate"></p-sortIcon></th>
-            <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
-            <th pSortableColumn="uploadedBy">Uploaded By <p-sortIcon field="uploadedBy"></p-sortIcon></th>
+            <th pSortableColumn="batchCode">
+              Batch Code <p-sortIcon field="batchCode"></p-sortIcon>
+            </th>
+            <th pSortableColumn="startDate">
+              Start Date <p-sortIcon field="startDate"></p-sortIcon>
+            </th>
+            <th pSortableColumn="endDate">
+              End Date <p-sortIcon field="endDate"></p-sortIcon>
+            </th>
+            <th pSortableColumn="status">
+              Status <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th pSortableColumn="uploadedBy">
+              Uploaded By <p-sortIcon field="uploadedBy"></p-sortIcon>
+            </th>
           </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-batch>
           <tr>
-            <td>{{batch.batchCode}}</td>
-            <td>{{batch.startDate ? (batch.endDate | date) : 'N/A'}}</td>
-            <td>{{batch.endDate ? (batch.endDate | date) : 'N/A'}}</td>
-            <td>{{batch.status}}</td>
-            <td>{{batch.uploadedBy}}</td>
+            <td>{{ batch.batchCode }}</td>
+            <td>{{ batch.startDate ? (batch.endDate | date) : "N/A" }}</td>
+            <td>{{ batch.endDate ? (batch.endDate | date) : "N/A" }}</td>
+            <td>{{ batch.status }}</td>
+            <td>{{ batch.uploadedBy }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -45,7 +79,6 @@
       </div>
 
       <!-- Download Error Logs Button -->
-      <button pButton label="Download Error Logs" (click)="downloadErrorLogs()" *ngIf="hasErrors"></button>
     </div>
   </div>
 </div>
