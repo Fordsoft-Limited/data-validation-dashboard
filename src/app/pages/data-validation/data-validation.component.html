@@ -43,40 +43,14 @@
                         <p-columnFilter type="text" field="district" display="menu" />
                     </div>
                 </th>
-                <!-- <th style="min-width:15rem">
-                    <div class="flex align-items-center">
-                        Agent
-                        <p-columnFilter field="representative" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
-                            <ng-template pTemplate="header">
-                                <div class="px-3 pt-3 pb-0">
-                                    <span class="font-bold">Agent Picker</span>
-                                </div>
-                            </ng-template>
-                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                <p-multiSelect [ngModel]="value" [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name">
-                                    <ng-template let-option pTemplate="item">
-                                        <div class="inline-block vertical-align-middle">
-                                            <img [alt]="option.label" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ option.image }}" width="24" class="vertical-align-middle" />
-                                            <span class="ml-1 mt-1">{{ option.name }}</span>
-                                        </div>
-                                    </ng-template>
-                                </p-multiSelect>
-                            </ng-template>
-                        </p-columnFilter>
-                    </div>
-                </th> -->
+                
                 <th style="min-width:10rem">
                     <div class="flex align-items-center">
                         Date
                         <p-columnFilter type="date" field="date" display="menu" />
                     </div>
                 </th>
-                <!-- <th style="min-width:10rem">
-                    <div class="flex align-items-center">
-                        Balance
-                        <p-columnFilter type="numeric" field="balance" display="menu" currency="USD" />
-                    </div>
-                </th> -->
+                
                 <th style="min-width:10rem">
                     <div class="flex align-items-center">
                         Status
@@ -91,26 +65,7 @@
                         </p-columnFilter>
                     </div>
                 </th>
-                <!-- <th style="min-width:10rem">
-                    <div class="flex align-items-center">
-                        Activity
-                        <p-columnFilter field="activity" matchMode="between" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
-                            <ng-template pTemplate="filter" let-filter="filterCallback">
-                                <p-slider [(ngModel)]="activityValues" [range]="true" (onSlideEnd)="filter($event.values)" styleClass="m-3" />
-                                <div class="flex align-items-center px-2">
-                                    <span>{{ activityValues[0] }}</span>
-                                    <span>{{ activityValues[1] }}</span>
-                                </div>
-                            </ng-template>
-                        </p-columnFilter>
-                    </div>
-                </th> -->
-                <!-- <th style="width: 10rem">
-                    <div class="flex align-items-center">
-                        Verified
-                        <p-columnFilter type="boolean" field="verified" display="menu" />
-                    </div>
-                </th> -->
+            
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-dataValidation>
@@ -119,12 +74,11 @@
                     <p-tableCheckbox [value]="dataValidation" />
                 </td>
                 <td>
-                    <!-- {{ customer.name }} -->
+                    
                       {{dataValidation.id}}
                 </td>
                 <td>
-                    <!-- <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
-                    <span class="ml-1 vertical-align-middle">{{ customer.country.name }}</span> -->
+                   
                     {{dataValidation.feeder}}
                 </td>
                 <td>
@@ -134,18 +88,11 @@
                 <td>
                     {{ dataValidation.date | date: 'MM/dd/yyyy' }}
                 </td>
-                <!-- <td>
-                    {{ customer.balance | currency: 'USD':'symbol' }}
-                </td> -->
+               
                 <td>
                     <p-tag [value]="dataValidation.status" [severity]="getSeverity(dataValidation.status)" />
                 </td>
-                <!-- <td>
-                    <p-progressBar [value]="customer.activity" [showValue]="false" />
-                </td> -->
-                <!-- <td class="text-center">
-                    <i class="pi" [ngClass]="{ 'text-green-500 pi-check-circle': customer.verified, 'text-red-500 pi-times-circle': !customer.verified }"></i>
-                </td> -->
+                
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
