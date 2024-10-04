@@ -1,6 +1,31 @@
 <div class="card">
-    <p-table #dt1 [value]="dataValidations" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
-        [loading]="loading" [paginator]="true" [globalFilterFields]="['feeder', 'district', 'date', 'status']"
+    <form [formGroup]="filterForm" (ngSubmit)="filterData()">
+        <div class="flex gap-5 mb-4 justify-content-center">
+          <div class="flex flex-column gap-2">
+            <label for="dateRange">Date Range:</label>
+            <div class="flex gap-2"> 
+                <input type="date" formControlName="dateRange" pInputText class="date-range"/>
+                <input type="date" formControlName="dateRange" pInputText class="date-range"/>
+            </div>
+            
+          </div>
+    
+          <div class="flex flex-column gap-2">
+            <label for="feeder">Feeder:</label>
+            <p-dropdown formControlName="feeder" [options]="feeders" placeholder="Select Feeder"></p-dropdown>
+          </div>
+    
+          <div class="flex flex-column gap-2">
+            <label for="businessUnit">Business Unit:</label>
+            <p-dropdown formControlName="businessUnit" [options]="businessUnits" placeholder="Select Business Unit"></p-dropdown>
+          </div>
+    
+          <p-button type="submit" label="Filter" class="mt-4"></p-button>
+        </div>
+    </form>
+
+    <p-table #dt1 [value]="filteredDataValidations" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading" [paginator]="true" [globalFilterFields]="['feeder', 'meterNo', 'date', 'status']"
         (onRowSelect)="showDetails($event.data)">
         <ng-template pTemplate="caption">
             <div class="flex">
@@ -21,7 +46,7 @@
                 <th style="min-width:15rem">
                     <div class="flex align-items-center">
                         Customer ID
-                        <p-columnFilter type="text" field="id" display="menu" />
+                        <!-- <p-columnFilter type="text" field="id" display="menu" /> -->
                     </div>
                 </th>
                 <th style="min-width:15rem">

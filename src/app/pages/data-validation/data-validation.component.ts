@@ -2,7 +2,7 @@ import { Component ,OnInit, ViewChild,ElementRef } from '@angular/core';
 import { DataValidation } from './model/bulk-validation';
 import { DataValidationService } from './service/data-validation.service';
 import { Table } from 'primeng/table';
-
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-data-validation',
@@ -14,6 +14,8 @@ export class DataValidationComponent implements OnInit {
   @ViewChild('filter') filter!: ElementRef;
 
   dataValidations!:DataValidation[];
+
+  filteredDataValidations: DataValidation[] = [];
 
   loading: boolean = true;
 
@@ -27,7 +29,19 @@ export class DataValidationComponent implements OnInit {
 
   comments: string = '';
 
-  constructor(private dataValidationService: DataValidationService) {}
+  filterForm!: FormGroup;
+
+   // Sample feeders and business units
+   feeders: string[] = ['Feeder1', 'Feeder2', 'Feeder3'];
+   businessUnits: string[] = ['Hub1', 'Hub2', 'Hub3'];
+
+  constructor(private dataValidationService: DataValidationService, private fb: FormBuilder) {
+    this.filterForm = this.fb.group({
+      dateRange: [],
+      feeder: [],
+      businessUnit: [],
+    });
+  }
 
   ngOnInit() {
     this.loadData();
@@ -43,10 +57,26 @@ export class DataValidationComponent implements OnInit {
         status: item.status || 'Pending', // Set default status
         comments: item.comments || '' // Set default comments
       }));
+      this.filteredDataValidations = this.dataValidations; 
       this.loading = false;
     });
   }
+  filterData() {
+    const { dateRange, feeder, businessUnit } = this.filterForm.value;
 
+    this.filteredDataValidations = this.dataValidations.filter((item) => {
+      const withinDateRange =
+  dateRange && dateRange.length === 2
+    ? item.date
+      ? new Date(item.date) >= dateRange[0] && new Date(item.date) <= dateRange[1]
+      : false // If item.date is undefined, this item should not match
+    : true;
+      const matchesFeeder = feeder ? item.feeder === feeder : true;
+      const matchesBusinessUnit = businessUnit ? item.businessHub === businessUnit : true;
+
+      return withinDateRange && matchesFeeder && matchesBusinessUnit;
+    });
+  }
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal(
         (event.target as HTMLInputElement).value,

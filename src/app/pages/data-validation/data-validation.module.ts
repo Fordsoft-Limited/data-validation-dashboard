@@ -21,6 +21,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';  
 
+
 export const dataValidationRoutes: Routes = [
   {
     path: '',
