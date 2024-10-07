@@ -53,6 +53,13 @@
        
         <div class="col-12 md:col-7 ">
             <div *ngIf="currentRecord" class="p-formgrid grid h-30rem overflow-scroll overflow-x-hidden">
+
+              <div class="field col-6 flex flex-column gap-2">
+                <label for="fullName">Customer Name</label>
+                <input [disabled]="true" pInputText id="fullName" [(ngModel)]="currentRecord.customerFullName"
+                    required />
+            </div>
+
                 <div class="field col-6 flex flex-column gap-2">
                     <label for="customerId">Customer ID</label>
                     <input [disabled]="true" pInputText id="customerId" [(ngModel)]="currentRecord.customerId"
@@ -64,11 +71,7 @@
                     <input [disabled]="true" pInputText id="cin" [(ngModel)]="currentRecord.cin" required />
                 </div>
 
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="fullName">Full Name</label>
-                    <input [disabled]="true" pInputText id="fullName" [(ngModel)]="currentRecord.customerFullName"
-                        required />
-                </div>
+               
 
                 <div class="field col-6 flex flex-column gap-2">
                     <label for="accountNo">Account No</label>
