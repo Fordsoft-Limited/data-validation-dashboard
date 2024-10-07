@@ -19,33 +19,46 @@ import { DialogModule } from 'primeng/dialog';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
-import { BadgeModule } from 'primeng/badge';  
-
+import { BadgeModule } from 'primeng/badge';
+import { DataVerificationComponent } from './data-verification/data-verification.component';  
+import { DividerModule } from 'primeng/divider';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 export const dataValidationRoutes: Routes = [
   {
     path: '',
     component: DataValidationComponent
   },
+  
+   { path: 'data-verification',
+    data:{breadcrumb: 'Data Verification'},
+    component: DataVerificationComponent },
+  
+
 
 ];
 
 
 @NgModule({
   declarations: [
-    DataValidationComponent
+    DataValidationComponent,
+    DataVerificationComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     TableModule,
+    ConfirmDialogModule,
     ButtonModule,
+    ConfirmPopupModule,
     InputTextModule,
     ToggleButtonModule,
     RippleModule,
     MultiSelectModule,
     InputTextareaModule,
     DropdownModule,
+    DividerModule,
     ProgressBarModule,
     ToastModule,
     SliderModule,
@@ -58,5 +71,6 @@ export const dataValidationRoutes: Routes = [
     BadgeModule,
     RouterModule.forChild(dataValidationRoutes)
   ]
+  //exports: [RouterModule]
 })
 export class DataValidationModule { }

@@ -63,6 +63,7 @@ export class DataValidationService {
         tenantPhone: '',
         meterCTRatio: '1:1',
         status: 'Pending',
+        supplyType:'Single Phase'
       },
       {
         id: '1002',
@@ -119,6 +120,7 @@ export class DataValidationService {
         tenantPhone: '234-567-8902',
         meterCTRatio: '1:1',
         status: 'Approved',
+        supplyType:'Three Phase'
       },
       {
         id: '1003',
@@ -175,6 +177,7 @@ export class DataValidationService {
         tenantPhone: '',
         meterCTRatio: '1:1',
         status: 'Rejected',
+        supplyType:'Single Phase'
       },
       {
         id: '1004',
@@ -231,6 +234,7 @@ export class DataValidationService {
         meterCTRatio: '1:1',
         date: new Date('2024-09-25'),
         status: 'Pending',
+        supplyType:'Single Phase'
       },
       {
         id: '1005',
@@ -287,6 +291,7 @@ export class DataValidationService {
         meterCTRatio: '1:1',
         date: new Date('2024-09-24'),
         status: 'Pending',
+        supplyType:'Single Phase'
       },
     ];
   }

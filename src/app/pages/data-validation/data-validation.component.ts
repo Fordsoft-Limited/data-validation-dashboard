@@ -3,11 +3,15 @@ import { DataValidation } from './model/bulk-validation';
 import { DataValidationService } from './service/data-validation.service';
 import { Table } from 'primeng/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+//import { ImportsModule } from './imports';
+
 
 @Component({
   selector: 'app-data-validation',
   templateUrl: './data-validation.component.html',
-  styleUrl: './data-validation.component.scss'
+  styleUrl: './data-validation.component.scss',
+
 })
 export class DataValidationComponent implements OnInit {
 
@@ -35,17 +39,23 @@ export class DataValidationComponent implements OnInit {
    feeders: string[] = ['Feeder1', 'Feeder2', 'Feeder3'];
    businessUnits: string[] = ['Hub1', 'Hub2', 'Hub3'];
 
-  constructor(private dataValidationService: DataValidationService, private fb: FormBuilder) {
+  constructor(private dataValidationService: DataValidationService, private fb: FormBuilder,private router: Router) {
     this.filterForm = this.fb.group({
       dateRange: [],
       feeder: [],
       businessUnit: [],
     });
+
+    
   }
+
+  
 
   ngOnInit() {
     this.loadData();
   }
+
+ 
 
 
 
@@ -87,7 +97,14 @@ export class DataValidationComponent implements OnInit {
 showDetails(dataValidation: DataValidation) {
   this.selectedDataValidation = { ...dataValidation }; // Clone the object
   this.comments = this.selectedDataValidation.comments ?? '';// Load existing comments
+  //this.navigateToDetail(dataValidation);
  // this.showDetailsDialog = true;
+}
+// navigateToDetail(selectedRecord: any) {
+//   this.router.navigate(['/data-verification', selectedRecord.id]); // Adjust the path and parameter as needed
+// }
+navigateToDetails() {
+  this.router.navigate(['app/data-validation/data-verification']);
 }
 
 openDialog() {

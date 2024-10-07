@@ -30,9 +30,10 @@
         <ng-template pTemplate="caption">
             <div class="flex">
                 <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" />
-
-                <p-button label="Show Details" (click)="openDialog()" [disabled]="!selectedDataValidation" class="ml-3"></p-button>
-
+<!-- 
+                <p-button label="Show Details" (click)="openDialog()" [disabled]="!selectedDataValidation" class="ml-3"></p-button> -->
+                
+                <p-button label="Show Details" (click)="navigateToDetails()"   class="ml-3"></p-button>
                 <span class="p-input-icon-left ml-auto">
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" [(ngModel)]="searchValue" #filter
@@ -88,8 +89,8 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-dataValidation>
-            <tr>
-                <td>
+            <tr  class="cursor-pointer">
+                <td  >
                     <p-tableCheckbox [value]="dataValidation" />
                 </td>
                 <td>
@@ -124,7 +125,7 @@
 
 
 
-<p-dialog [(visible)]="showDetailsDialog" modal="modal" [closable]="true" [header]="selectedDataValidation?.customerId"
+<!-- <p-dialog [(visible)]="showDetailsDialog" modal="modal" [closable]="true" [header]="selectedDataValidation?.customerId"
     [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
     <div *ngIf="selectedDataValidation" class="grid">
 
@@ -183,4 +184,4 @@
             <p-button label="Next" (click)="nextRecord()" [disabled]="isNextDisabled()"></p-button>
         </div>
     </div>
-</p-dialog>
+</p-dialog> -->

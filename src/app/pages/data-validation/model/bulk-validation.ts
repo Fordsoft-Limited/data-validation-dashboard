@@ -56,6 +56,7 @@ export interface DataValidation {
     ltPoleId: string;
     serviceWire: string;
     upriser: string;
+    
     region: string;
     businessHub: string;
     accountCategory: string; 
@@ -80,5 +81,7 @@ export interface DataValidation {
     tenantPhone: string;
     meterCTRatio: string; // e.g., '1:1'
     comments?: string;
+    supplyType: string;
     status?:string;
+   
   }

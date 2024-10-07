@@ -76,7 +76,7 @@ export const layoutRoutes: Routes = [
           },
           {
             path: 'data-validation',
-            data:{breadcrumb: 'Data Validation'},
+            data:{breadcrumb: 'Maker/Checker'},
             loadChildren: () =>
               import('../pages/data-validation/data-validation.module').then(
                 (m) => m.DataValidationModule
