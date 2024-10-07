@@ -19,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';  // For p-badge
 import { UserService } from './service/user.service';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 export const userRoutes: Routes = [
   {
@@ -50,6 +51,7 @@ export const userRoutes: Routes = [
     FormsModule,
     TagModule,
     BadgeModule,
+    RadioButtonModule,
     RouterModule.forChild(userRoutes)
   ],
   providers: [UserService]  // Register the service here

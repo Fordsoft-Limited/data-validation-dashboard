@@ -28,6 +28,7 @@ export class UserComponent implements OnInit {
   deleteUsersDialog: boolean = false;
   selectedRole: string[] = [];
   role: any[];
+  ingredient!: string;
 
   visible: boolean = false;
 

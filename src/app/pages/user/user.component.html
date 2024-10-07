@@ -28,9 +28,7 @@
   
       <ng-template pTemplate="header">
           <tr>
-              <th style="width: 10%">
-                  <p-tableHeaderCheckbox ></p-tableHeaderCheckbox>
-              </th>
+              
               <th style="width:20%">
                   Name
               </th>
@@ -56,9 +54,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-user let-editing="editing" let-ri="rowIndex">
           <tr [pEditableRow]="user">
-              <td>
-                  <p-tableCheckbox [value]="user"></p-tableCheckbox>
-              </td>
+              
               <td>
                   
                   <p-cellEditor>
@@ -125,7 +121,7 @@
                   </p-cellEditor>
               </td>
               <td>
-          <div style="margin-left: -280px;" class="flex align-items-center justify-content-center gap-2">
+          <div style="margin-left: -450px;" class="flex align-items-center justify-content-center gap-2">
               <button 
                   *ngIf="!editing" 
                   pButton 
@@ -165,7 +161,7 @@
   <p-dialog 
   [(visible)]="userDialog" 
   [style]="{ width: '450px' }" 
-  header="User Details" 
+  header="Manage User" 
   [modal]="true" 
   styleClass="p-fluid">
   <ng-template pTemplate="content">
@@ -198,22 +194,58 @@
                       </div>
                   </div>
 
+
                   <div class="field col-12 md:col-12">
-                      <label [attr.for]="'role'">Role</label>
-                      <p-multiSelect
-                          [options]="role"
-                          formControlName="role"
-                          class="form-control"
-                          defaultLabel="Select a Role"
-                          optionLabel="name"
-                          display="chip" 
-                      ></p-multiSelect>
-                      <!-- <div class="mt-2" *ngIf="role?.invalid && (role?.touched || role?.dirty)">
-                          <span class="error" *ngIf="role?.errors?.['required']">*Role is Required.</span>
-                      </div> -->
+                    <div class="flex flex-wrap gap-3">
+                        <div class="flex align-items-center">
+                            <p-radioButton 
+                                name="pizza" 
+                                value="Cheese" 
+                                [(ngModel)]="ingredient" 
+                                inputId="ingredient1" />
+                            <label for="ingredient1" class="ml-2">
+                                Cheese
+                            </label>
+                        </div>
+                        
+                        <div class="flex align-items-center">
+                            <p-radioButton 
+                                name="pizza" 
+                                value="Mushroom" 
+                                [(ngModel)]="ingredient" 
+                                inputId="ingredient2" />
+                            <label for="ingredient2" class="ml-2">
+                                Mushroom
+                            </label>
+                        </div>
+                        
+                        <div class="flex align-items-center">
+                            <p-radioButton 
+                                name="pizza" 
+                                value="Pepper" 
+                                [(ngModel)]="ingredient" 
+                                inputId="ingredient3" />
+                            <label for="ingredient3" class="ml-2">
+                                Pepper
+                            </label>
+                        </div>
+                    
+                        <div class="flex align-items-center">
+                            <p-radioButton 
+                                name="pizza" 
+                                value="Onion" 
+                                [(ngModel)]="ingredient" 
+                                inputId="ingredient4" />
+                            <label for="ingredient4" class="ml-2">
+                                Onion
+                            </label>
+                        </div>
+                    </div>
                   </div>
 
-                  <div class="field col-6 md:col-6">
+                  
+
+                  <div class="field col-12 md:col-12">
                       <label [attr.for]="'password'">Password</label>
                       <input pInputText id="password" type="password"  class="form-control" formControlName="password" required/>
                       <div class="mt-2" *ngIf="password?.invalid && (password?.touched || password?.dirty)">
@@ -222,7 +254,7 @@
                         </div>
                   </div>
 
-                  <div class="field col-6 md:col-6">
+                  <div class="field col-12 md:col-12">
                       <label [attr.for]="'cfPassword'">Confirm Password</label>
                       <input pInputText id="cfPassword" type="password"  class="form-control" formControlName="cfPassword" required />
                       <div class="mt-2" *ngIf="cfPassword?.invalid && (cfPassword?.touched || cfPassword?.dirty)">

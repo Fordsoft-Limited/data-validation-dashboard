@@ -8,10 +8,11 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService]
 })
 export class CustomerValidationComponent {
+  uploadedFiles: any[] = [];
 
   batches = [
-    { batchCode: 'BATCH001', startDate: new Date(), endDate: null, status: 'Pending', uploadedBy: 'Admin' },
-    { batchCode: 'BATCH002', startDate: new Date(), endDate: new Date(), status: 'Completed', uploadedBy: 'Reviewer' },
+    { batchCode: 'BATCH001', startDate: new Date(), endDate: null, status: 'Pending', uploadedBy: 'Admin',fileName: "example.jpg", fileSize: "512 Bytes" },
+    { batchCode: 'BATCH002', startDate: new Date(), endDate: new Date(), status: 'Completed', uploadedBy: 'Reviewer', fileName: "video.mp4", fileSize: "2.5 GB" },
     // More sample data...
   ];
 
@@ -42,6 +43,17 @@ export class CustomerValidationComponent {
     ).join('\n');
 
     return header + rows;
+  }
+
+  onUpload(event: any) {
+    for (let file of event.files) {
+      this.uploadedFiles.push({
+        name: file.name,
+        size: file.size
+      });
+    }
+
+    this.messageService.add({ severity: 'info', summary: 'File Uploaded', detail: 'All files uploaded successfully.' });
   }
 
   onFileSelect(event: any) {
@@ -87,7 +99,9 @@ export class CustomerValidationComponent {
           startDate: new Date(),
           endDate: null,
           status: 'Pending',
-          uploadedBy: 'User'
+          uploadedBy: 'User',
+          fileName: "file.name",
+          fileSize: "file.size"
         });
         this.hasErrors = false;
       } else {
@@ -119,15 +133,5 @@ export class CustomerValidationComponent {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }
-
-  onUpload() {
-    if (this.uploading) {
-      this.messageService.add({ severity: 'warn', summary: 'Upload in Progress', detail: 'Please wait for the current upload to finish.' });
-      return;
-    }
-
-    this.messageService.add({ severity: 'info', summary: 'File Selection', detail: 'Please select a file to upload.' });
-    // You can trigger the file input programmatically if needed here
   }
 }
