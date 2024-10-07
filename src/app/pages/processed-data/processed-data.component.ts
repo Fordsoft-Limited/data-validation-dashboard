@@ -1,10 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-processed-data',
   templateUrl: './processed-data.component.html',
-  styleUrl: './processed-data.component.scss'
+  styleUrls: ['./processed-data.component.scss'],
 })
-export class ProcessedDataComponent {
+export class ProcessedDataComponent implements OnInit {
 
+ 
+
+  constructor() {}
+
+  ngOnInit() {
+    // Optional: initialize with a sample message
+  }
+
+  
 }

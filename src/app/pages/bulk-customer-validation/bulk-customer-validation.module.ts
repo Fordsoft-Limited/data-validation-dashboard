@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProcessedDataComponent } from './processed-data.component';
+import { BulkCustomerValidationComponent } from './bulk-customer-validation.component';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'primeng/api';
 import { PasswordModule } from 'primeng/password';
@@ -13,17 +13,17 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
 
-export const processDataRoutes: Routes = [
+export const bulkCustomerValidationRoutes: Routes = [
   {
     path: '',
-    component: ProcessedDataComponent
+    component: BulkCustomerValidationComponent
   },
 
 ];
 
 @NgModule({
   declarations: [
-    ProcessedDataComponent
+    BulkCustomerValidationComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +39,12 @@ export const processDataRoutes: Routes = [
     ProgressBarModule,
     ToastModule,
     MessagesModule,
-    RouterModule.forChild(processDataRoutes)
+		MessagesModule,
+		ButtonModule,
+		ToastModule,
+		InputTextModule,
+    
+    RouterModule.forChild(bulkCustomerValidationRoutes)
   ]
 })
-export class ProcessedDataModule { }
+export class BulkCustomerValidationModule { }

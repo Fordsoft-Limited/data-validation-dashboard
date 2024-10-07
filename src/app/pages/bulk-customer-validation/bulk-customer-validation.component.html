@@ -1,0 +1,70 @@
+<div class="grid" style="display: flex; flex-wrap: wrap; width: 100%; justify-content: center;">
+
+  <!-- Header Section -->
+  <div class="col-12 mt-2">
+    <h3>Bulk Customer Validation</h3>
+  </div>
+
+  <!-- File Upload Section -->
+  <div class="col-12" style="width: 100%; max-width: 700px; margin: 10px auto; padding: 10px; box-sizing: border-box;">
+    <p-fileUpload 
+      name="demo[]" 
+      url="https://www.primefaces.org/cdn/api/upload.php" 
+      (onUpload)="onUpload($event)" 
+      [multiple]="true" 
+      accept="image/*" 
+      [maxFileSize]="1000000">
+      <ng-template pTemplate="content">
+        <ul *ngIf="uploadedFiles.length" style="list-style-type: none; padding: 0; margin: 0;">
+          <li *ngFor="let file of uploadedFiles" style="word-wrap: break-word; margin-bottom: 5px;">
+            {{ file.name }} - {{ file.size }} bytes
+          </li>
+        </ul>
+      </ng-template>
+    </p-fileUpload>
+  </div>
+
+  <!-- Progress Bar Section -->
+  <div class="col-12 card mt-2" style="width: 100%; max-width: 700px; margin: 10px auto; padding: 20px;">
+    <h6 style="text-align: left; margin: 0 0 10px;">Bulk Upload in Progress</h6> <!-- Aligned to the left -->
+    <p-progressBar [value]="50" ></p-progressBar>
+  </div>
+
+  <div class="col-12" style="width: 100%; max-width: 700px; margin: 1px auto; padding: 20px">
+    <p-messages 
+      [(value)]="messages" 
+      [enableService]="false" 
+      [closable]="false">
+    </p-messages>
+  </div>
+
+  <!-- Error Report Section -->
+  <div class="col-12" style="width: 100%; max-width: 700px; margin: 3px auto; padding: 10px; margin-top: -50px;">
+    <div class="text-900 font-semibold text-lg mt-5 mb-3 border-bottom-1 surface-border py-3">Error Report</div>
+    <ul class="list-none p-0 m-0">
+      <!-- Each list item should stack vertically with spacing -->
+      <li class="p-2 border-bottom-1 surface-border" style="margin-bottom: 10px;">
+        <div class="flex flex-column gap-2">
+          <div class="flex align-items-center">
+            <span class="font-semibold">Create a New Landing UI</span>   
+          </div>
+        </div>
+      </li>
+      <li class="p-3 border-bottom-1 surface-border" style="margin-bottom: 10px;">
+        <div class="flex flex-column gap-2">
+          <div class="flex align-items-center">
+            <span class="font-semibold">Create a New Marketing Project</span>   
+          </div>
+        </div>
+      </li>
+      <li class="p-3 border-bottom-1 surface-border" style="margin-bottom: 10px;">
+        <div class="flex flex-column gap-2">
+          <div class="flex align-items-center">
+            <span class="font-semibold">Create a New Marketing Project</span>   
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</div>

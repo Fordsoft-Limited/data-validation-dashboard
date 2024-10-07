@@ -5,21 +5,21 @@
 
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
-          <p-fileUpload 
-        name="demo[]" 
-        url="https://www.primefaces.org/cdn/api/upload.php" 
-        (onUpload)="onUpload($event)" 
-        [multiple]="true" 
-        accept="image/*" 
-        maxFileSize="1000000">
-            <ng-template pTemplate="content">
-                <ul *ngIf="uploadedFiles.length">
-                    <li *ngFor="let file of uploadedFiles">
-                        {{ file.name }} - {{ file.size }} bytes
-                    </li>
-                </ul>
-            </ng-template>
-         </p-fileUpload>
+          <div class="card flex justify-content-center gap-3">
+            <a routerLink="/app/bulk-customer-validation"   class="p-button font-bold">
+              <i class="pi pi-upload"></i>  
+            </a>
+        </div>
+
+          <!-- <p-fileUpload
+            pRipple
+            mode="basic"
+            name="file"
+            accept=".xlsx"
+            [auto]="false"
+            label="Upload Batch"
+            (onSelect)="onFileSelect($event)"
+          ></p-fileUpload> -->
         </ng-template>
 
         <ng-container pTemplate="center" *ngIf="hasErrors">
@@ -73,7 +73,6 @@
             <th pSortableColumn="uploadedBy">
               FileSize <p-sortIcon field="uploadedBy"></p-sortIcon>
             </th>
-            
           </tr>
         </ng-template>
 
@@ -86,6 +85,7 @@
             <td>{{ batch.uploadedBy }}</td>
             <td>{{ batch.fileName }}</td>
             <td>{{ batch.fileSize }}</td>
+
 
           </tr>
         </ng-template>

@@ -91,6 +91,14 @@ export const layoutRoutes: Routes = [
               ),
           },
           {
+            path: 'bulk-customer-validation',
+            data:{breadcrumb: 'Bulk Customer Validation'},
+            loadChildren: () =>
+              import('../pages/bulk-customer-validation/bulk-customer-validation.module').then(
+                (m) => m.BulkCustomerValidationModule
+              ),
+          },
+          {
             path: 'data-table',
             data:{breadcrumb: 'Data Table'},
             loadChildren: () =>
