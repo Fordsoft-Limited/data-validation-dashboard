@@ -76,12 +76,13 @@ export const layoutRoutes: Routes = [
           },
           {
             path: 'data-validation',
-            data:{breadcrumb: 'Data Validation'},
+            data:{breadcrumb: 'Maker/checker'},
             loadChildren: () =>
               import('../pages/data-validation/data-validation.module').then(
                 (m) => m.DataValidationModule
               ),
           },
+          
           {
             path: 'customer-validation',
             data:{breadcrumb: 'Customer Validation'},

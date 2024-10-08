@@ -1,601 +1,180 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild,ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataValidation } from './model/bulk-validation';
+import { DataValidationService } from './service/data-validation.service';
+import { Table } from 'primeng/table';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-data-validation',
   templateUrl: './data-validation.component.html',
+  styleUrl: './data-validation.component.scss',
   providers: [MessageService, ConfirmationService]
 })
-export class DataValidationComponent {
-  records = [
-    {
-      customerFullName: 'John Doe',
-      accountNo: 'ACC001',
-      meterNo: 'MTR001',
-      address: '123 Elm St',
-      city: 'Springfield',
-      lga: 'LGA1',
-      state: 'State1',
-      nearestLandmark: 'Near the park',
-      setupDate: '2024-01-01',
-      latitude: '12.345678',
-      longitude: '98.765432',
-      customerId: 'CUST001',
-      cin: 'CIN001',
-      applicationDate: '2024-01-15',
-      mobile: '1234567890',
-      email: 'johndoe@example.com',
-      statusCode: 'Active',
-      accountType: 'Postpaid',
-      currentTariffCode: 'R1',
-      correctTariffCode: 'R1',
-      tariffClass: 'LFN',
-      feeder: 'Feeder1',
-      feederId: 'FEED001',
-      serviceCenter: 'Center1',
-      distributionName: 'Distribution1',
-      dssId: 'DSS001',
-      ltPoleId: 'LT001',
-      serviceWire: 'Wire1',
-      upriser: 'Upriser1',
-      region: 'Region1',
-      businessHub: 'Hub1',
-      accountCategory: 'Residential',
-      connectionType: 'Metered',
-      custNatureOfBusiness: 'Business',
-      customerNIN: 'NIN001',
-      customerSupplyType: '1-Phase',
-      customerEstimatedLoad: '1000',
-      custHasMeter: 'Yes',
-      customerMeterCategory: 'Postpaid - Electronics',
-      customerMeterManufacturer: 'Manufacturer1',
-      customerMeterSaled: 'Yes',
-      customerMeterAccessible: 'Yes',
-      customerMeterLocation: 'Indoor',
-      customerBillName: 'John Doe',
-      customerHasAccountNo: 'Yes',
-      customerGroup: 'New',
-      isLandlord: 'No',
-      landlordName: '',
-      landlordPhone: '',
-      tenantName: '',
-      tenantPhone: '',
-      meterCTRatio: '1:1'
-    },
-    {
-      customerFullName: 'Jane Smith',
-      accountNo: 'ACC002',
-      meterNo: 'MTR002',
-      address: '456 Oak St',
-      city: 'Metropolis',
-      lga: 'LGA2',
-      state: 'State2',
-      nearestLandmark: 'Near the library',
-      setupDate: '2024-02-01',
-      latitude: '13.456789',
-      longitude: '97.654321',
-      customerId: 'CUST002',
-      cin: 'CIN002',
-      applicationDate: '2024-02-15',
-      mobile: '2345678901',
-      email: 'janesmith@example.com',
-      statusCode: 'Suspended',
-      accountType: 'Prepaid',
-      currentTariffCode: 'R2',
-      correctTariffCode: 'R2',
-      tariffClass: 'NMD',
-      feeder: 'Feeder2',
-      feederId: 'FEED002',
-      serviceCenter: 'Center2',
-      distributionName: 'Distribution2',
-      dssId: 'DSS002',
-      ltPoleId: 'LT002',
-      serviceWire: 'Wire2',
-      upriser: 'Upriser2',
-      region: 'Region2',
-      businessHub: 'Hub2',
-      accountCategory: 'Commercial',
-      connectionType: 'Un-Metered',
-      custNatureOfBusiness: 'Retail',
-      customerNIN: 'NIN002',
-      customerSupplyType: '3-Phase',
-      customerEstimatedLoad: '2000',
-      custHasMeter: 'No',
-      customerMeterCategory: 'Prepaid - Pole-Mounted',
-      customerMeterManufacturer: 'Manufacturer2',
-      customerMeterSaled: 'No',
-      customerMeterAccessible: 'No',
-      customerMeterLocation: 'Outdoor',
-      customerBillName: 'Jane Smith',
-      customerHasAccountNo: 'No',
-      customerGroup: 'Existing',
-      isLandlord: 'Yes',
-      landlordName: 'Robert Smith',
-      landlordPhone: '321-654-0987',
-      tenantName: 'Emily Smith',
-      tenantPhone: '234-567-8902',
-      meterCTRatio: '1:1'
-    },
-    {
-      customerFullName: 'Alice Johnson',
-      accountNo: 'ACC003',
-      meterNo: 'MTR003',
-      address: '789 Pine St',
-      city: 'Gotham',
-      lga: 'LGA3',
-      state: 'State3',
-      nearestLandmark: 'Near the school',
-      setupDate: '2024-03-01',
-      latitude: '14.567890',
-      longitude: '96.543210',
-      customerId: 'CUST003',
-      cin: 'CIN003',
-      applicationDate: '2024-03-15',
-      mobile: '3456789012',
-      email: 'alicejohnson@example.com',
-      statusCode: 'Closed',
-      accountType: 'Postpaid',
-      currentTariffCode: 'R3',
-      correctTariffCode: 'R3',
-      tariffClass: 'MD1',
-      feeder: 'Feeder3',
-      feederId: 'FEED003',
-      serviceCenter: 'Center3',
-      distributionName: 'Distribution3',
-      dssId: 'DSS003',
-      ltPoleId: 'LT003',
-      serviceWire: 'Wire3',
-      upriser: 'Upriser3',
-      region: 'Region3',
-      businessHub: 'Hub3',
-      accountCategory: 'Residential',
-      connectionType: 'Metered',
-      custNatureOfBusiness: 'Service',
-      customerNIN: 'NIN003',
-      customerSupplyType: '1-Phase',
-      customerEstimatedLoad: '1500',
-      custHasMeter: 'Yes',
-      customerMeterCategory: 'Postpaid - Digital',
-      customerMeterManufacturer: 'Manufacturer3',
-      customerMeterSaled: 'Yes',
-      customerMeterAccessible: 'Yes',
-      customerMeterLocation: 'Indoor',
-      customerBillName: 'Alice Johnson',
-      customerHasAccountNo: 'Yes',
-      customerGroup: 'New',
-      isLandlord: 'No',
-      landlordName: '',
-      landlordPhone: '',
-      tenantName: '',
-      tenantPhone: '',
-      meterCTRatio: '1:1'
-    },
-    {
-      customerFullName: 'Bob Brown',
-      accountNo: 'ACC004',
-      meterNo: 'MTR004',
-      address: '321 Birch St',
-      city: 'Star City',
-      lga: 'LGA4',
-      state: 'State4',
-      nearestLandmark: 'Near the mall',
-      setupDate: '2024-04-01',
-      latitude: '15.678901',
-      longitude: '95.432109',
-      customerId: 'CUST004',
-      cin: 'CIN004',
-      applicationDate: '2024-04-15',
-      mobile: '4567890123',
-      email: 'bobbrown@example.com',
-      statusCode: 'Inactive',
-      accountType: 'Prepaid',
-      currentTariffCode: 'C1',
-      correctTariffCode: 'C1',
-      tariffClass: 'MD2',
-      feeder: 'Feeder4',
-      feederId: 'FEED004',
-      serviceCenter: 'Center4',
-      distributionName: 'Distribution4',
-      dssId: 'DSS004',
-      ltPoleId: 'LT004',
-      serviceWire: 'Wire4',
-      upriser: 'Upriser4',
-      region: 'Region4',
-      businessHub: 'Hub4',
-      accountCategory: 'Commercial',
-      connectionType: 'Un-Metered',
-      custNatureOfBusiness: 'Wholesale',
-      customerNIN: 'NIN004',
-      customerSupplyType: '3-Phase',
-      customerEstimatedLoad: '2500',
-      custHasMeter: 'No',
-      customerMeterCategory: 'Prepaid - Wall-mounted',
-      customerMeterManufacturer: 'Manufacturer4',
-      customerMeterSaled: 'No',
-      customerMeterAccessible: 'No',
-      customerMeterLocation: 'Outdoor',
-      customerBillName: 'Bob Brown',
-      customerHasAccountNo: 'Yes',
-      customerGroup: 'Existing',
-      isLandlord: 'Yes',
-      landlordName: 'Susan Brown',
-      landlordPhone: '654-321-0987',
-      tenantName: 'Mike Brown',
-      tenantPhone: '567-890-1234',
-      meterCTRatio: '1:1'
-    },
-    {
-      customerFullName: 'Charlie Davis',
-      accountNo: 'ACC005',
-      meterNo: 'MTR005',
-      address: '654 Cedar St',
-      city: 'Central City',
-      lga: 'LGA5',
-      state: 'State5',
-      nearestLandmark: 'Near the post office',
-      setupDate: '2024-05-01',
-      latitude: '16.789012',
-      longitude: '94.321098',
-      customerId: 'CUST005',
-      cin: 'CIN005',
-      applicationDate: '2024-05-15',
-      mobile: '5678901234',
-      email: 'charliedavis@example.com',
-      statusCode: 'Active',
-      accountType: 'Postpaid',
-      currentTariffCode: 'R4',
-      correctTariffCode: 'R4',
-      tariffClass: 'LFN',
-      feeder: 'Feeder5',
-      feederId: 'FEED005',
-      serviceCenter: 'Center5',
-      distributionName: 'Distribution5',
-      dssId: 'DSS005',
-      ltPoleId: 'LT005',
-      serviceWire: 'Wire5',
-      upriser: 'Upriser5',
-      region: 'Region5',
-      businessHub: 'Hub5',
-      accountCategory: 'Residential',
-      connectionType: 'Metered',
-      custNatureOfBusiness: 'Home',
-      customerNIN: 'NIN005',
-      customerSupplyType: '1-Phase',
-      customerEstimatedLoad: '1200',
-      custHasMeter: 'Yes',
-      customerMeterCategory: 'Postpaid - Mechanical',
-      customerMeterManufacturer: 'Manufacturer5',
-      customerMeterSaled: 'Yes',
-      customerMeterAccessible: 'Yes',
-      customerMeterLocation: 'Indoor',
-      customerBillName: 'Charlie Davis',
-      customerHasAccountNo: 'Yes',
-      customerGroup: 'New',
-      isLandlord: 'No',
-      landlordName: '',
-      landlordPhone: '',
-      tenantName: '',
-      tenantPhone: '',
-      meterCTRatio: '1:1'
-    },
-    {
-      customerFullName: 'Diana Evans',
-      accountNo: 'ACC006',
-      meterNo: 'MTR006',
-      address: '987 Spruce St',
-      city: 'Coast City',
-      lga: 'LGA6',
-      state: 'State6',
-      nearestLandmark: 'Near the gas station',
-      setupDate: '2024-06-01',
-      latitude: '17.890123',
-      longitude: '93.210987',
-      customerId: 'CUST006',
-      cin: 'CIN006',
-      applicationDate: '2024-06-15',
-      mobile: '6789012345',
-      email: 'dianaevans@example.com',
-      statusCode: 'Active',
-      accountType: 'Prepaid',
-      currentTariffCode: 'R5',
-      correctTariffCode: 'R5',
-      tariffClass: 'MD1',
-      feeder: 'Feeder6',
-      feederId: 'FEED006',
-      serviceCenter: 'Center6',
-      distributionName: 'Distribution6',
-      dssId: 'DSS006',
-      ltPoleId: 'LT006',
-      serviceWire: 'Wire6',
-      upriser: 'Upriser6',
-      region: 'Region6',
-      businessHub: 'Hub6',
-      accountCategory: 'Commercial',
-      connectionType: 'Un-Metered',
-      custNatureOfBusiness: 'Industrial',
-      customerNIN: 'NIN006',
-      customerSupplyType: '3-Phase',
-      customerEstimatedLoad: '3000',
-      custHasMeter: 'No',
-      customerMeterCategory: 'Prepaid - Electronic',
-      customerMeterManufacturer: 'Manufacturer6',
-      customerMeterSaled: 'No',
-      customerMeterAccessible: 'No',
-      customerMeterLocation: 'Outdoor',
-      customerBillName: 'Diana Evans',
-      customerHasAccountNo: 'Yes',
-      customerGroup: 'Existing',
-      isLandlord: 'No',
-      landlordName: '',
-      landlordPhone: '',
-      tenantName: '',
-      tenantPhone: '',
-      meterCTRatio: '1:1'
-    },
-    {
-      customerFullName: 'Ethan Foster',
-      accountNo: 'ACC007',
-      meterNo: 'MTR007',
-      address: '543 Willow St',
-      city: 'Emerald City',
-      lga: 'LGA7',
-      state: 'State7',
-      nearestLandmark: 'Near the supermarket',
-      setupDate: '2024-07-01',
-      latitude: '18.901234',
-      longitude: '92.109876',
-      customerId: 'CUST007',
-      cin: 'CIN007',
-      applicationDate: '2024-07-15',
-      mobile: '7890123456',
-      email: 'ethanfoster@example.com',
-      statusCode: 'Pending',
-      accountType: 'Postpaid',
-      currentTariffCode: 'R6',
-      correctTariffCode: 'R6',
-      tariffClass: 'LFN',
-      feeder: 'Feeder7',
-      feederId: 'FEED007',
-      serviceCenter: 'Center7',
-      distributionName: 'Distribution7',
-      dssId: 'DSS007',
-      ltPoleId: 'LT007',
-      serviceWire: 'Wire7',
-      upriser: 'Upriser7',
-      region: 'Region7',
-      businessHub: 'Hub7',
-      accountCategory: 'Residential',
-      connectionType: 'Metered',
-      custNatureOfBusiness: 'Residential',
-      customerNIN: 'NIN007',
-      customerSupplyType: '1-Phase',
-      customerEstimatedLoad: '900',
-      custHasMeter: 'Yes',
-      customerMeterCategory: 'Postpaid - Digital',
-      customerMeterManufacturer: 'Manufacturer7',
-      customerMeterSaled: 'Yes',
-      customerMeterAccessible: 'Yes',
-      customerMeterLocation: 'Indoor',
-      customerBillName: 'Ethan Foster',
-      customerHasAccountNo: 'Yes',
-      customerGroup: 'New',
-      isLandlord: 'No',
-      landlordName: '',
-      landlordPhone: '',
-      tenantName: '',
-      tenantPhone: '',
-      meterCTRatio: '1:1'
-    },
-    {
-      customerFullName: 'Fiona Green',
-      accountNo: 'ACC008',
-      meterNo: 'MTR008',
-      address: '210 Maple St',
-      city: 'Sunnydale',
-      lga: 'LGA8',
-      state: 'State8',
-      nearestLandmark: 'Near the bank',
-      setupDate: '2024-08-01',
-      latitude: '19.012345',
-      longitude: '91.098765',
-      customerId: 'CUST008',
-      cin: 'CIN008',
-      applicationDate: '2024-08-15',
-      mobile: '8901234567',
-      email: 'fionagreen@example.com',
-      statusCode: 'Active',
-      accountType: 'Prepaid',
-      currentTariffCode: 'R7',
-      correctTariffCode: 'R7',
-      tariffClass: 'MD1',
-      feeder: 'Feeder8',
-      feederId: 'FEED008',
-      serviceCenter: 'Center8',
-      distributionName: 'Distribution8',
-      dssId: 'DSS008',
-      ltPoleId: 'LT008',
-      serviceWire: 'Wire8',
-      upriser: 'Upriser8',
-      region: 'Region8',
-      businessHub: 'Hub8',
-      accountCategory: 'Commercial',
-      connectionType: 'Un-Metered',
-      custNatureOfBusiness: 'Manufacturing',
-      customerNIN: 'NIN008',
-      customerSupplyType: '3-Phase',
-      customerEstimatedLoad: '4000',
-      custHasMeter: 'No',
-      customerMeterCategory: 'Prepaid - Mechanical',
-      customerMeterManufacturer: 'Manufacturer8',
-      customerMeterSaled: 'No',
-      customerMeterAccessible: 'No',
-      customerMeterLocation: 'Outdoor',
-      customerBillName: 'Fiona Green',
-      customerHasAccountNo: 'No',
-      customerGroup: 'Existing',
-      isLandlord: 'Yes',
-      landlordName: 'Michael Green',
-      landlordPhone: '321-987-6543',
-      tenantName: 'Liam Green',
-      tenantPhone: '123-456-7890',
-      meterCTRatio: '1:1'
-    },
-    {
-      customerFullName: 'George Harris',
-      accountNo: 'ACC009',
-      meterNo: 'MTR009',
-      address: '432 Ash St',
-      city: 'Redwood City',
-      lga: 'LGA9',
-      state: 'State9',
-      nearestLandmark: 'Near the bakery',
-      setupDate: '2024-09-01',
-      latitude: '20.123456',
-      longitude: '90.987654',
-      customerId: 'CUST009',
-      cin: 'CIN009',
-      applicationDate: '2024-09-15',
-      mobile: '9012345678',
-      email: 'georgeharris@example.com',
-      statusCode: 'Inactive',
-      accountType: 'Postpaid',
-      currentTariffCode: 'R8',
-      correctTariffCode: 'R8',
-      tariffClass: 'LFN',
-      feeder: 'Feeder9',
-      feederId: 'FEED009',
-      serviceCenter: 'Center9',
-      distributionName: 'Distribution9',
-      dssId: 'DSS009',
-      ltPoleId: 'LT009',
-      serviceWire: 'Wire9',
-      upriser: 'Upriser9',
-      region: 'Region9',
-      businessHub: 'Hub9',
-      accountCategory: 'Residential',
-      connectionType: 'Metered',
-      custNatureOfBusiness: 'Service',
-      customerNIN: 'NIN009',
-      customerSupplyType: '1-Phase',
-      customerEstimatedLoad: '1500',
-      custHasMeter: 'Yes',
-      customerMeterCategory: 'Postpaid - Digital',
-      customerMeterManufacturer: 'Manufacturer9',
-      customerMeterSaled: 'Yes',
-      customerMeterAccessible: 'Yes',
-      customerMeterLocation: 'Indoor',
-      customerBillName: 'George Harris',
-      customerHasAccountNo: 'Yes',
-      customerGroup: 'New',
-      isLandlord: 'No',
-      landlordName: '',
-      landlordPhone: '',
-      tenantName: '',
-      tenantPhone: '',
-      meterCTRatio: '1:1'
-    },
-    {
-      customerFullName: 'Hannah Ives',
-      accountNo: 'ACC010',
-      meterNo: 'MTR010',
-      address: '321 Cedar St',
-      city: 'Westview',
-      lga: 'LGA10',
-      state: 'State10',
-      nearestLandmark: 'Near the school',
-      setupDate: '2024-09-20',
-      latitude: '21.234567',
-      longitude: '89.876543',
-      customerId: 'CUST010',
-      cin: 'CIN010',
-      applicationDate: '2024-09-25',
-      mobile: '0123456789',
-      email: 'hannahives@example.com',
-      statusCode: 'Pending',
-      accountType: 'Prepaid',
-      currentTariffCode: 'R9',
-      correctTariffCode: 'R9',
-      tariffClass: 'MD1',
-      feeder: 'Feeder10',
-      feederId: 'FEED010',
-      serviceCenter: 'Center10',
-      distributionName: 'Distribution10',
-      dssId: 'DSS010',
-      ltPoleId: 'LT010',
-      serviceWire: 'Wire10',
-      upriser: 'Upriser10',
-      region: 'Region10',
-      businessHub: 'Hub10',
-      accountCategory: 'Commercial',
-      connectionType: 'Un-Metered',
-      custNatureOfBusiness: 'Retail',
-      customerNIN: 'NIN010',
-      customerSupplyType: '3-Phase',
-      customerEstimatedLoad: '2500',
-      custHasMeter: 'No',
-      customerMeterCategory: 'Prepaid - Electronic',
-      customerMeterManufacturer: 'Manufacturer10',
-      customerMeterSaled: 'No',
-      customerMeterAccessible: 'No',
-      customerMeterLocation: 'Outdoor',
-      customerBillName: 'Hannah Ives',
-      customerHasAccountNo: 'No',
-      customerGroup: 'Existing',
-      isLandlord: 'No',
-      landlordName: '',
-      landlordPhone: '',
-      tenantName: '',
-      tenantPhone: '',
-      meterCTRatio: '1:1'
+export class DataValidationComponent implements OnInit {
+  dataValidations!:DataValidation[];
+
+  filteredDataValidations: DataValidation[] = [];
+
+  loading: boolean = true;
+
+  statuses!: any[];
+
+  searchValue: string = '';
+
+  showDetailsDialog: boolean = false;
+
+  selectedDataValidation: DataValidation | null = null;
+
+  comments: string = '';
+
+  filterForm!: FormGroup;
+
+   // Sample feeders and business units
+   feeders: string[] = ['Feeder1', 'Feeder2', 'Feeder3'];
+   businessUnits: string[] = ['Hub1', 'Hub2', 'Hub3'];
+
+   @ViewChild('filter') filter!: ElementRef;
+
+
+   constructor(private dataValidationService: DataValidationService, private fb: FormBuilder,private router: Router) {
+    this.filterForm = this.fb.group({
+      dateRange: [],
+      feeder: [],
+      businessUnit: [],
+    });
+    
+  }
+
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData() {
+    this.dataValidationService.getValidation().then(data => {
+      // Set status to Pending by default if not set
+      this.dataValidations = data.map(item => ({
+        ...item,
+        status: item.status || 'Pending', // Set default status
+        comments: item.comments || '' // Set default comments
+      }));
+      this.filteredDataValidations = this.dataValidations; 
+      this.loading = false;
+    });
+  }
+  filterData() {
+    const { dateRange, feeder, businessUnit } = this.filterForm.value;
+
+    this.filteredDataValidations = this.dataValidations.filter((item) => {
+      const withinDateRange =
+  dateRange && dateRange.length === 2
+    ? item.date
+      ? new Date(item.date) >= dateRange[0] && new Date(item.date) <= dateRange[1]
+      : false // If item.date is undefined, this item should not match
+    : true;
+      const matchesFeeder = feeder ? item.feeder === feeder : true;
+      const matchesBusinessUnit = businessUnit ? item.businessHub === businessUnit : true;
+
+      return withinDateRange && matchesFeeder && matchesBusinessUnit;
+    });
+  }
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal(
+        (event.target as HTMLInputElement).value,
+        'contains'
+    );
+}
+
+showDetails(dataValidation: DataValidation) {
+  this.selectedDataValidation = { ...dataValidation }; // Clone the object
+  this.comments = this.selectedDataValidation.comments ?? '';// Load existing comments
+  
+}
+navigateToDetails() {
+  this.router.navigate(['app/data-validation/data-verification']);
+  
+}
+
+openDialog() {
+  if (this.selectedDataValidation) {
+    this.showDetailsDialog = true; // Open the dialog
+  }
+}
+
+
+
+
+approveRecord() {
+  if (this.selectedDataValidation) {
+    this.selectedDataValidation.status = 'Approved'; // Set status to Approved
+    this.selectedDataValidation.comments = this.comments; // Set comments
+  }
+}
+
+rejectRecord() {
+  if (this.selectedDataValidation) {
+    this.selectedDataValidation.status = 'Rejected'; // Set status to Rejected
+    this.selectedDataValidation.comments = this.comments; // Set comments
+  }
+}
+nextRecord() {
+    const currentIndex = this.dataValidations.findIndex(
+      (item) => item.id === this.selectedDataValidation?.id
+    );
+    if (currentIndex < this.dataValidations.length - 1) {
+      this.selectedDataValidation = this.dataValidations[currentIndex + 1];
     }
-  ]
-
-  selectedRecords = [];
-  reviewDialog = false;
-  rejectDialog = false;
-  comments: any;
-  rejectReason: any;
-  globalFilter: any;
-
-  constructor( private router: Router) {}
-
-
-
-  exportSelectedRecords() {
-    // Implement export logic here
   }
 
-  approveRecord() {
-    // Logic to approve the record with comments
-    console.log('Approved:', this.comments);
-    this.hideReviewDialog();
+  previousRecord() {
+    const currentIndex = this.dataValidations.findIndex(
+      (item) => item.id === this.selectedDataValidation?.id
+    );
+    if (currentIndex > 0) {
+      this.selectedDataValidation = this.dataValidations[currentIndex - 1];
+    }
   }
 
-  rejectRecord(record:any) {
-    // Logic to show reject dialog for the specific record
-    this.rejectDialog = true;
-  }
-  goToReviewPage() {
-    this.router.navigate(['/app/data-validation/review'], { state: { selectedRecords: this.selectedRecords } });
-  }
-  confirmReject() {
-    // Logic to handle rejection with reason
-    console.log('Rejected:', this.rejectReason);
-    this.hideRejectDialog();
+
+  closeDialog() {
+    this.showDetailsDialog = false;
   }
 
-  hideReviewDialog() {
-    this.reviewDialog = false;
-  }
 
-  hideRejectDialog() {
-    this.rejectDialog = false;
-  }
+  clear(table: Table) {
+    table.clear();
+    this.filter.nativeElement.value = '';
+    this.searchValue = '';
+}
 
-  onGlobalFilter(dt: any, event: any) {
-    const value = event.target.value;
-    this.globalFilter = value; // Store the filter value for use
-    dt.filterGlobal(value, 'contains'); // Apply the filter to the table
+// In your data-validation.component.ts
+
+isPreviousDisabled(): boolean {
+  return !this.selectedDataValidation || 
+         this.dataValidations.findIndex(item => item.id === this.selectedDataValidation?.id) === 0;
+}
+
+isNextDisabled(): boolean {
+  return !this.selectedDataValidation || 
+         this.dataValidations.findIndex(item => item.id === this.selectedDataValidation?.id) === this.dataValidations.length - 1;
+}
+
+
+
+getSeverity(status?: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
+  switch (status) {
+    case 'Approved':
+      return 'success';
+    case 'Pending':
+      return 'warning';
+    case 'Rejected':
+      return 'danger';
+    default:
+      return 'info'; 
   }
+}
+
+
+  
 }
