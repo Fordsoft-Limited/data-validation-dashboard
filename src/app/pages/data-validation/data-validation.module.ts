@@ -33,7 +33,7 @@ export const dataValidationRoutes: Routes = [
   {
     path: 'data-verification',
     data:{breadcrum: 'Data Verification'},
-    component: DataValidationComponent, // Ensure this is properly set up
+    component: DataVerificationComponent, // Ensure this is properly set up
   }
 
 ];
