@@ -10,16 +10,6 @@
               <i class="pi pi-upload"></i>  
             </a>
         </div>
-
-          <!-- <p-fileUpload
-            pRipple
-            mode="basic"
-            name="file"
-            accept=".xlsx"
-            [auto]="false"
-            label="Upload Batch"
-            (onSelect)="onFileSelect($event)"
-          ></p-fileUpload> -->
         </ng-template>
 
         <ng-container pTemplate="center" *ngIf="hasErrors">
@@ -40,14 +30,27 @@
             (click)="exportData()"
           ></button>
         </ng-template>
+        
       </p-toolbar>
 
       <p-table
+        #dt1
         [value]="batches"
         [paginator]="true"
         [rows]="10"
         sortMode="multiple"
+        [globalFilterFields]="['batchCode', 'startDate']"
       >
+
+      <ng-template pTemplate="caption">
+        <div class="flex align-items-center justify-content-between">
+            <h5 class="m-0">Customer Vadilation</h5>
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" [(ngModel)]="searchValue" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Keyword Search">
+            </span>
+        </div>
+    </ng-template>
         <ng-template pTemplate="header">
           <tr>
             <th pSortableColumn="batchCode">

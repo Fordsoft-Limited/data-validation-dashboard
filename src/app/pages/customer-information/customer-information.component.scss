@@ -1,0 +1,73 @@
+.form-scroll {
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent wrapping of form items */
+}
+
+.form-row {
+  display: inline-flex; /* Align items in a row */
+}
+
+.form-group {
+  display: inline-block; /* Ensure form groups remain in line */
+  margin-right: 10px; /* Adjust spacing as needed */
+}
+
+.form-group:last-child {
+  margin-right: 0; /* Remove margin from last item */
+}
+
+.form-group label {
+  display: block; /* Make the label block-level to appear above the input */
+  margin-bottom: 5px; /* Add some space between the label and input */
+}
+
+
+.form-group {
+  margin-bottom: 20px; /* Space between different form groups */
+}
+
+.form-row {
+  display: flex; /* Use flexbox for alignment */
+  align-items: center; /* Center items vertically */
+  margin-top: 5px; /* Space between header and inputs */
+}
+
+
+
+.form-row input {
+  flex: 1; /* Allow inputs to take remaining space */
+  margin-right: 10px; /* Space between inputs */
+}
+
+
+
+
+.form-row label {
+  flex: 0 0 100px; /* Fixed width for labels */
+  margin-right: 10px; /* Space between label and input */
+}
+
+.form-row input {
+  flex: 1; /* Allow inputs to take remaining space */
+}
+
+
+
+.field-header {
+  font-weight: bold; /* Make the field header stand out */
+  margin-top: 10px; /* Space above the field header */
+  margin-bottom: 5px; /* Space below the field header */
+}
+
+.value-header {
+  font-weight: bold; /* Make value headers stand out */
+  margin-bottom: 5px; /* Space below the header */
+}
+
+.form-group input {
+  width: 100%; /* Full width for inputs */
+  margin-bottom: 10px; /* Space between input fields */
+}
+
+
+

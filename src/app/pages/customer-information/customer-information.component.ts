@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { DataValidation } from '../model/bulk-validation';
-import { DataValidationService } from '../service/data-validation.service';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { CustomerInformation } from './model/customer-information';
+import { CustomerInformationService } from './service/customer-infomation.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Table } from 'primeng/table';
+
 
 @Component({
-  selector: 'app-data-verification',
-  templateUrl: './data-verification.component.html',
-  styleUrls: ['./data-verification.component.scss'],
+  selector: 'app-customer-information',
+  templateUrl: './customer-information.component.html',
+  styleUrls: ['./customer-information.component.scss'],
   providers: [ConfirmationService, MessageService]
-})
-export class DataVerificationComponent implements OnInit {
 
-  // selectedRecords: any[] = [];
-  // currentRecord: any; // Use this to track the selected record
-  selectedRecords: DataValidation[] = []; // Change type to DataValidation
-  currentRecord!: DataValidation ;
+})
+export class CustomerInformationComponent implements OnInit {
+
+  selectedRecords: CustomerInformation[] = []; // Change type to DataValidation
+  currentRecord!: CustomerInformation ;
   currentIndex: number = 0;
   comments: string = '';
   rejectDialog: boolean = false;
@@ -37,62 +37,22 @@ export class DataVerificationComponent implements OnInit {
   customerHasAccountNo:any[]=[];
   customerGroup:any[]=[];
   isLandlord:any[]=[];
+  searchValue: string = ''; 
 
-
-
-  constructor(private router: Router,
-    private dataValidationService: DataValidationService ,private confirmationService: ConfirmationService, private messageService: MessageService) {
-    
   
-  }
+  @ViewChild('filter') filter!: ElementRef;
 
-  confirm1(event: Event) {
-    this.confirmationService.confirm({
-        target: event.target as EventTarget,
-        message: 'Are you sure you want to approve the selected record?',
-        header: 'Confirmation',
-        icon: 'pi pi-exclamation-triangle',
-        acceptIcon:"none",
-        rejectIcon:"none",
-        rejectButtonStyleClass:"p-button-text",
-        accept: () => {
-            this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
-        },
-        reject: () => {
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-        }
-    });
-}
 
-confirm2(event: Event) {
-  this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: 'Are you sure you want to reject the selected record??',
-      header: 'Reject Confirmation',
-      icon: 'pi pi-info-circle',
-      acceptButtonStyleClass:"p-button-danger p-button-text",
-      rejectButtonStyleClass:"p-button-text p-button-text",
-      acceptIcon:"none",
-      rejectIcon:"none",
+  constructor(private customerInformationService: CustomerInformationService ,  private confirmationService: ConfirmationService, private messageService: MessageService) {}
 
-      accept: () => {
-          this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted' });
-      },
-      reject: () => {
-          this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
-      }
-  });
-}
+
+
+
   onRecordSelect(selectedRecord: any) {
     this.currentRecord = selectedRecord; // Set the current record to the selected one
   }
   ngOnInit() {
-    // const state = history.state;
-    // if (state.selectedRecords) {
-    //   this.selectedRecords = state.selectedRecords;
-    //   this.currentRecord = this.selectedRecords[0]; // Display the first record initially
-    // }
-    this.dataValidationService.getValidation().then((data) => {
+    this.customerInformationService.getValidation().then((data) => {
       this.selectedRecords = data;
       this.currentRecord = this.selectedRecords[0] || null; // Display the first record initially
     });
@@ -196,6 +156,14 @@ confirm2(event: Event) {
     ];
   }
 
+
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal(
+        (event.target as HTMLInputElement).value,
+        'contains'
+    );
+}
+
   nextRecord() {
     if (this.currentIndex < this.selectedRecords.length - 1) {
       this.currentIndex++;
@@ -221,27 +189,7 @@ confirm2(event: Event) {
     this.rejectDialog = true;
   }
 
-  confirmReject() {
-    console.log('Rejected Reason:', this.rejectReason);
-    this.rejectDialog = false;
-    this.rejectReason = ''; // Clear the reject reason for the next time
-    this.nextRecord(); // Move to the next record after rejection
-  }
-
-  confirmReview() {
-    console.log('Review Comments:', this.comments);
-    this.reviewDialog = false;
-    this.comments = ''; // Clear comments for the next review
-    this.nextRecord(); // Move to the next record after review
-  }
-
-  cancelReject() {
-    this.rejectDialog = false;
-  }
-
-  cancelReview() {
-    this.reviewDialog = false;
-  }
+  
 
   // Check if the current record is the first one
   isFirstRecord(): boolean {
@@ -252,4 +200,6 @@ confirm2(event: Event) {
   isLastRecord(): boolean {
     return this.currentIndex === this.selectedRecords.length - 1;
   }
+
+  
 }

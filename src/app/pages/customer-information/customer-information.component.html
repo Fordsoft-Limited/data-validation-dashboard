@@ -1,0 +1,586 @@
+
+<div class="card">
+
+    <div class="flex justify-content-between  pb-3 mb-2 border-300  border-bottom-1">
+        <h5 class="m-0">Customer Information</h5>
+
+        <div class="flex flex-wrap gap-3">
+          <p-toast />
+          <p-confirmPopup />
+           
+          <div class="p-input-icon-left">
+            <i class="pi pi-search" style="margin-top: -3px;"></i>
+            <input pInputText type="text" [(ngModel)]="searchValue" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Keyword Search">
+          </div>        </div>
+
+    </div>
+    <div class="grid max-h-33rem">
+
+        <div class="col-12 md:col-4 h-auto">
+            <div class="selected-records-list">
+                <p-table #dt1 [value]="selectedRecords" [globalFilterFields]="['accountNo', 'customerFullName']"
+                    [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 30, 40, 50]"
+                    (onRowSelect)="onRecordSelect($event.data)">
+
+                    <ng-template pTemplate="header">
+                        <tr >
+
+                            <th pSortableColumn="cin">Customer Name <p-sortIcon field="cin"></p-sortIcon></th>
+                            <th pSortableColumn="customerFullName">Account No <p-sortIcon
+                                    field="customerFullName"></p-sortIcon></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-selectedRecord>
+                      <tr (click)="currentRecord = selectedRecord" class="cursor-pointer">
+                          <td>{{ selectedRecord.customerFullName }}</td>
+                          <td>{{ selectedRecord.accountNo }}</td>
+                      </tr>
+                  </ng-template>
+
+                    
+                </p-table>
+            </div>
+        </div>
+        <div class="col-none md:col-1">
+           <p-divider layout="vertical" />
+        </div>
+
+
+
+       
+
+
+       
+        <div class="col-12 md:col-7 form-scroll" style="margin-top: 40px;">
+            <div *ngIf="currentRecord">
+
+              <div class="form-group col-md-3">
+                <h6 style="margin-left: 100px;">Customer Full Name</h6>
+                <div class="form-row">
+                    <label for="customerNameNew">New Value</label>
+                    <input [disabled]="true"  pInputText id="fullName" [(ngModel)]="currentRecord.customerFullName" required />
+                </div>
+                <div class="form-row">
+                    <label for="customerNameOld">Old Value</label>
+                    <input [disabled]="true" pInputText id="fullName" [(ngModel)]="currentRecord.customerFullName" required />
+                </div>
+               </div>
+
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Customer ID</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="customerId" [(ngModel)]="currentRecord.customerId" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="customerId" [(ngModel)]="currentRecord.customerId" required />
+                </div>
+               </div>
+
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">CIN</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="cin" [(ngModel)]="currentRecord.cin" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="cin" [(ngModel)]="currentRecord.cin" required />
+                </div>
+               </div>
+
+               
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Account No</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+               
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Meter No</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+               
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">City</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Nearest Landmark</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">SetUp Date</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+               
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Latitude</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Longitude</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Application Date</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Dss Id</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Email</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Mobile</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Feeder</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Feeder ID</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Service Center</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Distribution Name</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">LT Pole ID</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Service Wire</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Upriser</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">>Region</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Business Hub</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Customer Nature of Business</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Customer NIN</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Customer Estimated Load </h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Customer Meter Manufacturer</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Customer Bill Name</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">LGA</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">State</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Status Code</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Account Type</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Supply TYpe</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Current Tariff Code</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Tariff Class</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Correct Tariff Code</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Customer Has Meter</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Account Category</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Connection Type</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Customer Meter Category</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Meter Location</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Meter Accessible</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Meter Sealed</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Customer Has Account No</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Customer Group</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Landlord Name</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Landlord Phone</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Landlord Phone</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Meter CT Ratio</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Slug</h6>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+                <div class="form-row">
+                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                </div>
+               </div>
+
+               <div class="form-group col-md-3">
+                <h6 style="margin-left: 20px;">Customer Batch</h6>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+                <div class="form-row">
+                  <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
+                </div>
+               </div>
+
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+
+  

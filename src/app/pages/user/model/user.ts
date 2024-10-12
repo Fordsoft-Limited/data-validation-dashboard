@@ -4,7 +4,9 @@ export interface User {
     role?: string;
     email?: string;
     password?: string;
-    cfPassword?: string;
+    confirmPassword?: string;
     inventoryStatus?: string;
     date?: string | Date;
+    ingredient?: string; 
+
 }

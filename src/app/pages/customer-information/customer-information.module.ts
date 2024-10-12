@@ -1,52 +1,61 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataValidationComponent } from './data-validation.component';
+import { CustomerInformationComponent } from './customer-information.component';
 import { RouterModule, Routes } from '@angular/router';
+import { SharedModule } from 'primeng/api';
+import { PasswordModule } from 'primeng/password';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { SharedModule } from './../../shared/shared.module';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { TabViewModule } from 'primeng/tabview';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { ToastModule } from 'primeng/toast';
+import { MessagesModule } from 'primeng/messages';
+import { TableModule } from 'primeng/table';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { RippleModule } from 'primeng/ripple';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { ToastModule } from 'primeng/toast';
+import { DropdownModule } from 'primeng/dropdown';
+import { DividerModule } from 'primeng/divider';
 import { SliderModule } from 'primeng/slider';
 import { RatingModule } from 'primeng/rating';
+import { DialogModule } from 'primeng/dialog';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';
-import { DropdownModule } from 'primeng/dropdown';
-import { DividerModule } from 'primeng/divider';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { DataVerificationComponent } from './data-verification/data-verification.component';
 
-export const dataValidationRoutes: Routes = [
+
+export const customerInformationRoutes: Routes = [
   {
     path: '',
-    component: DataValidationComponent,
+    component: CustomerInformationComponent
   },
-  {
-    path: 'data-verification',
-    data:{breadcrum: 'Data Verification'},
-    component: DataVerificationComponent, // Ensure this is properly set up
-  }
 
 ];
 
-
 @NgModule({
   declarations: [
-    DataValidationComponent,
-    DataVerificationComponent
+    CustomerInformationComponent
   ],
   imports: [
-
-  CommonModule,
+    CommonModule,
+    SharedModule,
+    CommonModule,
+    SharedModule,
+    TabViewModule,
+    FileUploadModule,
+    ButtonModule,
+    InputTextModule,
+    ReactiveFormsModule,
+    PasswordModule,
+    ProgressBarModule,
+    ToastModule,
+    MessagesModule,
+    CommonModule,
    SharedModule,
    CommonModule,
     SharedModule,
@@ -71,12 +80,7 @@ export const dataValidationRoutes: Routes = [
     FormsModule,
     TagModule,
     BadgeModule,
-    RouterModule.forChild(dataValidationRoutes),
-
-   ReactiveFormsModule,
-   FormsModule,
-
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    RouterModule.forChild(customerInformationRoutes)
+  ]
 })
-export class DataValidationModule { }
+export class CustomerInformationModule { }
