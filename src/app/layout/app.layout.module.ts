@@ -51,11 +51,11 @@ export const layoutRoutes: Routes = [
               ),
           },
           {
-            path: 'processed-data',
-            data:{breadcrumb: 'Processed Data'},
+            path: 'customer-information',
+            data:{breadcrumb: 'Customer Information'},
             loadChildren: () =>
-              import('../pages/processed-data/processed-data.module').then(
-                (m) => m.ProcessedDataModule
+              import('../pages/customer-information/customer-information.module').then(
+                (m) => m.CustomerInformationModule
               ),
           },
           {
@@ -114,6 +114,14 @@ export const layoutRoutes: Routes = [
             loadChildren: () =>
               import('../pages/bulk-customer-validation/bulk-customer-validation.module').then(
                 (m) => m.BulkCustomerValidationModule
+              ),
+          },
+          {
+            path: 'manage-user',
+            data:{breadcrumb: 'Manage User'},
+            loadChildren: () =>
+              import('../pages/manage-user/manage-user.module').then(
+                (m) => m.ManageUserModule
               ),
           },
           {

@@ -1,0 +1,94 @@
+<div class="card">
+    <span class="text-900 text-xl font-bold mb-4 block">Manage User</span>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="grid">
+        <div class="col-12 lg:col-2">
+          <div class="text-900 font-medium text-xl mb-3">Profile</div>
+          <p class="m-0 p-0 text-600 line-height-3 mr-3">Welcome to the user creation process! Please fill out the required fields to set up your account.</p>
+
+        </div>
+        <div class="col-12 lg:col-10">
+          <div class="grid formgrid p-fluid">
+            <div class="field mb-4 col-10">
+              <label for="name" class="font-medium text-900">Name</label>
+              <input id="name" style="height: 50px;" type="text" pInputText class="form-control" formControlName="name" required>
+              <div class="mt-2" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
+                <span class="errors" *ngIf="name?.errors?.['required']">*Name is Required.</span>
+                <span class="errors" *ngIf="name?.errors?.['pattern']">*Enter only characters.</span>
+
+            </div>
+            </div>
+  
+            <div class="field mb-4 col-10">
+              <label for="email" class="font-medium text-900">Email</label>
+              <input id="email" style="height: 50px;" type="email" class="form-control" pInputText formControlName="email" required>
+              <div class="mt-2" *ngIf="email?.invalid && (email?.touched || email?.dirty)">
+                <span class="errors" *ngIf="email?.errors?.['required']">*Email is Required.</span>
+                <span class="errors" *ngIf="email?.errors?.['pattern']">*Enter a valid email address.</span>
+            </div>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-12">
+                <div class=" flex">
+                    <div class="flex flex-wrap gap-3">
+                        <div class="flex align-items-center">
+                            <p-radioButton 
+                                name="ingredient" 
+                                value="admin" 
+                                formControlName="ingredient" 
+                                inputId="ingredient1" />
+                            <label for="ingredient1" class="ml-2">Admin</label>
+                        </div>
+
+                        <div class="flex align-items-center" style="margin-left: 25px;">
+                            <p-radioButton 
+                                name="ingredient" 
+                                value="user" 
+                                formControlName="ingredient" 
+                                inputId="ingredient2" />
+                            <label for="ingredient2" class="ml-2">User</label>
+                        </div>
+
+                        <div class="flex align-items-center" style="margin-left: 25px;">
+                            <p-radioButton 
+                                name="ingredient" 
+                                value="approval" 
+                                formControlName="ingredient" 
+                                inputId="ingredient3" />
+                            <label for="ingredient3" class="ml-2">Approval</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+  
+            
+
+            <div class="field mb-4 col-12 md:col-10">
+              <label for="password" class="font-medium text-900">Password</label>
+              <input style="height: 50px;" id="password" type="password" class="form-control" pInputText formControlName="password" required>
+              <div class="mt-2" *ngIf="password?.invalid && (password?.touched || password?.dirty)">
+                <span class="errors" *ngIf="password?.errors?.['required']">*Password is required.</span>
+                <span class="errors" *ngIf="password?.errors?.['minlength']">*Password must be at least 4 characters long.</span>
+              </div>
+            </div>
+  
+            <div class="field mb-4 col-12 md:col-10">
+              <label for="confirmPassword" class="font-medium text-900">Confirm Password</label>
+              <input style="height: 50px;" id="confirmPassword" type="password" class="form-control" pInputText formControlName="confirmPassword" required>
+              <div class="mt-2" *ngIf="confirmPassword?.invalid && (confirmPassword?.touched || confirmPassword?.dirty)">
+                <span class="errors" *ngIf="confirmPassword?.errors?.['required']">*Confirm Password is required.</span>
+                <span class="errors" *ngIf="userForm?.errors?.['passwordMismatch']">*Passwords do not match.</span>
+              </div>
+            </div>
+  
+            
+  
+            <div class="col-12">
+              <button pButton pRipple label="Add New User" [label]="isLoading ? 'Add New User...' : 'Add New User'" [disabled]="userForm.invalid" class="w-auto mt-3" type="submit"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  

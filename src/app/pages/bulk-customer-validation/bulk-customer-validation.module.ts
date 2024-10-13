@@ -12,6 +12,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 export const bulkCustomerValidationRoutes: Routes = [
   {
@@ -43,7 +44,7 @@ export const bulkCustomerValidationRoutes: Routes = [
 		ButtonModule,
 		ToastModule,
 		InputTextModule,
-    
+    MessageModule,
     RouterModule.forChild(bulkCustomerValidationRoutes)
   ]
 })

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-customer-validation',
@@ -9,6 +10,10 @@ import { MessageService } from 'primeng/api';
 })
 export class CustomerValidationComponent {
   uploadedFiles: any[] = [];
+  searchValue: string = ''; // Initialize searchValue
+
+  @ViewChild('filter') filter!: ElementRef;
+
 
   batches = [
     { batchCode: 'BATCH001', startDate: new Date(), endDate: null, status: 'Pending', uploadedBy: 'Admin',fileName: "example.jpg", fileSize: "512 Bytes" },
@@ -22,6 +27,15 @@ export class CustomerValidationComponent {
 
   constructor(private messageService: MessageService) {}
 
+
+
+  
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal(
+        (event.target as HTMLInputElement).value,
+        'contains'
+    );
+}
   exportData() {
     const csvContent = this.convertToCSV(this.batches);
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });

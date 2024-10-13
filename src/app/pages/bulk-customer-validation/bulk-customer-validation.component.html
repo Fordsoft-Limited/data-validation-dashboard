@@ -9,10 +9,9 @@
   <div class="col-12" style="width: 100%; max-width: 700px; margin: 10px auto; padding: 10px; box-sizing: border-box;">
     <p-fileUpload 
       name="demo[]" 
-      url="https://www.primefaces.org/cdn/api/upload.php" 
-      (onUpload)="onUpload($event)" 
+      (onUpload)="handleUpload($event)" 
       [multiple]="true" 
-      accept="image/*" 
+      accept=".xlsx,.csv" 
       [maxFileSize]="1000000">
       <ng-template pTemplate="content">
         <ul *ngIf="uploadedFiles.length" style="list-style-type: none; padding: 0; margin: 0;">
@@ -22,12 +21,17 @@
         </ul>
       </ng-template>
     </p-fileUpload>
+  
+    <p-message *ngIf="uploadError" severity="error" text="uploadError"></p-message>
+    <button *ngIf="uploadError" (click)="retryUpload()">Retry Upload</button>
+  
+    <p-message *ngIf="uploadSuccess" severity="success" text="uploadSuccess"></p-message>
   </div>
 
   <!-- Progress Bar Section -->
   <div class="col-12 card mt-2" style="width: 100%; max-width: 700px; margin: 10px auto; padding: 20px;">
-    <h6 style="text-align: left; margin: 0 0 10px;">Bulk Upload in Progress</h6> <!-- Aligned to the left -->
-    <p-progressBar [value]="50" ></p-progressBar>
+    <h6 style="text-align: left; margin: 0 0 10px;">Bulk Upload in Progress</h6>
+    <p-progressBar [value]="progressValue"></p-progressBar>
   </div>
 
   <div class="col-12" style="width: 100%; max-width: 700px; margin: 1px auto; padding: 20px">
@@ -39,32 +43,19 @@
   </div>
 
   <!-- Error Report Section -->
-  <div class="col-12" style="width: 100%; max-width: 700px; margin: 3px auto; padding: 10px; margin-top: -50px;">
-    <div class="text-900 font-semibold text-lg mt-5 mb-3 border-bottom-1 surface-border py-3">Error Report</div>
-    <ul class="list-none p-0 m-0">
-      <!-- Each list item should stack vertically with spacing -->
-      <li class="p-2 border-bottom-1 surface-border" style="margin-bottom: 10px;">
+<div class="col-12" style="width: 100%; max-width: 700px; margin: 3px auto; padding: 10px; margin-top: -50px;">
+  <div class="text-900 font-semibold text-lg mt-5 mb-3 border-bottom-1 surface-border py-3">Error Report</div>
+  <ul class="list-none p-0 m-0">
+    <ng-container *ngFor="let customer of customers">
+      <li *ngIf="customer.status === 'Invalid'" class="p-2 border-bottom-1 surface-border" style="margin-bottom: 10px;">
         <div class="flex flex-column gap-2">
           <div class="flex align-items-center">
-            <span class="font-semibold">Create a New Landing UI</span>   
+            <span class="font-semibold">Email: {{ customer.email }} - Reason: {{ customer.errorReason }}</span>
           </div>
         </div>
       </li>
-      <li class="p-3 border-bottom-1 surface-border" style="margin-bottom: 10px;">
-        <div class="flex flex-column gap-2">
-          <div class="flex align-items-center">
-            <span class="font-semibold">Create a New Marketing Project</span>   
-          </div>
-        </div>
-      </li>
-      <li class="p-3 border-bottom-1 surface-border" style="margin-bottom: 10px;">
-        <div class="flex flex-column gap-2">
-          <div class="flex align-items-center">
-            <span class="font-semibold">Create a New Marketing Project</span>   
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
+    </ng-container>
+  </ul>
+</div>
 
 </div>

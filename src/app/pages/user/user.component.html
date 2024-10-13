@@ -17,8 +17,16 @@
   >
   <ng-template pTemplate="caption">
       <div class="flex-container">
-          <button pButton pRipple label="Add New User" icon="pi pi-plus" class="p-button-secondary p-button-outlined mr-2" (click)="openNew()"></button>
-        
+          <!-- <button pButton pRipple label="Add New User" icon="pi pi-plus" class="p-button-secondary p-button-outlined mr-2" (click)="openNew()"></button> -->
+          <!-- <a routerLink="/app/manage-user" icon="pi pi-plus"   class="p-button-secondary p-button-outlined mr-2">
+            Add New User 
+          </a> -->
+
+          <a routerLink="/app/manage-user"   class="p-button font-bold">
+            Add New User 
+          </a>
+
+
           <div class="p-input-icon-left">
             <i class="pi pi-search" style="margin-top: -3px;"></i>
             <input pInputText type="text" [(ngModel)]="searchValue" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Keyword Search">
