@@ -91,6 +91,23 @@ export const layoutRoutes: Routes = [
                 (m) => m.CustomerValidationModule
               ),
           },
+           
+          {
+            path: 'approved-record',
+            data:{breadcrumb: 'Approved Record'},
+            loadChildren: () =>
+              import('../pages/approved-asset/approved-asset.module').then(
+                (m) => m.ApprovedAssetModule
+              ),
+          },
+          {
+            path: 'customer-details',
+            data:{breadcrumb: 'Customer Details'},
+            loadChildren: () =>
+              import('../pages/customer-details/customer-details.module').then(
+                (m) => m.CustomerDetailsModule
+              ),
+          },
           {
             path: 'bulk-customer-validation',
             data:{breadcrumb: 'Bulk Customer Validation'},

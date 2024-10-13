@@ -1,0 +1,144 @@
+<div class="card">
+    <form [formGroup]="filterForm" (ngSubmit)="filterData()">
+        <div class="flex gap-5 mb-4 justify-content-center">
+          <div class="flex flex-column gap-2">
+            <label for="dateRange">Date Range:</label>
+            <div class="flex gap-2"> 
+              <input type="date" formControlName="dateRange" pInputText class="date-range"/>
+              <input type="date" formControlName="dateRange" pInputText class="date-range"/>
+            </div>
+          </div>
+      
+          <div class="flex flex-column gap-2">
+            <label for="feeder">Feeder:</label>
+            <p-dropdown formControlName="feeder" [options]="feeders" placeholder="Select Feeder"></p-dropdown>
+          </div>
+      
+          <div class="flex flex-column gap-2">
+            <label for="businessUnit">Business Unit:</label>
+            <p-dropdown formControlName="businessUnit" [options]="businessUnits" placeholder="Select Business Unit"></p-dropdown>
+          </div>
+      
+          <div class="flex gap-2 mt-4">
+            <p-button type="submit" label="Filter"></p-button>
+            <!-- <p-button type="button" label="Reset Filter" (click)="resetFilter()" class="p-button-secondary"></p-button> -->
+          </div>
+        </div>
+      </form>
+      
+      <!-- Display filtered records -->
+      <p-table [value]="filteredRecords">
+        <!-- Table content here -->
+      </p-table>
+      
+
+    <p-table #dt1 [value]="approvedRecords" dataKey="recordNumber" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading" [paginator]="true"
+        [globalFilterFields]="['customerName', 'cin', 'accountNumber', 'meterNumber']"
+        (onRowSelect)="showDetails($event.data)">
+
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="resetFilter()"/>
+                <p-button label="Show Details" (click)="openDialog()" class="ml-3"></p-button>
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" [(ngModel)]="searchValue" #filter
+                        (input)="onGlobalFilter(dt1, $event)" placeholder="Keyword Search">
+                </span>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+                <th style="min-width:15rem">Customer Name</th>
+                <th style="min-width:15rem">CIN</th>
+                <th style="min-width:15rem">Record Number</th>
+                <th style="min-width:15rem">Account Number</th>
+                <th style="min-width:15rem">Meter Number</th>
+                <th style="min-width:10rem">Date Captured</th>
+                <th style="min-width:10rem">Date Approved</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-record>
+            <tr class="cursor-pointer">
+                <td><p-tableCheckbox [value]="record" /></td>
+                <td>{{ record.customerName }}</td>
+                <td>{{ record.cin }}</td>
+                <td>{{ record.recordNumber }}</td>
+                <td>{{ record.accountNumber }}</td>
+                <td>{{ record.meterNumber }}</td>
+                <td>{{ record.dateCaptured | date: 'MM/dd/yyyy' }}</td>
+                <td>{{ record.dateApproved | date: 'MM/dd/yyyy' }}</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8">No approved records found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</div>
+
+
+
+
+ <p-dialog [(visible)]="showDetailsDialog" modal="modal" [closable]="true" [header]="selectedApprovedRecord?.customerName"
+  >
+  <!-- [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" -->
+  <div *ngIf="selectedApprovedRecord" class="grid">
+
+     <div class="col-12 ">
+          <p><strong>Customer Full Name:</strong> {{ selectedApprovedRecord.customerName }}</p>
+          <p><strong>Account No:</strong> {{ selectedApprovedRecord.cin }}</p>
+          <p><strong>Meter No:</strong> {{ selectedApprovedRecord.recordNumber }}</p>
+          <p><strong>Address:</strong> {{ selectedApprovedRecord.accountNumber }}</p>
+          <p><strong>City:</strong> {{ selectedApprovedRecord.meterNumber }}</p>
+          <p><strong>Date Captured:</strong> {{ selectedApprovedRecord.dateCaptured | date: 'MM/dd/yyyy' }}</p>
+          <p><strong>Date Approved:</strong> {{ selectedApprovedRecord.dateApproved | date: 'MM/dd/yyyy' }}</p>
+      </div>
+   <!--    <div class="col-12 md:col-6">
+          <p><strong>Application Date:</strong> {{ selectedDataValidation.applicationDate | date: 'MM/dd/yyyy' }}</p>
+          <p><strong>Mobile:</strong> {{ selectedDataValidation.mobile }}</p>
+          <p><strong>Email:</strong> {{ selectedDataValidation.email }}</p>
+          <p><strong>Status Code:</strong> {{ selectedDataValidation.statusCode }}</p>
+          <p><strong>Account Type:</strong> {{ selectedDataValidation.accountType }}</p>
+          <p><strong>Current Tariff Code:</strong> {{ selectedDataValidation.currentTariffCode }}</p>
+          <p><strong>Correct Tariff Code:</strong> {{ selectedDataValidation.correctTariffCode }}</p>
+          <p><strong>Tariff Class:</strong> {{ selectedDataValidation.tariffClass }}</p>
+          <p><strong>Feeder:</strong> {{ selectedDataValidation.feeder }}</p>
+          <p><strong>Service Center:</strong> {{ selectedDataValidation.serviceCenter }}</p>
+          <p><strong>Region:</strong> {{ selectedDataValidation.region }}</p>
+          <p><strong>Business Hub:</strong> {{ selectedDataValidation.businessHub }}</p>
+
+          <p>
+              <strong>Status:</strong>
+              <p-tag *ngIf="selectedDataValidation" [value]="selectedDataValidation.status ?? 'Unknown'"
+                  [severity]="getSeverity(selectedDataValidation.status ?? 'Unknown')">
+              </p-tag>
+          </p>
+      </div>
+      
+
+      <div class="col-12 flex flex-column gap-2">
+          <label for="comments">Comments:</label>
+          <textarea id="comments" rows="3" [(ngModel)]="comments" pInputTextarea></textarea>
+      </div>
+
+      <div class="col-12 flex justify-content-between ">
+          <p-button label="Reject" (click)="rejectRecord()" [disabled]="!selectedDataValidation"
+              severity="danger"></p-button>
+          <p-button label="Approve" (click)="approveRecord()" [disabled]="!selectedDataValidation"
+              severity="success"></p-button>
+      </div>
+
+      <div class="col-12 flex justify-content-end gap-3 mt-4">
+          <p-button label="Previous" (click)="previousRecord()" [disabled]="isPreviousDisabled()"></p-button>
+          <p-button label="Next" (click)="nextRecord()" [disabled]="isNextDisabled()"></p-button>
+      </div> -->
+  </div>
+</p-dialog>

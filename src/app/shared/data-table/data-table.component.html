@@ -1,30 +1,49 @@
-<p-table [value]="data" [rows]="10" [loading]="loading" [paginator]="true" [globalFilterFields]="globalFilterFields">
-  <ng-template pTemplate="caption">
-    <ng-content></ng-content> <!-- For any custom content (like search) -->
-  </ng-template>
+<p-table [value]="data" [rows]="rowsPerPage" [loading]="loading" [paginator]="true" 
+         [globalFilterFields]="globalFilterFields" [resizableColumns]="true" 
+         [reorderableColumns]="true" selectionMode="multiple" [(selection)]="selectedRows">
+         <ng-template pTemplate="caption">
+          <ng-content></ng-content> 
+        </ng-template>
+      
+        <!-- Column toggler for customizable column visibility -->
+        <!-- <p-columnToggler></p-columnToggler> -->
+      
+        <!-- Header Row with Sorting -->
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let header of headers" [style.minWidth]="header.minWidth" [pSortableColumn]="header.field">
+              <div class="flex justify-content-between align-items-center">
+                {{ header.label }}
+                <p-sortIcon [field]="header.field"></p-sortIcon> <!-- Sorting Icon -->
+              </div>
+            </th>
+          </tr>
+        </ng-template>
 
-  <ng-template pTemplate="header">
-    <tr>
-      <th *ngFor="let header of headers" [style.minWidth]="header.minWidth">
-        <div class="flex justify-content-between align-items-center">
-          {{ header.label }}
-        </div>
-      </th>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="body" let-rowData>
-    <tr>
-      <td *ngFor="let header of headers">
-          <span *ngIf="!header.isAction">
-              <!-- Check if the field is 'date' and apply date formatting -->
-              <ng-container *ngIf="header.field === 'date'; else defaultField">
-                {{ rowData[header.field] | date:'MM/dd/yyyy' }} <!-- Customize format as needed -->
+        <ng-template pTemplate="body" let-rowData>
+          <tr>
+            <td *ngFor="let header of headers">
+              <span *ngIf="!header.isAction">
+                <!-- Date formatting -->
+                <ng-container *ngIf="header.field === 'date'; else defaultField">
+                  {{ rowData[header.field] | date:'MM/dd/yyyy' }}
+                </ng-container>
+                <ng-template #defaultField>
+                  {{ rowData[header.field] }}
+                </ng-template>
+              </span>
+              
+              <!-- Status Tag -->
+              <ng-container *ngIf="header.status">
+                <p-tag 
+                  [value]="rowData[header.field]" 
+                  [severity]="getSeverity(rowData[header.field])" 
+                  [rounded]="true" 
+                 ></p-tag>
+             
               </ng-container>
-              <ng-template #defaultField>
-                {{ rowData[header.field] }}
-              </ng-template>
-            </span>
+
+
         <ng-container *ngIf="header.isAction">
           <div class="action-buttons">
             <p-button icon="pi pi-pencil" class="mr-2" (click)="edit(rowData)"></p-button>

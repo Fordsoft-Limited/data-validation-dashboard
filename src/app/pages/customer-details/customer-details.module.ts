@@ -1,6 +1,7 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataValidationComponent } from './data-validation.component';
+import { CustomerDetailsComponent } from './customer-details.component';
+import { CustomerDetailFieldComponent } from './customer-detail-field/customer-detail-field.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -23,38 +24,36 @@ import { BadgeModule } from 'primeng/badge';
 import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { DataVerificationComponent } from './data-verification/data-verification.component';
+//import { QRCodeModule } from 'qrcode';
 
-export const dataValidationRoutes: Routes = [
+
+export const customerDetailsRoutes: Routes = [
   {
     path: '',
-    component: DataValidationComponent,
+    component: CustomerDetailsComponent,
   },
-  {
-    path: 'data-verification',
-    data:{breadcrum: 'Data Verification'},
-    component: DataVerificationComponent, 
-  }
+  // {
+  //   path: 'data-verification',
+  //   data:{breadcrum: 'Data Verification'},
+  //   component: DataVerificationComponent, 
+  // }
 
 ];
 
-
 @NgModule({
   declarations: [
-    DataValidationComponent,
-    DataVerificationComponent
+    CustomerDetailsComponent,
+    CustomerDetailFieldComponent,
+
   ],
   imports: [
-
-  CommonModule,
-   SharedModule,
-   CommonModule,
-    SharedModule,
+    CommonModule,
     TableModule,
     ConfirmDialogModule,
     ButtonModule,
     ConfirmPopupModule,
     InputTextModule,
+    SharedModule,
     ToggleButtonModule,
     RippleModule,
     MultiSelectModule,
@@ -71,12 +70,10 @@ export const dataValidationRoutes: Routes = [
     FormsModule,
     TagModule,
     BadgeModule,
-    RouterModule.forChild(dataValidationRoutes),
+    RouterModule.forChild(customerDetailsRoutes),
 
    ReactiveFormsModule,
    FormsModule,
-
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  ]
 })
-export class DataValidationModule { }
+export class CustomerDetailsModule { }
