@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApprovedAssetComponent } from './approved-asset.component';
+import { NewCustomerComponent } from './new-customer.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -22,54 +22,43 @@ import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';
 import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { CustomerDetailsComponent } from '../customer-details/customer-details.component';
 
-export const approvedAssetRoutes: Routes = [
+export const newCustomerRoute: Routes = [
   {
     path: '',
-    component: ApprovedAssetComponent,
+    component: NewCustomerComponent
   },
-  // {
-  //   path: 'data-verification',
-  //   data:{breadcrum: 'Data Verification'},
-  //   component: DataVerificationComponent, 
-  // }
 
 ];
 
 @NgModule({
   declarations: [
-    ApprovedAssetComponent
+    NewCustomerComponent
   ],
   imports: [
     CommonModule,
+    RouterModule.forChild(newCustomerRoute),
+    ReactiveFormsModule,
+    FormsModule,
     TableModule,
     ConfirmDialogModule,
     ButtonModule,
-    ConfirmPopupModule,
     InputTextModule,
-    SharedModule,
+    SelectButtonModule,
     ToggleButtonModule,
     RippleModule,
     MultiSelectModule,
+    BadgeModule,
     InputTextareaModule,
     DropdownModule,
+    TagModule,
     DividerModule,
     ProgressBarModule,
     ToastModule,
     SliderModule,
     RatingModule,
     DialogModule,
-    SelectButtonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    TagModule,
-    BadgeModule,
-    RouterModule.forChild(approvedAssetRoutes),
-
-   ReactiveFormsModule,
-   FormsModule,
+    
   ]
 })
-export class ApprovedAssetModule { }
+export class NewCustomerModule { }

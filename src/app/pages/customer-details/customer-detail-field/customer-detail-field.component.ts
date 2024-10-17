@@ -7,8 +7,8 @@ import { Component,Input } from '@angular/core';
 })
 export class CustomerDetailFieldComponent {
 
-  @Input() fieldName: string = '';
-  @Input() newData: string | null = null;
-  @Input() existingData: string | null = null;
+  @Input() fieldName!: string;
+  @Input() newData: string | null = null; // Accepts string or null
+  @Input() existingData: string | null = null; // Accepts string or null
 
 }

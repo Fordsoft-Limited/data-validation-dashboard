@@ -5,13 +5,13 @@ import {
     Renderer2,
     ViewChild,
 } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router,NavigationStart,  NavigationCancel, NavigationError  } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { MenuService } from './app.menu.service';
 import { AppSidebarComponent } from './app.sidebar.component';
 import { AppTopbarComponent } from './app.topbar.component';
 import { LayoutService } from './service/app.layout.service';
-
+import { LoadingService } from '../shared/services/loading.service';
 @Component({
     selector: 'app-layout',
     templateUrl: './app.layout.component.html',
@@ -35,12 +35,17 @@ export class AppLayoutComponent implements OnDestroy {
 
     @ViewChild(AppTopbarComponent) appTopbar!: AppTopbarComponent;
 
+    loading$ = this.loadingService.loading$; // Subscribe to the loading state
+
+
+
     constructor(
         private menuService: MenuService,
         public layoutService: LayoutService,
         public renderer: Renderer2,
         public router: Router,
-        private cd: ChangeDetectorRef
+        private cd: ChangeDetectorRef,
+        private loadingService: LoadingService
     ) {
         this.hideMenuProfile();
 
@@ -154,6 +159,22 @@ export class AppLayoutComponent implements OnDestroy {
                 }
             });
 
+            this.router.events.subscribe((event) => {
+                if (event instanceof NavigationStart) {
+                    this.showLoadingWithDelay();
+                } else if (
+                    event instanceof NavigationEnd ||
+                    event instanceof NavigationCancel ||
+                    event instanceof NavigationError
+                ) {
+                    this.hideLoadingAfterDelay();
+                    this.hideMenu();
+                    this.hideTopbarMenu();
+                    this.hideMenuProfile();
+                }
+            });
+        
+
         this.router.events
             .pipe(filter((event) => event instanceof NavigationEnd))
             .subscribe(() => {
@@ -161,8 +182,26 @@ export class AppLayoutComponent implements OnDestroy {
                 this.hideTopbarMenu();
                 this.hideMenuProfile();
             });
+
+
+            
+            
+    }
+    
+
+
+    showLoadingWithDelay() {
+        setTimeout(() => {
+            this.loadingService.showLoading();
+        }, 0); // Delay for showing loading spinner (500ms)
     }
 
+    // Method to hide the loading spinner after a delay
+    hideLoadingAfterDelay() {
+        setTimeout(() => {
+            this.loadingService.hideLoading();
+        }, 2000); // Delay for hiding loading spinner (1 second)
+    }
     blockBodyScroll(): void {
         if (document.body.classList) {
             document.body.classList.add('blocked-scroll');

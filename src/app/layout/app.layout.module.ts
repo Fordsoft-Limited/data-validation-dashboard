@@ -27,6 +27,7 @@ import { MenuModule } from 'primeng/menu';
 import { StyleClassModule } from 'primeng/styleclass';
 import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 export const layoutRoutes: Routes = [
@@ -141,6 +142,16 @@ export const layoutRoutes: Routes = [
                 (m) => m.SettingsModule
               ),
           },
+
+          {
+            path:'new-customer',
+            data:{breadcrumb: 'New  Customer'},
+
+            loadChildren: () =>
+              import('../pages/new-customer/new-customer.module').then(
+                (m) => m.NewCustomerModule
+              ),
+          },
     ]
     },
 
@@ -166,7 +177,7 @@ export const layoutRoutes: Routes = [
         StyleClassModule,
        SharedModule,
         SidebarModule,
-
+        ProgressSpinnerModule,
         AppConfigModule,
         RouterModule.forChild(layoutRoutes),
     ]

@@ -24,12 +24,13 @@ import { BadgeModule } from 'primeng/badge';
 import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { TimelineModule } from 'primeng/timeline';
 //import { QRCodeModule } from 'qrcode';
-
+import { CardModule } from 'primeng/card';
 
 export const customerDetailsRoutes: Routes = [
   {
-    path: '',
+    path: ':id',
     component: CustomerDetailsComponent,
   },
   // {
@@ -51,9 +52,11 @@ export const customerDetailsRoutes: Routes = [
     TableModule,
     ConfirmDialogModule,
     ButtonModule,
+    CardModule,
     ConfirmPopupModule,
     InputTextModule,
     SharedModule,
+    TimelineModule,
     ToggleButtonModule,
     RippleModule,
     MultiSelectModule,

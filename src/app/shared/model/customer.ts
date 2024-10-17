@@ -1,32 +1,5 @@
-// export interface DataValidation{
-//     customerFullName?:string;
-//     accountNo?:string;
-//     meterNo?:string;
-//     address?:string;
-//     city?:string;
-//     lga?:string;
-//     state?:string;
-//     latitude?:string;
-//     longitude?:string;
-//     customerId?:string;
-//     cin?:string;
-//     applicationDate?:string|Date;
-//     currentTariffCode?:string;
-//     accountType?:string;
-//     correctTariffCode?:string;
-//     tariffClass?:string;
-
-//     email?:string;
-//     mobile?:string;
-//     id?:string;
-//     feeder?:string;
-//     district?:string;
-//     date?: string | Date;
-//     status?:string;
-//     comments?: string;
-// }
-export interface DataValidation {
-    id?:string;
+export interface Customer {
+    id?:number;
     customerFullName: string;
     accountNo: string;
     meterNo: string;
@@ -36,6 +9,7 @@ export interface DataValidation {
     state: string;
     nearestLandmark: string;
     date?: string | Date;
+    dateApproved: string| Date;  
     latitude: string;
     longitude: string;
     customerId: string;

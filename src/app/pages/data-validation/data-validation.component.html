@@ -1,6 +1,6 @@
 <div class="card">
   <form [formGroup]="filterForm" (ngSubmit)="filterData()">
-      <div class="flex gap-5 mb-4 justify-content-center">
+      <div class="flex gap-5 mb-4 justify-content-center flex-wrap">
         <div class="flex flex-column gap-2">
           <label for="dateRange">Date Range:</label>
           <div class="flex gap-2"> 
@@ -20,7 +20,7 @@
           <p-dropdown formControlName="businessUnit" [options]="businessUnits" placeholder="Select Business Unit"></p-dropdown>
         </div>
   
-        <p-button type="submit" label="Filter" class="mt-4"></p-button>
+        <p-button type="submit" label="Filter" [loading]="loading" [outlined]="true"severity="secondary" class="mt-4"></p-button>
       </div>
   </form>
 
@@ -29,11 +29,11 @@
       (onRowSelect)="showDetails($event.data)">
       <ng-template pTemplate="caption">
           <div class="flex">
-              <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" />
-<!-- 
-              <p-button label="Show Details" (click)="openDialog()" [disabled]="!selectedDataValidation" class="ml-3"></p-button> -->
+              <!-- <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" /> -->
+
+              <p-button label="Review" [loading]="loading" (click)="navigateToDetails()" [disabled]="!selectedDataValidation" class="ml-3"></p-button>
               
-              <p-button label="Show Details" (click)="navigateToDetails()"   class="ml-3"></p-button>
+              <!-- <p-button label="Show Details" (click)="navigateToDetails()"   class="ml-3"></p-button> -->
               <span class="p-input-icon-left ml-auto">
                   <i class="pi pi-search"></i>
                   <input pInputText type="text" [(ngModel)]="searchValue" #filter

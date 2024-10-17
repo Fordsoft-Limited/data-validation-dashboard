@@ -1,147 +1,97 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
+import { Customer } from '../../shared/model/customer';
+import { CustomerService } from '../../shared/services/customer.service';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-customer-details',
   templateUrl: './customer-details.component.html',
   styleUrl: './customer-details.component.scss'
 })
-export class CustomerDetailsComponent {
+export class CustomerDetailsComponent implements OnInit {
+ // customerId: number = 1001;
+  // customerId: number;
+  customerId: number  = 0; 
+  customer: Customer | null = null;
+  newData: Customer | null = null;
+  existingData: Customer | null = null;
 
-  customer = {
-    customerId: 'CUST123456',
-    newData: {
-      customerFullName: 'John Doe',
-      accountNumber: '123456789',
-      meterNumber: 'MT123456789',
-      address: '123 Main St',
-      city: 'Lagos',
-      lga: 'Ikeja',
-      state: 'Lagos',
-      nearestLandmark: 'Central Park',
-      setupDate: '2023-01-10',
-      latitude: '6.5244',
-      longitude: '3.3792',
-      cin: 'CIN123456',
-      applicationDate: '2023-09-25',
-      mobileNumber: '08012345678',
-      email: 'johndoe@example.com',
-      statusCode: 'ACTIVE',
-      accountType: 'Residential',
-      currentTariffCode: 'TAR001',
-      correctTariffCode: 'TAR002',
-      tariffClass: 'Class A',
-      feeder: 'Feeder-1',
-      feederId: 'FEED001',
-      serviceCenter: 'Center-1',
-      distributionName: 'Dist-1',
-      dssId: 'DSS001',
-      ltPoleId: 'LTP001',
-      serviceWire: 'Copper',
-      upriser: 'UP001',
-      region: 'Region 1',
-      businessHub: 'Business Hub 1',
-      accountCategory: 'Commercial',
-      connectionType: 'Prepaid',
-      customersNatureOfBusiness: 'Retail',
-      customerNIN: 'NIN123456',
-      customerSupplyType: 'Single Phase',
-      customerEstimatedLoad: '5KW',
-      customerHasMeter: 'Yes',
-      customerMeterCategory: 'Postpaid',
-      customerMeterManufacturer: 'Manufacturer-1',
-      customerMeterSealed: 'Yes',
-      customerMeterAccessible: 'Yes',
-      customerMeterLocation: 'Outdoor',
-      customerBillName: 'John Doe',
-      customerHasAccountNumber: 'Yes',
-      customerGroup: 'Group 1',
-      isLandlord: 'Yes',
-      landlordName: 'John Doe Sr.',
-      landlordPhone: '08098765432',
-      tenantName: 'Tenant Name',
-      tenantPhone: '08065432178',
-      meterCtRatio: '5:1',
-      customerBatch: 'Batch-1',
-      slug: 'john-doe-lagos-123'
-    } as { [key: string]: string },  // Index signature for newData
-    existingData: {
-      customerFullName: 'Jonathan Doe',
-      accountNumber: '987654321',
-      meterNumber: 'MT987654321',
-      address: '456 Market St',
-      city: 'Abuja',
-      lga: 'Wuse',
-      state: 'Abuja',
-      nearestLandmark: 'Shopping Mall',
-      setupDate: '2022-05-15',
-      latitude: '9.0765',
-      longitude: '7.3986',
-      cin: 'CIN654321',
-      applicationDate: '2022-06-15',
-      mobileNumber: '08098765432',
-      email: 'jonathandoe@example.com',
-      statusCode: 'INACTIVE',
-      accountType: 'Commercial',
-      currentTariffCode: 'TAR002',
-      correctTariffCode: 'TAR001',
-      tariffClass: 'Class B',
-      feeder: 'Feeder-2',
-      feederId: 'FEED002',
-      serviceCenter: 'Center-2',
-      distributionName: 'Dist-2',
-      dssId: 'DSS002',
-      ltPoleId: 'LTP002',
-      serviceWire: 'Aluminum',
-      upriser: 'UP002',
-      region: 'Region 2',
-      businessHub: 'Business Hub 2',
-      accountCategory: 'Residential',
-      connectionType: 'Postpaid',
-      customersNatureOfBusiness: 'Wholesale',
-      customerNIN: 'NIN654321',
-      customerSupplyType: 'Three Phase',
-      customerEstimatedLoad: '10KW',
-      customerHasMeter: 'Yes',
-      customerMeterCategory: 'Prepaid',
-      customerMeterManufacturer: 'Manufacturer-2',
-      customerMeterSealed: 'No',
-      customerMeterAccessible: 'No',
-      customerMeterLocation: 'Indoor',
-      customerBillName: 'Jonathan Doe',
-      customerHasAccountNumber: 'Yes',
-      customerGroup: 'Group 2',
-      isLandlord: 'No',
-      landlordName: '',
-      landlordPhone: '',
-      tenantName: 'Tenant Doe',
-      tenantPhone: '08087654321',
-      meterCtRatio: '10:1',
-      customerBatch: 'Batch-2',
-      slug: 'jonathan-doe-abuja-987'
-    } as { [key: string]: string },  // Index signature for existingData
-    dataEntryHistory: [
-      { content: 'Updated meter number', date_created: '2023-10-01' },
-      { content: 'Changed tariff code', date_created: '2023-09-15' },
-      { content: 'Updated contact number', date_created: '2023-08-20' },
-      { content: 'Address correction', date_created: '2023-07-10' }
-    ]
-  };
-  customerFields = [
+
+  constructor(private customerService: CustomerService, private route: ActivatedRoute, private router: Router) {
+    // this.customerId=0;
+  }
+
+  ngOnInit(): void {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    this.customerId = idParam ? +idParam : 0; // Update customerId based on route parameter
+    this.loadCustomerDetails();
+  }
+  // loadCustomerDetails(): void {
+  //   // Fetch existing customer data
+  //   this.customerService.getCustomerById(this.customerId).then(existingCustomer => {
+  //     this.existingData = existingCustomer;
+  //     // Fetch new customer data
+  //     return this.customerService.getNewCustomerById(this.customerId);
+  //   }).then(newCustomer => {
+  //     this.newData = newCustomer;
+
+     
+     
+  //   }).catch(error => {
+  //     console.error('Error fetching customer data', error);
+  //   });
+  // }
+
+  loadCustomerDetails(): void {
+    if (this.customerId !== null) {
+      this.customerService.getCustomerById(this.customerId).then(existingCustomer => {
+        this.existingData = existingCustomer;
+        return this.customerService.getNewCustomerById(this.customerId);
+      }).then(newCustomer => {
+        this.newData = newCustomer;
+      }).catch(error => {
+        console.error('Error fetching customer data', error);
+      });
+    }
+  }
+
+ 
+
+  dataEntryHistory = [
+    { content: 'Updated meter number', date_created: '2023-10-01',icon: 'pi pi-cloud-upload' ,color:'#10e01a'},
+    { content: 'Changed tariff code', date_created: '2023-09-15' ,icon: 'pi pi-eraser',color:'#f5d902'},
+    { content: 'Updated contact number', date_created: '2023-08-20' ,icon: 'pi pi-cloud-upload',color:'#dd02f5'},
+    { content: 'Address correction', date_created: '2023-07-10' ,icon: 'pi pi-pencil',color:'#f57c02'}
+  ];
+
+  events = this.dataEntryHistory.map(entry => ({
+    status: entry.content,
+    date: entry.date_created,
+    icon: entry.icon, // Optionally add an icon
+    color: entry.color      // Optionally add a color
+  }));
+  // Navigation method to go back
+  goBack() {
+    window.history.back();
+   }
+
+
+
+   customerFields: { name: string; key: keyof Customer }[] = [
     { name: 'Customer Full Name', key: 'customerFullName' },
-    { name: 'Account Number', key: 'accountNumber' },
-    { name: 'Meter Number', key: 'meterNumber' },
+    { name: 'Account Number', key: 'accountNo' },
+    { name: 'Meter Number', key: 'meterNo' },
     { name: 'Address', key: 'address' },
     { name: 'City', key: 'city' },
     { name: 'LGA', key: 'lga' },
     { name: 'State', key: 'state' },
     { name: 'Nearest Landmark', key: 'nearestLandmark' },
-    { name: 'Setup Date', key: 'setupDate' },
+    { name: 'Setup Date', key: 'applicationDate' },
     { name: 'Latitude', key: 'latitude' },
     { name: 'Longitude', key: 'longitude' },
     { name: 'Customer ID', key: 'customerId' },
     { name: 'CIN', key: 'cin' },
     { name: 'Application Date', key: 'applicationDate' },
-    { name: 'Mobile Number', key: 'mobileNumber' },
+    { name: 'Mobile Number', key: 'mobile' },
     { name: 'Email', key: 'email' },
     { name: 'Status Code', key: 'statusCode' },
     { name: 'Account Type', key: 'accountType' },
@@ -160,32 +110,27 @@ export class CustomerDetailsComponent {
     { name: 'Business Hub', key: 'businessHub' },
     { name: 'Account Category', key: 'accountCategory' },
     { name: 'Connection Type', key: 'connectionType' },
-    { name: "Customer's Nature of Business", key: 'customersNatureOfBusiness' },
+    { name: "Customer's Nature of Business", key: 'custNatureOfBusiness' },
     { name: 'Customer NIN', key: 'customerNIN' },
     { name: 'Customer Supply Type', key: 'customerSupplyType' },
     { name: 'Customer Estimated Load', key: 'customerEstimatedLoad' },
-    { name: 'Customer Has Meter', key: 'customerHasMeter' },
+    { name: 'Customer Has Meter', key: 'custHasMeter' },
     { name: 'Customer Meter Category', key: 'customerMeterCategory' },
     { name: 'Customer Meter Manufacturer', key: 'customerMeterManufacturer' },
-    { name: 'Customer Meter Sealed', key: 'customerMeterSealed' },
+    { name: 'Customer Meter Sealed', key: 'customerMeterSaled' },
     { name: 'Customer Meter Accessible', key: 'customerMeterAccessible' },
     { name: 'Customer Meter Location', key: 'customerMeterLocation' },
     { name: 'Customer Bill Name', key: 'customerBillName' },
-    { name: 'Customer Has Account Number', key: 'customerHasAccountNumber' },
+    { name: 'Customer Has Account Number', key: 'customerHasAccountNo' },
     { name: 'Customer Group', key: 'customerGroup' },
     { name: 'Is Landlord', key: 'isLandlord' },
     { name: 'Landlord Name', key: 'landlordName' },
     { name: 'Landlord Phone', key: 'landlordPhone' },
     { name: 'Tenant Name', key: 'tenantName' },
     { name: 'Tenant Phone', key: 'tenantPhone' },
-    { name: 'Meter CT Ratio', key: 'meterCtRatio' },
-    { name: 'Customer Batch', key: 'customerBatch' },
-    { name: 'Slug', key: 'slug' }
+    { name: 'Meter CT Ratio', key: 'supplyType' },
+    { name: 'Customer Batch', key: 'customerGroup' },
+    //{ name: 'Slug', key: 'slug' }
   ];
-
-  // Navigation method to go back
-  goBack() {
-  //   window.history.back();
-   }
-
+  
 }

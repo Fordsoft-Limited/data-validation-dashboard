@@ -1,7 +1,12 @@
 <div class="card">
 
     <div class="flex justify-content-between  pb-3 mb-2 border-300  border-bottom-1">
-        <h5 class="m-0">Checker</h5>
+
+      <div class="flex flex-column p-0 m-0">
+         <h5 class="-mt-1">Checker</h5>
+         <h6 class="-mt-1">Total item: 27</h6>
+      </div>
+       
 
         <div class="flex flex-wrap gap-3">
           <p-toast />
@@ -19,18 +24,10 @@
                 <p-table #dt [value]="selectedRecords" [globalFilterFields]="['cin', 'customerFullName']"
                     [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 30, 40, 50]"
                     (onRowSelect)="onRecordSelect($event.data)">
-                    <!-- <ng-template pTemplate="caption">
-                        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                            <h5 class="m-0">Data Approval/Review</h5>
-
-                        </div>
-                    </ng-template> -->
 
                     <ng-template pTemplate="header">
                         <tr >
-                            <!-- <th style="width: 3rem">
-                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                            </th> -->
+                           
                             <th pSortableColumn="cin">CIN <p-sortIcon field="cin"></p-sortIcon></th>
                             <th pSortableColumn="customerFullName">Customer Name <p-sortIcon
                                     field="customerFullName"></p-sortIcon></th>
@@ -39,7 +36,7 @@
 
                     <ng-template pTemplate="body" let-selectedRecord>
                         <tr (click)="currentRecord = selectedRecord" class="cursor-pointer">
-                            <!-- <td><p-tableCheckbox [value]="selectedRecord"></p-tableCheckbox></td> -->
+                          
                             <td>{{ selectedRecord.cin }}</td>
                             <td>{{ selectedRecord.customerFullName }}</td>
                         </tr>
@@ -327,10 +324,7 @@
                   </div>
             </div>
 
-            <!-- <div class="flex justify-content-between mt-2">
-                <button pButton label="Previous" (click)="previousRecord()" [disabled]="isFirstRecord()"></button>
-                <button pButton label="Next" (click)="nextRecord()" [disabled]="isLastRecord()"></button>
-            </div> -->
+           
         </div>
     </div>
 </div>

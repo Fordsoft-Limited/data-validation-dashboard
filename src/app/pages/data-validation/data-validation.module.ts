@@ -24,6 +24,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DataVerificationComponent } from './data-verification/data-verification.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 export const dataValidationRoutes: Routes = [
   {
@@ -52,6 +53,7 @@ export const dataValidationRoutes: Routes = [
     SharedModule,
     TableModule,
     ConfirmDialogModule,
+    ProgressSpinnerModule,
     ButtonModule,
     ConfirmPopupModule,
     InputTextModule,

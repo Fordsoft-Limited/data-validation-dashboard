@@ -3,30 +3,39 @@ import { ApprovedRecord } from './model/approved';
 import { ApprovedAssetService } from './service/approved-asset.service';
 import { Table } from 'primeng/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
-@Component({
+import { Customer } from '../../shared/model/customer';
+import { CustomerService } from '../../shared/services/customer.service';
+import { Router } from '@angular/router';
+import { LoadingService } from '../../shared/services/loading.service';
+import { Location } from '@angular/common';
+@Component({ 
   selector: 'app-approved-asset',
   templateUrl: './approved-asset.component.html',
   styleUrl: './approved-asset.component.scss'
 })
 export class ApprovedAssetComponent implements OnInit{
-  approvedRecords !: ApprovedRecord[];
+  approvedRecords !: Customer[];
 
-  filteredRecords  : ApprovedRecord[]=[];
+  filteredRecords  : Customer[]=[];
 
-  loading: boolean = true;
+  loading: boolean = false;
+
+  isFilterLoading: boolean = false;
+  isResetLoading: boolean = false;
+
+  isShowDetails:boolean = false;
 
   searchValue: string = '';
 
   showDetailsDialog: boolean = false;
 
-  selectedApprovedRecord: ApprovedRecord | null = null
+  selectedApprovedRecord: Customer | null = null
 
   filterForm!: FormGroup;
-  feeders = [{ label: 'Feeder 1', value: 'Feeder 1' }, { label: 'Feeder 2', value: 'Feeder 2' }];  // Example data
+  feeders = [{ label: 'Feeder 1', value: 'Feeder1' }, { label: 'Feeder 2', value: 'Feeder2' }];  // Example data
   businessUnits = [{ label: 'Business Unit 1', value: 'Business Unit 1' }, { label: 'Business Unit 2', value: 'Business Unit 2' }]; // Example data
 
-    constructor(private approvedAssetService:ApprovedAssetService ,private fb: FormBuilder){
+    constructor(private approvedAssetService:ApprovedAssetService ,private fb: FormBuilder, private customerService:CustomerService,private router: Router,  private loadingService: LoadingService){
 
     }
   ngOnInit(): void {
@@ -38,7 +47,7 @@ export class ApprovedAssetComponent implements OnInit{
     businessUnit: ['']
   });
 
-  this.approvedAssetService.getRecord().then((data) => {
+  this.customerService.getCustomer().then((data) => {
     this.approvedRecords = data;
     this.filteredRecords = data; // Initially display all records
     this.loading = false;
@@ -47,21 +56,31 @@ export class ApprovedAssetComponent implements OnInit{
 
 
   filterData() {
-    const { dateRange, feeder, businessUnit } = this.filterForm.value;
+    this.loading=true;
+    const { dateRange, feeder, businessHub } = this.filterForm.value;
 
+    setTimeout(() => {
+      this.loading=false;
     this.filteredRecords = this.approvedRecords.filter(record => {
       const matchesFeeder = feeder ? record.feeder === feeder : true;
-      const matchesBusinessUnit = businessUnit ? record.businessUnit === businessUnit : true;
+      const matchesBusinessUnit = businessHub ? record.businessHub === businessHub : true;
       
       // Assuming dateRange is an array with [startDate, endDate]
       const matchesDateRange = dateRange ? this.isWithinDateRange(record.dateApproved, dateRange) : true;
 
       return matchesFeeder && matchesBusinessUnit && matchesDateRange;
     });
+    },2000)
+
   }
   resetFilter() {
-    this.filterForm.reset();  // Reset the form fields
-    this.filteredRecords = [...this.approvedRecords];  // Restore the original list
+    this.isResetLoading=true;
+    setTimeout(() => {
+      this.isResetLoading=false;
+      this.filterForm.reset();  // Reset the form fields
+      this.filteredRecords = [...this.approvedRecords];  // Restore the original list
+    },2000)
+    
   }
 
   private isWithinDateRange(recordDate: string | Date, dateRange: [string, string]): boolean {
@@ -73,17 +92,23 @@ export class ApprovedAssetComponent implements OnInit{
     return recordTime >= startTime && recordTime <= endTime;
   }
   
-  showDetails(record: ApprovedRecord) {
+  showDetails(record: Customer) {
     // Implement the function to show record details
     this.selectedApprovedRecord = {...record};
-
+    
     console.log('Record details:', record);
 
   }
   openDialog() {
-    if (this.selectedApprovedRecord) {
-      this.showDetailsDialog = true; // Open the dialog
+    this.isShowDetails=true;
+    setTimeout(() => {
+      this.isShowDetails=false;
+       if (this.selectedApprovedRecord) {
+     //  this.showDetailsDialog = true; // Open the dialog
+     this.router.navigate(['/app/customer-details', this.selectedApprovedRecord.id]);
     }
+    },2000)
+   
   }
   
   
