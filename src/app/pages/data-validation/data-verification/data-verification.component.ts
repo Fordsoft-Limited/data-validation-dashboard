@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { DataValidation } from '../model/bulk-validation';
 import { DataValidationService } from '../service/data-validation.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-
+import { Customer } from '../../../shared/model/customer';
+import { CustomerService } from '../../../shared/services/customer.service';
 @Component({
   selector: 'app-data-verification',
   templateUrl: './data-verification.component.html',
@@ -14,8 +15,8 @@ export class DataVerificationComponent implements OnInit {
 
   // selectedRecords: any[] = [];
   // currentRecord: any; // Use this to track the selected record
-  selectedRecords: DataValidation[] = []; // Change type to DataValidation
-  currentRecord!: DataValidation ;
+  selectedRecords: Customer[] = []; // Change type to DataValidation
+  currentRecord!: Customer ;
   currentIndex: number = 0;
   comments: string = '';
   rejectDialog: boolean = false;
@@ -41,7 +42,7 @@ export class DataVerificationComponent implements OnInit {
 
 
   constructor(private router: Router,
-    private dataValidationService: DataValidationService ,private confirmationService: ConfirmationService, private messageService: MessageService) {
+    private dataValidationService: DataValidationService ,private confirmationService: ConfirmationService, private messageService: MessageService, private  customerService:CustomerService) {
     
   
   }
@@ -92,7 +93,7 @@ confirm2(event: Event) {
     //   this.selectedRecords = state.selectedRecords;
     //   this.currentRecord = this.selectedRecords[0]; // Display the first record initially
     // }
-    this.dataValidationService.getValidation().then((data) => {
+    this.customerService.getCustomer().then((data) => {
       this.selectedRecords = data;
       this.currentRecord = this.selectedRecords[0] || null; // Display the first record initially
     });

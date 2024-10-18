@@ -11,6 +11,7 @@ import { Table } from 'primeng/table';
 export class CustomerValidationComponent {
   uploadedFiles: any[] = [];
   searchValue: string = ''; // Initialize searchValue
+  loading:boolean = false;
 
   @ViewChild('filter') filter!: ElementRef;
 
@@ -37,17 +38,27 @@ export class CustomerValidationComponent {
     );
 }
   exportData() {
-    const csvContent = this.convertToCSV(this.batches);
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
+    this.loading=true;
 
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'batch_history.csv');
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    setTimeout(() => {
+      this.loading=false;
+      const csvContent = this.convertToCSV(this.batches);
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+  
+      
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'batch_history.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    },2000)
+   
+
+    
+    
   }
 
   convertToCSV(batches: any[]): string {

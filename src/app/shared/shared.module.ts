@@ -36,7 +36,8 @@ import { TreeModule } from 'primeng/tree';
 import { TreeTableModule } from 'primeng/treetable';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { SidebarModule } from 'primeng/sidebar';
-
+import { TagModule } from 'primeng/tag';
+import { BadgeModule } from 'primeng/badge';
 import { DataTableComponent } from './data-table/data-table.component';
 
 @NgModule({
@@ -45,6 +46,8 @@ import { DataTableComponent } from './data-table/data-table.component';
     CommonModule,
     SharedRoutingModule,
     AccordionModule,
+    BadgeModule,
+    TagModule,
     AutoCompleteModule,
     ButtonModule,
     CalendarModule,
@@ -77,13 +80,14 @@ import { DataTableComponent } from './data-table/data-table.component';
     TooltipModule,
     TreeModule,
     TreeTableModule,
-
   ],
   exports: [
     CommonModule,
     AccordionModule,
     AutoCompleteModule,
     ButtonModule,
+    TagModule,
+    BadgeModule,
     CalendarModule,
     CardModule,
     CarouselModule,

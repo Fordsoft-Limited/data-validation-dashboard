@@ -1,7 +1,12 @@
 <div class="card">
 
     <div class="flex justify-content-between  pb-3 mb-2 border-300  border-bottom-1">
-        <h5 class="m-0">Checker</h5>
+
+      <div class="flex flex-column p-0 m-0">
+         <h5 class="-mt-1">Checker</h5>
+         <h6 class="-mt-1">Total item: 27</h6>
+      </div>
+       
 
         <div class="flex flex-wrap gap-3">
           <p-toast />
@@ -19,18 +24,10 @@
                 <p-table #dt [value]="selectedRecords" [globalFilterFields]="['cin', 'customerFullName']"
                     [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 30, 40, 50]"
                     (onRowSelect)="onRecordSelect($event.data)">
-                    <!-- <ng-template pTemplate="caption">
-                        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                            <h5 class="m-0">Data Approval/Review</h5>
-
-                        </div>
-                    </ng-template> -->
 
                     <ng-template pTemplate="header">
                         <tr >
-                            <!-- <th style="width: 3rem">
-                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                            </th> -->
+                           
                             <th pSortableColumn="cin">CIN <p-sortIcon field="cin"></p-sortIcon></th>
                             <th pSortableColumn="customerFullName">Customer Name <p-sortIcon
                                     field="customerFullName"></p-sortIcon></th>
@@ -39,7 +36,7 @@
 
                     <ng-template pTemplate="body" let-selectedRecord>
                         <tr (click)="currentRecord = selectedRecord" class="cursor-pointer">
-                            <!-- <td><p-tableCheckbox [value]="selectedRecord"></p-tableCheckbox></td> -->
+                          
                             <td>{{ selectedRecord.cin }}</td>
                             <td>{{ selectedRecord.customerFullName }}</td>
                         </tr>
@@ -58,17 +55,21 @@
                 <label for="fullName">Customer Name</label>
                 <input [disabled]="true" pInputText id="fullName" [(ngModel)]="currentRecord.customerFullName"
                     required />
+                    <small><b>Incoming Customer Name: </b>{{ currentRecord.customerFullName }}</small>
             </div>
 
                 <div class="field col-6 flex flex-column gap-2">
                     <label for="customerId">Customer ID</label>
                     <input [disabled]="true" pInputText id="customerId" [(ngModel)]="currentRecord.customerId"
                         required />
+
+                      <small><b>Incoming Customer Id: </b>{{ currentRecord.customerId }}</small>
                 </div>
 
                 <div class="field col-6 flex flex-column gap-2">
                     <label for="cin">CIN</label>
-                    <input [disabled]="true" pInputText id="cin" [(ngModel)]="currentRecord.cin" required />
+                    <input [disabled]="true" pInputText id="cin" [(ngModel)]="currentRecord.cin" required  />
+                    <small><b>Incoming CIN: </b>{{ currentRecord.cin }}</small>
                 </div>
 
                
@@ -76,27 +77,32 @@
                 <div class="field col-6 flex flex-column gap-2">
                     <label for="accountNo">Account No</label>
                     <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
+                    <small><b>Incoming Account No: </b>{{ currentRecord.accountNo }}</small>
                 </div>
 
                 <div class="field col-6 flex flex-column gap-2">
                     <label for="accountNo">Meter No</label>
                     <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.meterNo" required />
+                    <small><b>Incoming Meter No: </b>{{ currentRecord.meterNo }}</small>
                 </div>
 
                 <div class="field col-6 flex flex-column gap-2">
                     <label for="accountNo">City</label>
                     <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.city" required />
+                    <small><b>Incoming City: </b>{{ currentRecord.city }}</small>
                 </div>
 
                 <div class="field col-6 flex flex-column gap-2">
                     <label for="accountNo">City</label>
                     <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.city" required />
+                    <small><b>Incoming City: </b>{{ currentRecord.city }}</small>
                 </div>
 
                 <div class="field col-6 flex flex-column gap-2">
                     <label for="accountNo">Nearest Landmark</label>
                     <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.nearestLandmark"
                         required />
+                        <small><b>Incoming Nearest Landmark: </b>{{ currentRecord.nearestLandmark }}</small>
                 </div>
 
                 <div class="field col-6 flex flex-column gap-2">
@@ -210,118 +216,115 @@
 
 
                 <!-- Additional fields for meter number, address, etc., follow the same structure -->
-                <div class="field col-4 flex flex-column gap-2">
+                <div class="field col-6 flex flex-column gap-2">
                     <label for="statusCode">LGA</label>
                     <p-dropdown id="statusCode" [(ngModel)]="currentRecord.lga" [options]="statusCodes"
                         placeholder="Select Status Code" required></p-dropdown>
                 </div>
 
-                <div class="field col-4 flex flex-column gap-2">
+                <div class="field col-6 flex flex-column gap-2">
                     <label for="statusCode">State</label>
                     <p-dropdown id="statusCode" [(ngModel)]="currentRecord.state" [options]="statusCodes"
                         placeholder="Select Status Code" required></p-dropdown>
                 </div>
 
-                <div class="field col-4 flex flex-column gap-2">
+                <div class="field col-6 flex flex-column gap-2">
                     <label for="statusCode">Status Code</label>
                     <p-dropdown id="statusCode" [(ngModel)]="currentRecord.statusCode" [options]="statusCodes"
                         placeholder="Select Status Code" required></p-dropdown>
                 </div>
 
-                <div class="field col-4 flex flex-column gap-2">
+                <div class="field col-6 flex flex-column gap-2">
                     <label for="accountType">Account Type</label>
                     <p-dropdown id="accountType" [(ngModel)]="currentRecord.supplyType" [options]="accountTypes"
                         placeholder="Select Account Type" required></p-dropdown>
                 </div>
 
-                <div class="field col-4 flex flex-column gap-2">
+                <div class="field col-6 flex flex-column gap-2">
                     <label for="supplyType">Supply Type</label>
                     <p-dropdown id="supplyType" [(ngModel)]="currentRecord.supplyType" [options]="supplyTypes"
                     optionLabel="label"  optionValue="value"    placeholder="Select Supply Type" required></p-dropdown>
                 </div>
-                <div class="field col-4 flex flex-column gap-2">
+                <div class="field col-6 flex flex-column gap-2">
                     <label for="currentTariffCode">Current Tariff Code</label>
                     <p-dropdown id="currentTariffCode"  [(ngModel)]="currentRecord.currentTariffCode" [options]="currentTariffCode"  optionLabel="label"
                     optionValue="value" placeholder="Select Current Tariff Code" required></p-dropdown>
                   </div>
                   
                   <!-- Dropdown for Tariff Code -->
-                  <div class="field col-4 flex flex-column gap-2">
+                  <div class="field col-6 flex flex-column gap-2">
                     <label for="tariffClass">Tariff Class</label>
                     <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
                   </div>
                   
                   <!-- Dropdown for Correct Tariff Code -->
-                  <div class="field col-4 flex flex-column gap-2">
+                  <div class="field col-6 flex flex-column gap-2">
                     <label for="correctTariffCode">Correct Tariff Code</label>
                     <p-dropdown id="correctTariffCode" [(ngModel)]="currentRecord.correctTariffCode" [options]="correctTariffCode" placeholder="Select correctTariff" required></p-dropdown>
                   </div>
                   
                   <!-- Dropdown for Customer Has Meter -->
-                  <div class="field col-4 flex flex-column gap-2">
+                  <div class="field col-6 flex flex-column gap-2">
                     <label for="customerHasMeter">Customer Has Meter</label>
                     <p-dropdown id="customerHasMeter" [(ngModel)]="currentRecord.custHasMeter" [options]="customerHasMeter" placeholder="Select Meter Status" required></p-dropdown>
                   </div>
                   
                   <!-- Dropdown for Account Category -->
-                  <div class="field col-4 flex flex-column gap-2">
+                  <div class="field col-6 flex flex-column gap-2">
                     <label for="accountCategory">Account Category</label>
                     <p-dropdown id="accountCategory" [(ngModel)]="currentRecord.accountCategory" [options]="accountCategory" placeholder="Select  Category" required></p-dropdown>
                   </div>
                   
                   <!-- Dropdown for Connection Type -->
-                  <div class="field col-4 flex flex-column gap-2">
+                  <div class="field col-6 flex flex-column gap-2">
                     <label for="connectionType">Connection Type</label>
                     <p-dropdown id="connectionType" [(ngModel)]="currentRecord.connectionType" [options]="connectionType" placeholder="Select  Type" required></p-dropdown>
                   </div>
                   
                   <!-- Dropdown for Customer Meter Category -->
-                  <div class="field col-4 flex flex-column gap-2">
+                  <div class="field col-6 flex flex-column gap-2">
                     <label for="customerMeterCategory">Customer Meter Category</label>
                     <p-dropdown id="customerMeterCategory" [(ngModel)]="currentRecord.customerMeterCategory" [options]="customerMeterCategory" placeholder="Select Meter Category" required></p-dropdown>
                   </div>
                   
                   <!-- Dropdown for Meter Location -->
-                  <div class="field col-4 flex flex-column gap-2">
+                  <div class="field col-6 flex flex-column gap-2">
                     <label for="customerMeterLocation">Meter Location</label>
                     <p-dropdown id="customerMeterLocation" [(ngModel)]="currentRecord.customerMeterLocation" [options]="meterLocation" placeholder="Select Meter Location" required></p-dropdown>
                   </div>
                   
                   <!-- Dropdown for Customer Meter Accessible -->
-                  <div class="field col-4 flex flex-column gap-2">
+                  <div class="field col-6 flex flex-column gap-2">
                     <label for="customerMeterAccessible">Meter Accessible</label>
                     <p-dropdown id="customerMeterAccessible" [(ngModel)]="currentRecord.customerMeterAccessible" [options]="customerMeterAccessible" placeholder="Select Accessibility" required></p-dropdown>
                   </div>
                   
                   <!-- Dropdown for Customer Meter Sealed -->
-                  <div class="field col-4 flex flex-column gap-2">
+                  <div class="field col-6 flex flex-column gap-2">
                     <label for="customerMeterSealed">Meter Sealed</label>
                     <p-dropdown id="customerMeterSealed" [(ngModel)]="currentRecord.customerMeterSaled" [options]="customerMeterSealed" placeholder="Select Seal Status" required></p-dropdown>
                   </div>
                   
                   <!-- Dropdown for Customer Has Account No -->
-                  <div class="field col-4 flex flex-column gap-2">
+                  <div class="field col-6 flex flex-column gap-2">
                     <label for="customerHasAccountNo">Customer Has Account No</label>
                     <p-dropdown id="customerHasAccountNo" [(ngModel)]="currentRecord.customerHasAccountNo" [options]="customerHasAccountNo" placeholder="Select Account" required></p-dropdown>
                   </div>
                   
                   <!-- Dropdown for Customer Group -->
-                  <div class="field col-4 flex flex-column gap-2">
+                  <div class="field col-6 flex flex-column gap-2">
                     <label for="customerGroup">Customer Group</label>
                     <p-dropdown id="customerGroup" [(ngModel)]="currentRecord.customerGroup" [options]="customerGroup" placeholder="Select Group" required></p-dropdown>
                   </div>
                   
                   <!-- Dropdown for Is Landlord -->
-                  <div class="field col-4 flex flex-column gap-2">
+                  <div class="field col-6 flex flex-column gap-2">
                     <label for="isLandlord">Is Landlord</label>
                     <p-dropdown id="isLandlord" [(ngModel)]="currentRecord.isLandlord" [options]="isLandlord" placeholder="Select Yes or No" required></p-dropdown>
                   </div>
             </div>
 
-            <!-- <div class="flex justify-content-between mt-2">
-                <button pButton label="Previous" (click)="previousRecord()" [disabled]="isFirstRecord()"></button>
-                <button pButton label="Next" (click)="nextRecord()" [disabled]="isLastRecord()"></button>
-            </div> -->
+           
         </div>
     </div>
 </div>

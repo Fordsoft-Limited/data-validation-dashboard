@@ -1,0 +1,78 @@
+<div class="card">
+  <form [formGroup]="filterForm" (ngSubmit)="filterData()">
+    <div class="flex gap-5 mb-4 justify-content-center flex-wrap">
+      <div class="flex flex-column gap-2">
+        <label for="dateRange">Date Range:</label>
+        <div class="flex gap-2"> 
+          <input type="date" formControlName="dateRange" pInputText class="date-range" />
+          <input type="date" formControlName="dateRange" pInputText class="date-range" />
+        </div>
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <label for="feeder">Feeder:</label>
+        <p-dropdown formControlName="feeder" [options]="feeders" placeholder="Select Feeder"></p-dropdown>
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <label for="businessUnit">Business Unit:</label>
+        <p-dropdown formControlName="businessUnit" [options]="businessUnits" placeholder="Select Business Unit"></p-dropdown>
+      </div>
+
+      <div class="flex gap-2 mt-4">
+        <p-button type="submit" [loading]="loading" label="Filter"></p-button>
+        <p-button type="button" [loading]="isResetLoading" label="Reset Filter" [outlined]="true" (click)="resetFilter()" severity="danger"></p-button>
+      </div>
+    </div>
+  </form>
+
+  <p-table [value]="filteredRecords" [loading]="loading" [paginator]="true" [rows]="10"  (onRowSelect)="showDetails($event.data)">
+
+    <ng-template pTemplate="caption">
+        <div class="flex">
+            <!-- <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="resetFilter()"/> -->
+            <p-button label="Show Details"(click)="openDialog()" class="ml-3" [loading]="isShowDetails" [disabled]="!selectedApprovedRecord"></p-button>
+            
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem"><p-tableRadioButton /></th>
+        <th style="min-width:15rem">CIN</th>
+        <th style="min-width:15rem">Customer Name</th>
+        <th style="min-width:15rem">Feeder</th>
+        <th style="min-width:10rem">Date Captured</th>
+        <th style="min-width:10rem">Date Approved</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-record>
+      <tr class="cursor-pointer">
+        <td><p-tableRadioButton [value]="record" /></td>
+        <td>{{ record.cin }}</td>
+        <td>{{ record.customerFullName }}</td>
+        <td>{{ record.feeder }}</td>
+        <td>{{ record.date | date: 'MM/dd/yyyy' }}</td>
+        <td>{{ record.dateApproved | date: 'MM/dd/yyyy' }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6">No approved records found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog [(visible)]="showDetailsDialog" modal="modal" [closable]="true" [header]="selectedApprovedRecord?.customerFullName">
+    <div *ngIf="selectedApprovedRecord" class="grid">
+      <div class="col-12">
+        <p><strong>Customer Full Name:</strong> {{ selectedApprovedRecord.customerFullName }}</p>
+        <p><strong>Account No:</strong> {{ selectedApprovedRecord.cin }}</p>
+        <p><strong>Feeder:</strong> {{ selectedApprovedRecord.feeder }}</p>
+        <p><strong>Date Captured:</strong> {{ selectedApprovedRecord.date | date: 'MM/dd/yyyy' }}</p>
+        <p><strong>Date Approved:</strong> {{ selectedApprovedRecord.dateApproved | date: 'MM/dd/yyyy' }}</p>
+      </div>
+    </div>
+  </p-dialog>
+</div>

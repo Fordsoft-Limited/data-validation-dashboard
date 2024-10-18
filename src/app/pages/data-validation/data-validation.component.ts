@@ -5,6 +5,8 @@ import { DataValidationService } from './service/data-validation.service';
 import { Table } from 'primeng/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Customer } from '../../shared/model/customer';
+import { CustomerService } from '../../shared/services/customer.service';
 
 @Component({
   selector: 'app-data-validation',
@@ -13,12 +15,13 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   providers: [MessageService, ConfirmationService]
 })
 export class DataValidationComponent implements OnInit {
+
+  
   dataValidations!:DataValidation[];
 
   filteredDataValidations: DataValidation[] = [];
 
-  loading: boolean = true;
-
+  loading: boolean = false;
   statuses!: any[];
 
   searchValue: string = '';
@@ -60,39 +63,60 @@ export class DataValidationComponent implements OnInit {
         comments: item.comments || '' // Set default comments
       }));
       this.filteredDataValidations = this.dataValidations; 
-      this.loading = false;
+     this.loading = false;
     });
+    
+    
+    
   }
   filterData() {
+    this.loading = true;
     const { dateRange, feeder, businessUnit } = this.filterForm.value;
 
-    this.filteredDataValidations = this.dataValidations.filter((item) => {
-      const withinDateRange =
-  dateRange && dateRange.length === 2
-    ? item.date
-      ? new Date(item.date) >= dateRange[0] && new Date(item.date) <= dateRange[1]
-      : false // If item.date is undefined, this item should not match
-    : true;
-      const matchesFeeder = feeder ? item.feeder === feeder : true;
-      const matchesBusinessUnit = businessUnit ? item.businessHub === businessUnit : true;
-
-      return withinDateRange && matchesFeeder && matchesBusinessUnit;
-    });
+    setTimeout(() => { 
+      this.loading = false; // Hide loading after data is fetched
+      this.filteredDataValidations = this.dataValidations.filter((item) => {
+     
+        const withinDateRange =
+    dateRange && dateRange.length === 2
+      ? item.date
+        ? new Date(item.date) >= dateRange[0] && new Date(item.date) <= dateRange[1]
+        : false // If item.date is undefined, this item should not match
+      : true;
+        const matchesFeeder = feeder ? item.feeder === feeder : true;
+        const matchesBusinessUnit = businessUnit ? item.businessHub === businessUnit : true;
+  
+        return withinDateRange && matchesFeeder && matchesBusinessUnit;
+      });
+    }, 2000);
+    
+   
   }
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal(
         (event.target as HTMLInputElement).value,
         'contains'
     );
+    
+
+
+   
+
 }
 
 showDetails(dataValidation: DataValidation) {
+  //this.loading=true;
   this.selectedDataValidation = { ...dataValidation }; // Clone the object
   this.comments = this.selectedDataValidation.comments ?? '';// Load existing comments
   
 }
 navigateToDetails() {
-  this.router.navigate(['app/data-validation/data-verification']);
+  this.loading=true;
+  setTimeout(() =>{
+    this.loading=false;
+    this.router.navigate(['app/data-validation/data-verification']);
+  } , 2000);
+  
   
 }
 

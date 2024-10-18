@@ -1,6 +1,6 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataValidationComponent } from './data-validation.component';
+import { NewCustomerComponent } from './new-customer.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -22,63 +22,43 @@ import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';
 import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { DataVerificationComponent } from './data-verification/data-verification.component';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
-export const dataValidationRoutes: Routes = [
+export const newCustomerRoute: Routes = [
   {
     path: '',
-    component: DataValidationComponent,
+    component: NewCustomerComponent
   },
-  {
-    path: 'data-verification',
-    data:{breadcrum: 'Data Verification'},
-    component: DataVerificationComponent, 
-  }
 
 ];
 
-
 @NgModule({
   declarations: [
-    DataValidationComponent,
-    DataVerificationComponent
+    NewCustomerComponent
   ],
   imports: [
-
-  CommonModule,
-   SharedModule,
-   CommonModule,
-    SharedModule,
+    CommonModule,
+    RouterModule.forChild(newCustomerRoute),
+    ReactiveFormsModule,
+    FormsModule,
     TableModule,
     ConfirmDialogModule,
-    ProgressSpinnerModule,
     ButtonModule,
-    ConfirmPopupModule,
     InputTextModule,
+    SelectButtonModule,
     ToggleButtonModule,
     RippleModule,
     MultiSelectModule,
+    BadgeModule,
     InputTextareaModule,
     DropdownModule,
+    TagModule,
     DividerModule,
     ProgressBarModule,
     ToastModule,
     SliderModule,
     RatingModule,
     DialogModule,
-    SelectButtonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    TagModule,
-    BadgeModule,
-    RouterModule.forChild(dataValidationRoutes),
-
-   ReactiveFormsModule,
-   FormsModule,
-
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    
+  ]
 })
-export class DataValidationModule { }
+export class NewCustomerModule { }

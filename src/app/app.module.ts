@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppLayoutModule } from './layout/app.layout.module';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -15,6 +16,7 @@ import { SharedModule } from './shared/shared.module';
     AppRoutingModule,
     AppLayoutModule,
     BrowserModule,
+    ProgressSpinnerModule,
     BrowserAnimationsModule,
   ],
   providers: [

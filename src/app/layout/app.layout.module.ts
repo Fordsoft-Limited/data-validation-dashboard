@@ -27,6 +27,7 @@ import { MenuModule } from 'primeng/menu';
 import { StyleClassModule } from 'primeng/styleclass';
 import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 export const layoutRoutes: Routes = [
@@ -91,6 +92,23 @@ export const layoutRoutes: Routes = [
                 (m) => m.CustomerValidationModule
               ),
           },
+           
+          {
+            path: 'approved-record',
+            data:{breadcrumb: 'Approved Record'},
+            loadChildren: () =>
+              import('../pages/approved-asset/approved-asset.module').then(
+                (m) => m.ApprovedAssetModule
+              ),
+          },
+          {
+            path: 'customer-details',
+            data:{breadcrumb: 'Customer Details'},
+            loadChildren: () =>
+              import('../pages/customer-details/customer-details.module').then(
+                (m) => m.CustomerDetailsModule
+              ),
+          },
           {
             path: 'bulk-customer-validation',
             data:{breadcrumb: 'Bulk Customer Validation'},
@@ -124,6 +142,16 @@ export const layoutRoutes: Routes = [
                 (m) => m.SettingsModule
               ),
           },
+
+          {
+            path:'new-customer',
+            data:{breadcrumb: 'New  Customer'},
+
+            loadChildren: () =>
+              import('../pages/new-customer/new-customer.module').then(
+                (m) => m.NewCustomerModule
+              ),
+          },
     ]
     },
 
@@ -149,7 +177,7 @@ export const layoutRoutes: Routes = [
         StyleClassModule,
        SharedModule,
         SidebarModule,
-
+        ProgressSpinnerModule,
         AppConfigModule,
         RouterModule.forChild(layoutRoutes),
     ]

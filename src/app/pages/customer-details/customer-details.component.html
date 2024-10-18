@@ -1,0 +1,71 @@
+<div class="customer-details-container">
+
+
+  <!-- Back button -->
+  <button pButton (click)="goBack()" class="mb-3">Back</button>
+  <h2>Customer Details</h2>
+
+  <!-- QR Code Display -->
+  <!-- <div class="qr-code">
+      <qrcode [qrdata]="customer.customerId" [size]="256" [level]="'M'"></qrcode>
+    </div> -->
+
+  <!-- Customer Detail Fields -->
+  <div class="grid">
+    <div class="col-12 md:col-8">
+      <div class="grid">
+        <div class="col-12 md:col-6" *ngFor="let field of customerFields">
+          <app-customer-detail-field [fieldName]="field.name"
+            [newData]="newData ? newData[field.key]?.toString() || null : null"
+            [existingData]="existingData ? existingData[field.key]?.toString() || null : null"></app-customer-detail-field>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-12 md:col-4">
+
+      <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
+        <ng-template pTemplate="marker" let-event>
+          <span
+            class="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1"
+            [style]="{ 'background-color': event.color }">
+            <i [class]="event.icon"></i>
+          </span>
+        </ng-template>
+
+        <ng-template pTemplate="content" let-event>
+          <!-- <p-card [header]="event.status" [subheader]="event.date" headerStyleClass="custom-header"
+            subheaderStyleClass="custom-subheader">
+            <p>
+              {{ event.status }} was performed on {{ event.date }}.
+            </p>
+          </p-card> -->
+          <div class="card w-100%">
+         
+            <h4 class="text-base">{{ event.status }}</h4>
+            <p class="text-xs">{{ event.date | date:'short' }}</p>
+       
+          </div>
+
+
+        </ng-template>
+      </p-timeline>
+    </div>
+
+
+  </div>
+
+
+
+
+
+
+  <!-- <div class="data-history">
+    <h3>Data Entry History</h3>
+    <ul *ngFor="let historyItem of customer.dataEntryHistory" class="flex flex-column gap-2">
+      <li>
+        {{ historyItem.content }} - {{ historyItem.date_created | date:'short' }}
+      </li>
+    </ul>
+  </div> -->
+</div>
