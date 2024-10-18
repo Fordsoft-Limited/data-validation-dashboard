@@ -40,12 +40,12 @@
               {{ event.status }} was performed on {{ event.date }}.
             </p>
           </p-card> -->
-          <!-- <div class="card"> -->
+          <div class="card w-100%">
          
-            <h4 class="text-lg">{{ event.status }}</h4>
-            <p>{{ event.date | date:'short' }}</p>
+            <h4 class="text-base">{{ event.status }}</h4>
+            <p class="text-xs">{{ event.date | date:'short' }}</p>
        
-          <!-- </div> -->
+          </div>
 
 
         </ng-template>
