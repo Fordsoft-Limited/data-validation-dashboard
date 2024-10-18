@@ -2,7 +2,7 @@
 
   <!-- Header Section -->
   <div class="col-12 mt-2">
-    <h3>Bulk Customer Validation</h3>
+    <!-- <h3>Bulk Customer Validation</h3> -->
   </div>
 
   <!-- File Upload Section -->
@@ -30,7 +30,7 @@
 
   <!-- Progress Bar Section -->
   <div class="col-12 card mt-2" style="width: 100%; max-width: 700px; margin: 10px auto; padding: 20px;">
-    <h6 style="text-align: left; margin: 0 0 10px;">Bulk Upload in Progress</h6>
+    <h6 style="text-align: left; margin: 0 0 10px;">Upload Progress</h6>
     <p-progressBar [value]="progressValue"></p-progressBar>
   </div>
 
@@ -46,16 +46,24 @@
 <div class="col-12" style="width: 100%; max-width: 700px; margin: 3px auto; padding: 10px; margin-top: -50px;">
   <div class="text-900 font-semibold text-lg mt-5 mb-3 border-bottom-1 surface-border py-3">Error Report</div>
   <ul class="list-none p-0 m-0">
-    <ng-container *ngFor="let customer of customers">
-      <li *ngIf="customer.status === 'Invalid'" class="p-2 border-bottom-1 surface-border" style="margin-bottom: 10px;">
-        <div class="flex flex-column gap-2">
-          <div class="flex align-items-center">
-            <span class="font-semibold">Email: {{ customer.email }} - Reason: {{ customer.errorReason }}</span>
-          </div>
-        </div>
-      </li>
-    </ng-container>
+    <li  class="flex flex-column gap-3 md:flex-row md:align-items-center p-2 border-bottom-1 surface-border">
+      <div class="flex align-items-center flex-1">
+          <label for="task.id" style="word-break: break-word;" class="font-medium ml-2" >Error One</label>
+      </div>
+  </li>
+  <li  class="flex flex-column gap-3 md:flex-row md:align-items-center p-2 border-bottom-1 surface-border">
+    <div class="flex align-items-center flex-1">
+        <label for="task.id" style="word-break: break-word;" class="font-medium ml-2" >Error Two</label>
+    </div>
+</li>
+<li  class="flex flex-column gap-3 md:flex-row md:align-items-center p-2 border-bottom-1 surface-border">
+  <div class="flex align-items-center flex-1">
+      <label for="task.id" style="word-break: break-word;" class="font-medium ml-2" >Error Three </label>
+  </div>
+</li>
   </ul>
 </div>
 
 </div>
+
+
