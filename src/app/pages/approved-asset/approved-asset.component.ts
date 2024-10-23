@@ -34,6 +34,7 @@ export class ApprovedAssetComponent implements OnInit{
   filterForm!: FormGroup;
   feeders = [{ label: 'Feeder 1', value: 'Feeder1' }, { label: 'Feeder 2', value: 'Feeder2' }];  // Example data
   businessUnits = [{ label: 'Business Unit 1', value: 'Business Unit 1' }, { label: 'Business Unit 2', value: 'Business Unit 2' }]; // Example data
+  regions =[{label: 'Region 1', value: 'Region1'}, { label: 'Region 2', value: 'Region2' }];
 
     constructor(private approvedAssetService:ApprovedAssetService ,private fb: FormBuilder, private customerService:CustomerService,private router: Router,  private loadingService: LoadingService){
 
@@ -44,7 +45,8 @@ export class ApprovedAssetComponent implements OnInit{
    this.filterForm = this.fb.group({
     dateRange: [''],
     feeder: [''],
-    businessUnit: ['']
+    businessUnit: [''],
+    region:['']
   });
 
   this.customerService.getCustomer().then((data) => {
@@ -57,18 +59,19 @@ export class ApprovedAssetComponent implements OnInit{
 
   filterData() {
     this.loading=true;
-    const { dateRange, feeder, businessHub } = this.filterForm.value;
+    const { dateRange, feeder, businessHub,region } = this.filterForm.value;
 
     setTimeout(() => {
       this.loading=false;
     this.filteredRecords = this.approvedRecords.filter(record => {
       const matchesFeeder = feeder ? record.feeder === feeder : true;
       const matchesBusinessUnit = businessHub ? record.businessHub === businessHub : true;
+      const matchesRegion = region ? record.region === region : true;
       
       // Assuming dateRange is an array with [startDate, endDate]
       const matchesDateRange = dateRange ? this.isWithinDateRange(record.dateApproved, dateRange) : true;
 
-      return matchesFeeder && matchesBusinessUnit && matchesDateRange;
+      return matchesFeeder && matchesBusinessUnit && matchesDateRange && matchesRegion;
     });
     },2000)
 

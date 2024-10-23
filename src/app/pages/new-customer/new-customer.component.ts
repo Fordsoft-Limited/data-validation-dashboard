@@ -31,6 +31,7 @@ export class NewCustomerComponent implements OnInit {
   filterForm!: FormGroup;
   feeders = [{ label: 'Feeder 1', value: 'Feeder1' }, { label: 'Feeder 2', value: 'Feeder2' }];  // Example data
   businessUnits = [{ label: 'Business Unit 1', value: 'Business Unit 1' }, { label: 'Business Unit 2', value: 'Business Unit 2' }];
+  regions =[{label: 'Region 1', value: 'Region1'}, { label: 'Region 2', value: 'Region2' }];
 
   constructor( private fb: FormBuilder, private customerService:CustomerService,private router: Router,  ){
 

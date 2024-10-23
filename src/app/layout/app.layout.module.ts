@@ -43,14 +43,14 @@ export const layoutRoutes: Routes = [
                 (m) => m.DashboardModule
               ),
           },
-          {
-            path: 'reports',
-            data:{breadcrumb: 'Reports'},
-            loadChildren: () =>
-              import('../pages/reports/reports.module').then(
-                (m) => m.ReportsModule
-              ),
-          },
+          // {
+          //   path: 'reports',
+          //   data:{breadcrumb: 'Reports'},
+          //   loadChildren: () =>
+          //     import('../pages/reports/reports.module').then(
+          //       (m) => m.ReportsModule
+          //     ),
+          // },
           {
             path: 'customer-information',
             data:{breadcrumb: 'Customer Information'},
@@ -94,7 +94,7 @@ export const layoutRoutes: Routes = [
           },
            
           {
-            path: 'approved-record',
+            path: 'reports',
             data:{breadcrumb: 'Approved Record'},
             loadChildren: () =>
               import('../pages/approved-asset/approved-asset.module').then(
