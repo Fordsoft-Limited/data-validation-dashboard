@@ -18,7 +18,7 @@ export class changePassword{
     new_password!: string
 }
 
-export class refreshToken{
+export class refreshToken{  
     refresh!: string
 }
 
