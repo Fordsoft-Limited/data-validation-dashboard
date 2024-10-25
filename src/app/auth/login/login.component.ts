@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { LoginModel } from '../model/loginModel';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { EntranceService } from '../../api/entrance.service';
-import { entranceLogin } from '../../model/user';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +22,6 @@ export class LoginComponent {
 
   constructor(
     private layoutService: LayoutService,
-    private entranceService: EntranceService,
     private router: Router,
     private snackbarService: SnackbarService
   ) {}
@@ -47,7 +44,7 @@ export class LoginComponent {
   onSubmit() {
     this.isLoading = true;  // Start the loading spinner
   
-   
+    // Reset the messages
     this.loginSuccess = false;
     this.loginError = false;
   

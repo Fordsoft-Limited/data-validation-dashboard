@@ -40,6 +40,7 @@ import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';
 import { DataTableComponent } from './data-table/data-table.component';
 
+
 @NgModule({
   declarations: [ DataTableComponent],
   imports: [
@@ -48,6 +49,7 @@ import { DataTableComponent } from './data-table/data-table.component';
     AccordionModule,
     BadgeModule,
     TagModule,
+    
     AutoCompleteModule,
     ButtonModule,
     CalendarModule,
@@ -87,6 +89,7 @@ import { DataTableComponent } from './data-table/data-table.component';
     AutoCompleteModule,
     ButtonModule,
     TagModule,
+    
     BadgeModule,
     CalendarModule,
     CardModule,

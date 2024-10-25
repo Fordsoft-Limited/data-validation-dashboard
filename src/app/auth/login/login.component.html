@@ -1,92 +1,89 @@
 
 
 <body style="margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif;">
-    <header style="background-color: #f8f8f8; padding: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <!-- Logo Section -->
-            <div style="flex-shrink: 0;">
-                <img src="assets/layout/images/login/ibedc-logo.png" width="100px" height="70px" alt="avalon-ng"/>
+  <header style="background-color: #f8f8f8; padding: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+          <!-- Logo Section -->
+          <div style="flex-shrink: 0;">
+              <img src="assets/layout/images/login/ibedc-logo.png" width="100px" height="70px" alt="avalon-ng"/>
+          </div>
+          
+          <!-- Account Options Section -->
+          <!-- <div style="text-align: right;">
+              <a href="#" style="text-decoration: none; color: #333; margin-left: 20px;">Don't have an account?</a>
+              <a href="#" style="text-decoration: none; background-color: #007bff; color: white; padding: 10px 20px; border-radius: 5px; margin-left: 20px;">Sign Up</a>
+          </div> -->
+      </div>
+  </header>
+
+
+  <div style="max-width: 700px; margin: 50px auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+      <h2 style="text-align: center;">Welcome back!</h2>
+      <p style="text-align: center; font-size: 15px; margin-bottom: 20px; margin-top: -10px;">Login into your IBEDC account.</p>
+
+
+       <div *ngIf="loginSuccess" class="text-center" style="border: 1px solid #218838; background-color: #28a745; color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+         <p><i class="pi pi-check-circle" style="margin-right: 5px;"></i> Login Successful!</p>
+      </div>
+  
+      <!-- Error Notification -->
+      <div *ngIf="loginError" class="text-center" style="border: 1px solid #c82333; background-color: #dc3545; color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+          <p><i class="pi pi-exclamation-triangle" style="margin-right: 5px;"></i> {{ errorMessage }}</p> 
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  
+          <!-- Email/Phone Input -->
+          <div style="margin-bottom: 20px;">
+            <label for="emailPhone" style="display: block; margin-bottom: 7px;">Username</label>
+            <input type="text" id="emailPhone" formControlName="emailPhone" placeholder="Enter your username"
+                   style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; height: 50px;">
+           
+             <!-- Error Messages -->
+             <div class="mt-2" *ngIf="loginForm.get('emailPhone')?.invalid && (loginForm.get('emailPhone')?.touched || loginForm.get('emailPhone')?.dirty)">
+              <span style="color: red; font-size: 14px;" *ngIf="loginForm.get('emailPhone')?.errors?.['required']">
+                  * Email is required.
+              </span>
+              <span style="color: red; font-size: 14px;" *ngIf="loginForm.get('emailPhone')?.errors?.['pattern']">
+                  * Enter a valid email address.
+              </span>
+              
+          </div>
+          </div>
+      
+          <!-- Password Input -->
+          <div style="margin-top: 30px;">
+            <label for="password" style="display: block; margin-bottom: 7px;">Password</label>
+            <input type="password" id="password" formControlName="password" placeholder="Password"
+                   style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; height: 50px">
+            <!-- Error Message -->
+
+            <div class="mt-2" *ngIf="password?.invalid && (password?.touched || password?.dirty)">
+              <span style="color: red; font-size: 14px;" *ngIf="password?.errors?.['required']">* Password is required.</span>
+              <span style="color: red; font-size: 14px;" *ngIf="password?.errors?.['minlength']">* Password must be at least 4 characters long.</span>
             </div>
-            
-            <!-- Account Options Section -->
-            <!-- <div style="text-align: right;">
-                <a href="#" style="text-decoration: none; color: #333; margin-left: 20px;">Don't have an account?</a>
-                <a href="#" style="text-decoration: none; background-color: #007bff; color: white; padding: 10px 20px; border-radius: 5px; margin-left: 20px;">Sign Up</a>
-            </div> -->
-        </div>
-    </header>
-
-
-    <div style="max-width: 700px; margin: 50px auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-        <h2 style="text-align: center;">Welcome back!</h2>
-        <p style="text-align: center; font-size: 15px; margin-bottom: 20px; margin-top: -10px;">Login into your IBEDC account.</p>
-
-
-         <div *ngIf="loginSuccess" class="text-center" style="border: 1px solid #218838; background-color: #28a745; color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
-           <p><i class="pi pi-check-circle" style="margin-right: 5px;"></i> Login Successful!</p>
-        </div>
-    
-        <!-- Error Notification -->
-        <div *ngIf="loginError" class="text-center" style="border: 1px solid #c82333; background-color: #dc3545; color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
-            <p><i class="pi pi-exclamation-triangle" style="margin-right: 5px;"></i> {{ errorMessage }}</p> 
-        </div>
-
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    
-            <!-- Email/Phone Input -->
-            <div style="margin-bottom: 20px;">
-              <label for="emailPhone" style="display: block; margin-bottom: 7px;">Username</label>
-              <input type="text" id="emailPhone" formControlName="emailPhone" placeholder="Enter your username"
-                     style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; height: 50px;">
-             
-               <!-- Error Messages -->
-               <div class="mt-2" *ngIf="loginForm.get('emailPhone')?.invalid && (loginForm.get('emailPhone')?.touched || loginForm.get('emailPhone')?.dirty)">
-                <span style="color: red; font-size: 14px;" *ngIf="loginForm.get('emailPhone')?.errors?.['required']">
-                    * Email is required.
-                </span>
-                <span style="color: red; font-size: 14px;" *ngIf="loginForm.get('emailPhone')?.errors?.['pattern']">
-                    * Enter a valid email address.
-                </span>
-                
-            </div>
-            </div>
-        
-            <!-- Password Input -->
-            <div style="margin-top: 30px;">
-              <label for="password" style="display: block; margin-bottom: 7px;">Password</label>
-              <input type="password" id="password" formControlName="password" placeholder="Password"
-                     style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; height: 50px">
-              <!-- Error Message -->
-
-              <div class="mt-2" *ngIf="password?.invalid && (password?.touched || password?.dirty)">
-                <span style="color: red; font-size: 14px;" *ngIf="password?.errors?.['required']">* Password is required.</span>
-                <span style="color: red; font-size: 14px;" *ngIf="password?.errors?.['minlength']">* Password must be at least 4 characters long.</span>
-              </div>
-            </div>
-        
-            <!-- Remember Me and Forgot Password -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
-              <div>
-                <input type="checkbox" id="rememberMe" name="rememberMe" style="margin-right: 5px; color: #007bff;">
-                <label for="rememberMe">Keep me signed in</label>
-              </div>
-              <div>
-                <a href="#" [routerLink]="['/auth/forget-password']" style="text-decoration: none; color: #007bff;">Forgot Password?</a>
-              </div>
-            </div>
-        
-            <!-- Login Button -->
+          </div>
+      
+          <!-- Remember Me and Forgot Password -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
             <div>
-                <button pButton type="submit"   [label]="isLoading ? 'Logging in...' : 'Login'"  [disabled]="loginForm.invalid" label="Login" style="width: 100%; padding: 10px; display: block; border: none; border-radius: 5px; cursor: pointer; height: 40px; margin-top: 40px;">
-                   
-                    </button>
+              <input type="checkbox" id="rememberMe" name="rememberMe" style="margin-right: 5px; color: #007bff;">
+              <label for="rememberMe">Keep me signed in</label>
             </div>
-        
-          </form>
-    </div>
-    <div style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);  padding: 10px 20px; text-align: center;">
-        Copyrights © 2024 IBEDC. All Rights Reserved..
-    </div>
-
-
-
+            <div>
+              <a href="#" [routerLink]="['/auth/forget-password']" style="text-decoration: none; color: #007bff;">Forgot Password?</a>
+            </div>
+          </div>
+      
+          <!-- Login Button -->
+          <div>
+              <button pButton type="submit"   [label]="isLoading ? 'Logging in...' : 'Login'"  [disabled]="loginForm.invalid" label="Login" style="width: 100%; padding: 10px; display: block; border: none; border-radius: 5px; cursor: pointer; height: 40px; margin-top: 40px;">
+                 
+                  </button>
+          </div>
+      
+        </form>
+  </div>
+  <div style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);  padding: 10px 20px; text-align: center;">
+      Copyrights © 2024 IBEDC. All Rights Reserved..
+  </div>
