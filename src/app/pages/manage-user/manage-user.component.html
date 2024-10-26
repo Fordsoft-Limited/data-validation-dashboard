@@ -20,46 +20,48 @@
             </div>
   
             <div class="field mb-4 col-10">
-              <label for="email" class="font-medium text-900">Email</label>
-              <input id="email" style="height: 50px;" type="email" class="form-control" pInputText formControlName="email" required>
-              <div class="mt-2" *ngIf="email?.invalid && (email?.touched || email?.dirty)">
-                <span class="errors" *ngIf="email?.errors?.['required']">*Email is Required.</span>
-                <span class="errors" *ngIf="email?.errors?.['pattern']">*Enter a valid email address.</span>
+              <label for="username" class="font-medium text-900">User Name</label>
+              <input id="username" style="height: 50px;" type="username" class="form-control" pInputText formControlName="username" required>
+              <div class="mt-2" *ngIf="username?.invalid && (username?.touched || username?.dirty)">
+                <span class="errors" *ngIf="username?.errors?.['required']">*Username is Required.</span>
+                <!-- <span class="errors" *ngIf="username?.errors?.['pattern']">*Enter a valid email address.</span> -->
             </div>
             </div>
 
             <div class="field mb-4 col-12 md:col-12">
-                <div class=" flex">
-                    <div class="flex flex-wrap gap-3">
-                        <div class="flex align-items-center">
-                            <p-radioButton 
-                                name="ingredient" 
-                                value="admin" 
-                                formControlName="ingredient" 
-                                inputId="ingredient1" />
-                            <label for="ingredient1" class="ml-2">Admin</label>
-                        </div>
-
-                        <div class="flex align-items-center" style="margin-left: 25px;">
-                            <p-radioButton 
-                                name="ingredient" 
-                                value="user" 
-                                formControlName="ingredient" 
-                                inputId="ingredient2" />
-                            <label for="ingredient2" class="ml-2">User</label>
-                        </div>
-
-                        <div class="flex align-items-center" style="margin-left: 25px;">
-                            <p-radioButton 
-                                name="ingredient" 
-                                value="approval" 
-                                formControlName="ingredient" 
-                                inputId="ingredient3" />
-                            <label for="ingredient3" class="ml-2">Approval</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
+              <div class="flex">
+                  <div class="flex flex-wrap gap-3">
+                      <div class="flex align-items-center">
+                          <p-radioButton 
+                              name="role" 
+                              value="ADMIN" 
+                              formControlName="role" 
+                              inputId="role1" />
+                          <label for="role1" class="ml-2">Admin</label>
+                      </div>
+          
+                      <div class="flex align-items-center" style="margin-left: 25px;">
+                          <p-radioButton 
+                              name="role" 
+                              value="USER" 
+                              formControlName="role" 
+                              inputId="role2" />
+                          <label for="role2" class="ml-2">User</label>
+                      </div>
+          
+                      <div class="flex align-items-center" style="margin-left: 25px;">
+                          <p-radioButton 
+                              name="role" 
+                              value="APPROVAL" 
+                              formControlName="role" 
+                              inputId="role3" />
+                          <label for="role3" class="ml-2">Approval</label>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          
+          
   
             
 

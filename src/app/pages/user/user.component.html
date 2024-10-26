@@ -32,7 +32,7 @@
       <ng-template pTemplate="header">
           <tr>
               
-              <th style="width:10%"> Name</th>
+              <th style="width:10%">Name</th>
               <th style="width:10%">Email</th>
               <th style="width:10%">Role</th>
               <th style="width: 10%">Status</th>
@@ -61,11 +61,11 @@
                       <ng-template pTemplate="input">
                           <input 
                               pInputText type="text" 
-                              [(ngModel)]="user.email" 
+                              [(ngModel)]="user.username" 
                               required />
                       </ng-template>
                       <ng-template pTemplate="output">
-                          {{user.email}}
+                          {{user.username}}
                       </ng-template>
                   </p-cellEditor>
               </td>
@@ -109,7 +109,7 @@
                   </p-cellEditor>
               </td>
               <td>
-          <div style="margin-left: -150px;" class="flex align-items-center justify-content-center gap-2">
+          <!-- <div style="margin-left: -150px;" class="flex align-items-center justify-content-center gap-2">
               <button 
                   *ngIf="!editing" 
                   pButton 
@@ -139,7 +139,7 @@
                   (click)="onRowEditCancel(user, ri)" 
                   class="p-button-rounded p-button-text p-button-danger">
               </button>
-          </div>
+          </div> -->
               </td>
           </tr>
       </ng-template>

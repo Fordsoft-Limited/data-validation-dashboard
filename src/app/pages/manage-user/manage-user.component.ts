@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { User } from '../user/model/user';
+import { addUser } from '../../model/user';
+import { UserService } from '../../api/user.service';
 
 @Component({
   selector: 'app-manage-user',
@@ -10,12 +11,11 @@ import { User } from '../user/model/user';
   providers: [MessageService, ConfirmationService],
 })
 export class ManageUserComponent implements OnInit {
-  userForm!: FormGroup;  // Declare userForm
-  users!: User[];
-  isLoading: boolean = false;  // Loading state
+  userForm!: FormGroup;  
+  users!: addUser[];
+  isLoading: boolean = false;  
 
-
-  user: User = {};
+  user: addUser = new addUser(); 
   userDialog: boolean = false;
   submitted: boolean = false;
 
@@ -26,74 +26,128 @@ export class ManageUserComponent implements OnInit {
 
   userAddedSuccess: boolean = false;
 
-  ingredient!: string;
-
-  constructor(private messageService: MessageService) {
+  constructor(private userService: UserService) {
     this.role = [
       { name: 'Admin', code: 'ADMIN' },
       { name: 'User', code: 'USER' },
     ];
   }
 
-  ngOnInit(): void {
-    this.userForm = new FormGroup(
-      {
-          name: new FormControl('', [
-              Validators.required,
-              Validators.pattern('^[a-zA-Z ]+$'),
-          ]),
-          email: new FormControl('', [
-              Validators.required,
-              Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'),
-          ]),
-          password: new FormControl('', [
-              Validators.required,
-              Validators.minLength(4),
-          ]),
-          confirmPassword: new FormControl('', Validators.required),
-          ingredient: new FormControl(''), // Add ingredient control
+//   ngOnInit(): void {
+//     this.userForm = new FormGroup({
+//         name: new FormControl('', [
+//             Validators.required,
+//             Validators.pattern('^[a-zA-Z ]+$'),
+//         ]),
+//         username: new FormControl('', [
+//             Validators.required
+//         ]),
+//         password: new FormControl('', [
+//             Validators.required,
+//             Validators.minLength(4),
+//         ]),
+//         confirmPassword: new FormControl('', Validators.required),
+//         role: new FormControl('', Validators.required), // Ensure role is required
+//     });
+// }
+
+passwordMatchValidator(form: FormGroup): { [key: string]: boolean } | null {
+  const password = form.get('password')?.value;
+  const confirmPassword = form.get('confirmPassword')?.value;
+
+  return password === confirmPassword ? null : { passwordMismatch: true };
+}
+ngOnInit(): void {
+  this.userForm = new FormGroup({
+    name: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[a-zA-Z ]+$'),
+    ]),
+    username: new FormControl('', [Validators.required]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(4),
+    ]),
+    confirmPassword: new FormControl('', Validators.required),
+    role: new FormControl('', Validators.required),
+  });
+}
+
+  
+
+//   onSubmit() {
+//     this.submitted = true;
+
+//     if (this.userForm.valid) {
+//         const payload: addUser = {
+//             username: this.userForm.value.username,
+//             name: this.userForm.value.name,
+//             role: this.selectedRole[0], // Use the first selected role
+//             password: this.userForm.value.password
+//         };
+
+//         console.log('Payload to create user:', payload); // Log payload for debugging
+
+//         this.userService.createUser(payload).subscribe({
+//             next: (response) => {
+//                 console.log('User created:', response);
+//                 this.userAddedSuccess = true; 
+//                 alert(`Thank You ${this.userForm.value.name}`);
+//                 this.userForm.reset();
+//                 setTimeout(() => this.userAddedSuccess = false, 3000);
+//             },
+//             error: (error) => {
+//                 console.error('Error creating user:', error);
+//                 if (error.error && error.error.message) {
+//                     alert(`Error creating user: ${error.error.message}`);
+//                 } else {
+//                     alert('There was an error creating the user.');
+//                 }
+//             }
+//         });
+//     } else {
+//         console.log('Form is not valid', this.userForm.errors);
+//     }
+// }
+
+onSubmit() {
+  this.submitted = true;
+  this.isLoading = true;
+
+  if (this.userForm.valid) {
+    const payload: addUser = {
+      username: this.userForm.value.username,
+      name: this.userForm.value.name,
+      role: this.userForm.value.role,
+      password: this.userForm.value.password
+    };
+
+    this.userService.createUser(payload).subscribe({
+      next: (response) => {
+        this.userAddedSuccess = true;
+        this.userForm.reset();
+        this.isLoading = false;
+        // Show a success message using toast or another UI element
       },
-      // { validators: this.passwordMatchValidator }
-  );
+      error: (error) => {
+        this.isLoading = false;
+        // Handle error as described above
+      }
+    });
+  } else {
+    this.isLoading = false;
+    console.log('Form is not valid', this.userForm.errors);
   }
+}
 
-  passwordMatchValidator(form: FormGroup): { [key: string]: boolean } | null {
-    const password = form.get('password')?.value;
-    const confirmPassword= form.get('confirmPassword')?.value;
-
-    return password === confirmPassword ? null : { passwordMismatch: true };
-  }
-
-  onSubmit() {
-    this.submitted = true;
-
-    // Check if the form is valid before proceeding
-    if (this.userForm.valid) {
-      // Handle user data
-      console.log('User data:', this.userForm.value);
-
-      // Show success notification
-      this.userAddedSuccess = true; 
-      alert(`Thank You ${this.userForm.value.name}`); // Success message
-
-      this.userForm.reset(); // Reset the form
-
-      // Hide the notification after 3 seconds
-      setTimeout(() => {
-        this.userAddedSuccess = false;
-      }, 3000);
-    } else {
-      console.log('Form is not valid');
-    }
-  }
 
   // Getters for form controls
   get name() {
     return this.userForm.get('name');
   }
 
-  get email() {
-    return this.userForm.get('email');
+  get username() {
+    return this.userForm.get('username'); // Corrected to 'username'
   }
 
   get password() {
