@@ -21,6 +21,7 @@
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
+
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
@@ -69,17 +70,22 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "configurations": {
-            "production": {
-              "buildTarget": "ibedc-validation-dashboard-ui:build:production"
-            },
-            "development": {
-              "buildTarget": "ibedc-validation-dashboard-ui:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
+  "builder": "@angular-devkit/build-angular:dev-server",
+  "options": {
+    "proxyConfig": "src/proxy.conf.json"
+  },
+  "configurations": {
+    "production": {
+      "buildTarget": "ibedc-validation-dashboard-ui:build:production"
+    },
+    "development": {
+      "buildTarget": "ibedc-validation-dashboard-ui:build:development"
+    }
+  },
+  "defaultConfiguration": "development"
+},
+
+        
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {

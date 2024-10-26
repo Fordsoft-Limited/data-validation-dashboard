@@ -9,10 +9,14 @@ import { entranceLogin } from '../model/user';
 })
 export class EntranceService {
 
-  constructor(private http: HttpClient, private base: BaseService) { }
+  constructor(private http: HttpClient, private base: BaseService) {
+    console.log(this.baseUrl);
+   }
 
-  private baseUrl = this.base._baseUrl + '/entrance'
+  private baseUrl = this.base._baseUrl + '/entrance';
 
+  
+  
 
 
   entranceLogin(payload: entranceLogin): Observable<any> {
@@ -20,6 +24,8 @@ export class EntranceService {
        `/login` , payload).pipe(
       catchError(err => this.base.errorHandler(err))  
     );
+  
+
   }
 
 

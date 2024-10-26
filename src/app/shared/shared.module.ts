@@ -39,9 +39,11 @@ import { SidebarModule } from 'primeng/sidebar';
 import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';
 import { DataTableComponent } from './data-table/data-table.component';
+import { MessageService } from 'primeng/api'; 
 
 
 @NgModule({
+  providers: [MessageService],
   declarations: [ DataTableComponent],
   imports: [
     CommonModule,
@@ -49,7 +51,6 @@ import { DataTableComponent } from './data-table/data-table.component';
     AccordionModule,
     BadgeModule,
     TagModule,
-    
     AutoCompleteModule,
     ButtonModule,
     CalendarModule,

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { LoginModel } from '../model/loginModel';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { EntranceService } from '../../api/entrance.service';
+import { entranceLogin } from '../../model/user';
 
 @Component({
   selector: 'app-login',
@@ -11,8 +13,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  
   loginForm!: FormGroup;
-  loginModel!: LoginModel[];
+  loginModel!: entranceLogin[];
   loginSuccess: boolean = false;
   loginError: boolean = false;
   rememberMe: boolean = false;
@@ -23,7 +26,8 @@ export class LoginComponent {
   constructor(
     private layoutService: LayoutService,
     private router: Router,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private entranceService:EntranceService
   ) {}
 
   get dark(): boolean {
@@ -32,9 +36,7 @@ export class LoginComponent {
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
-        emailPhone: new FormControl('', [Validators.required, Validators.pattern(
-            '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
-        ),]),
+        username: new FormControl('', [Validators.required]),
         password: new FormControl('',  [Validators.required, Validators.minLength(4)])
     });
 
@@ -48,11 +50,11 @@ export class LoginComponent {
     this.loginSuccess = false;
     this.loginError = false;
   
-    const emailPhone = this.loginForm.get('emailPhone')?.value;
+    const username = this.loginForm.get('username')?.value;
     const password = this.loginForm.get('password')?.value;
   
-    // Check if emailPhone or password is missing
-    if (!emailPhone) {
+    // Check if username or password is missing
+    if (!username) {
         this.errorMessage = 'The email/username field must not be left empty.';
         this.loginError = true; // Show error notification
         this.autoDismissError();
@@ -63,27 +65,25 @@ export class LoginComponent {
         this.autoDismissError();
         this.isLoading = false;  // Stop the loading spinner
     } else {
-        // Simulate login process (you can replace this with actual login logic)
-        setTimeout(() => {
-          this.isLoading = false;  // Stop the loading spinner
-  
-          // Simulate login success
-          const isLoginSuccessful = true;  // Replace with actual login logic
-  
-          if (isLoginSuccessful) {
-            this.loginSuccess = true; // Show success notification
-            this.autoDismissSuccess();
-            this.router.navigate(['/app']);  // Navigate after successful login
-          } else {
-            this.errorMessage = 'Invalid credentials, please try again.';
-            this.loginError = true; // Show error notification
-            this.autoDismissError();
-          }
-        }, 2000); // Simulate a 2-second delay
-    }
-  }
-  
+        // Call the backend login API using the service
+        const loginPayload = { username, password };  // Create payload
 
+        this.entranceService.entranceLogin(loginPayload).subscribe({
+            next: (response) => {
+                this.isLoading = false;  // Stop the loading spinner
+                this.loginSuccess = true; // Show success notification
+                this.autoDismissSuccess();
+                this.router.navigate(['/app']);  // Navigate after successful login
+            },
+            error: (error) => {
+                this.isLoading = false;  // Stop the loading spinner
+                this.errorMessage = 'Invalid credentials, please try again.';
+                this.loginError = true; // Show error notification
+                this.autoDismissError();
+            }
+        });
+    }
+}
 
   private autoDismissError() {
     setTimeout(() => {
@@ -99,8 +99,8 @@ private autoDismissSuccess() {
 }
 
 
-get emailPhone() {
-    return this.loginForm.get('emailPhone');
+get username() {
+    return this.loginForm.get('username');
 }
 get password() {
     return this.loginForm.get('password');

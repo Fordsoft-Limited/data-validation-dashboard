@@ -19,5 +19,5 @@ export class BaseService {
     return throwError(error || "Server Error");
   }
 
-
+  
 }
