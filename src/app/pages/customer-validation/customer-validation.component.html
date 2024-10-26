@@ -11,7 +11,11 @@
             </a>
         </div>
         </ng-template>
-
+        <ng-template pTemplate="center">
+          <div *ngIf="totalRecords > 0" class="total-count">
+            Total Batches: {{ totalRecords }}
+          </div>
+        </ng-template>
         <ng-container pTemplate="center" *ngIf="hasErrors">
           <button
             pButton
@@ -34,7 +38,8 @@
         
       </p-toolbar>
 
-      <p-table [value]="batches" [loading]="loading" [paginator]="true" [rows]="10">
+      <p-table [value]="batches" [loading]="loading" [paginator]="true" [rows]="pageSize"   
+      [totalRecords]="totalRecords" (onPage)="onPageChange($event)">
         <ng-template pTemplate="header">
           <tr>
             <th pSortableColumn="batch_code">
@@ -55,8 +60,8 @@
             <th pSortableColumn="date_created">
               Created Date <p-sortIcon field="date_created"></p-sortIcon>
             </th>
-            <th pSortableColumn="created_by.username">
-              Uploaded By <p-sortIcon field="created_by.username"></p-sortIcon>
+            <th pSortableColumn="created_by.name">
+              Uploaded By <p-sortIcon field="created_by.name"></p-sortIcon>
             </th>
           </tr>
         </ng-template>
@@ -69,7 +74,7 @@
             <td>{{ batch.total_rejected }}</td>
             <td>{{ batch.total_record }}</td>
             <td>{{ batch.date_created | date }}</td>
-           <td>{{ batch.created_by.username }}</td>
+           <td>{{ batch.created_by.name }}</td>
           </tr>
         </ng-template>
       </p-table>

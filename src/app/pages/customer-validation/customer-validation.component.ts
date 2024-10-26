@@ -18,20 +18,13 @@ export class CustomerValidationComponent {
   uploading: boolean = false;
   hasErrors: boolean = false;
   errorLogs: string[] = [];
-
+  currentPage: number = 1;
+  totalRecords: number = 0; 
+  pageSize: number = 10;
 
   @ViewChild('filter') filter!: ElementRef;
 
 
-  // batches = [
-  //   { batchCode: 'BATCH001', startDate: new Date(), endDate: null, status: 'Pending', uploadedBy: 'Admin',fileName: "example.jpg", fileSize: "512 Bytes" },
-  //   { batchCode: 'BATCH002', startDate: new Date(), endDate: new Date(), status: 'Completed', uploadedBy: 'Reviewer', fileName: "video.mp4", fileSize: "2.5 GB" },
-  //   // More sample data...
-  // ];
-
-  // uploading: boolean = false;
-  // hasErrors: boolean = false; // To track if there are any errors
-  // errorLogs: string[] = []; // Array to store error logs
 
   constructor(private messageService: MessageService, private customerService: CustomerService) {}
 
@@ -47,30 +40,33 @@ export class CustomerValidationComponent {
 
 ngOnInit() {
   console.log('Component initialized');
-  this.loadBatches(1, 10); // Load the first page with a page size of 10
+  this.loadBatches(this.currentPage, this.pageSize); // Load the first page with a page size of 10
 }
-
 loadBatches(page: number, pageSize: number) {
   this.loading = true;
   this.customerService.getCustomerValidateBatchesByPages(page, pageSize).subscribe(
     (response) => {
       this.loading = false;
-      console.log('Fetched data:', response); // Log the entire response
-      // Extracting the results from the response
       if (response && response.data && response.data.results) {
-        this.batches = response.data.results; // Assign the results to batches
+        this.batches = response.data.results;
+        this.totalRecords = response.data.count; 
       } else {
-        this.batches = []; // Fallback to an empty array if no results
+        this.batches = []; 
+        this.messageService.add({ severity: 'info', summary: 'No Data', detail: 'No batches found.' });
       }
     },
     (error) => {
       this.loading = false;
       console.error('Error fetching batches:', error); // Log the error
+      this.batches = []; // Clear batches on error
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load batches.' });
     }
   );
 }
-
+onPageChange(event: any) {
+  this.currentPage = event.page + 1; // PrimeNG pagination is 0-based
+  this.loadBatches(this.currentPage, this.pageSize); // Load the new page
+}
 
   exportData() {
     this.loading=true;
