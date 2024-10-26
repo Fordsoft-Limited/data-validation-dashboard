@@ -34,63 +34,42 @@
         
       </p-toolbar>
 
-      <p-table
-        #dt1
-        [value]="batches"
-        [paginator]="true"
-        [rows]="10"
-        sortMode="multiple"
-        [globalFilterFields]="['batchCode', 'startDate']"
-      >
-
-      <ng-template pTemplate="caption">
-        <div class="flex align-items-center justify-content-between">
-            <h5 class="m-0">Customer Vadilation</h5>
-            <span class="p-input-icon-left">
-                <i class="pi pi-search"></i>
-                <input pInputText type="text" [(ngModel)]="searchValue" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Keyword Search">
-            </span>
-        </div>
-    </ng-template>
+      <p-table [value]="batches" [loading]="loading" [paginator]="true" [rows]="10">
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="batchCode">
-              Batch Code <p-sortIcon field="batchCode"></p-sortIcon>
+            <th pSortableColumn="batch_code">
+              Batch Code <p-sortIcon field="batch_code"></p-sortIcon>
             </th>
-            <th pSortableColumn="startDate">
-              Start Date <p-sortIcon field="startDate"></p-sortIcon>
+            <th pSortableColumn="validation_type">
+              Validation Type <p-sortIcon field="validation_type"></p-sortIcon>
             </th>
-            <th pSortableColumn="endDate">
-              End Date <p-sortIcon field="endDate"></p-sortIcon>
+            <th pSortableColumn="total_approved">
+              Total Approved <p-sortIcon field="total_approved"></p-sortIcon>
             </th>
-            <th pSortableColumn="status">
-              Status <p-sortIcon field="status"></p-sortIcon>
+            <th pSortableColumn="total_rejected">
+              Total Rejected <p-sortIcon field="total_rejected"></p-sortIcon>
             </th>
-            <th pSortableColumn="uploadedBy">
-              Uploaded By <p-sortIcon field="uploadedBy"></p-sortIcon>
+            <th pSortableColumn="total_record">
+              Total Record <p-sortIcon field="total_record"></p-sortIcon>
             </th>
-
-            <th pSortableColumn="uploadedBy">
-              FileName <p-sortIcon field="uploadedBy"></p-sortIcon>
+            <th pSortableColumn="date_created">
+              Created Date <p-sortIcon field="date_created"></p-sortIcon>
             </th>
-
-            <th pSortableColumn="uploadedBy">
-              FileSize <p-sortIcon field="uploadedBy"></p-sortIcon>
+            <th pSortableColumn="created_by.username">
+              Uploaded By <p-sortIcon field="created_by.username"></p-sortIcon>
             </th>
           </tr>
         </ng-template>
-
+      
         <ng-template pTemplate="body" let-batch>
           <tr>
-            <td>{{ batch.batchCode }}</td>
-            <td>{{ batch.startDate ? (batch.endDate | date) : "N/A" }}</td>
-            <td>{{ batch.endDate ? (batch.endDate | date) : "N/A" }}</td>
-            <td>{{ batch.status }}</td>
-            <td>{{ batch.uploadedBy }}</td>
-            <td>{{ batch.fileName }}</td>
-            <td>{{ batch.fileSize }}</td>
-
-
+            <td>{{ batch.batch_code }}</td>
+            <td>{{ batch.validation_type }}</td>
+            <td>{{ batch.total_approved }}</td>
+            <td>{{ batch.total_rejected }}</td>
+            <td>{{ batch.total_record }}</td>
+            <td>{{ batch.date_created | date }}</td>
+           <td>{{ batch.created_by.username }}</td>
           </tr>
         </ng-template>
       </p-table>

@@ -1,6 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { CustomerService } from '../../api/customer.service';
+
 
 @Component({
   selector: 'app-customer-validation',
@@ -12,21 +14,26 @@ export class CustomerValidationComponent {
   uploadedFiles: any[] = [];
   searchValue: string = ''; // Initialize searchValue
   loading:boolean = false;
+  batches: any[] = [];
+  uploading: boolean = false;
+  hasErrors: boolean = false;
+  errorLogs: string[] = [];
+
 
   @ViewChild('filter') filter!: ElementRef;
 
 
-  batches = [
-    { batchCode: 'BATCH001', startDate: new Date(), endDate: null, status: 'Pending', uploadedBy: 'Admin',fileName: "example.jpg", fileSize: "512 Bytes" },
-    { batchCode: 'BATCH002', startDate: new Date(), endDate: new Date(), status: 'Completed', uploadedBy: 'Reviewer', fileName: "video.mp4", fileSize: "2.5 GB" },
-    // More sample data...
-  ];
+  // batches = [
+  //   { batchCode: 'BATCH001', startDate: new Date(), endDate: null, status: 'Pending', uploadedBy: 'Admin',fileName: "example.jpg", fileSize: "512 Bytes" },
+  //   { batchCode: 'BATCH002', startDate: new Date(), endDate: new Date(), status: 'Completed', uploadedBy: 'Reviewer', fileName: "video.mp4", fileSize: "2.5 GB" },
+  //   // More sample data...
+  // ];
 
-  uploading: boolean = false;
-  hasErrors: boolean = false; // To track if there are any errors
-  errorLogs: string[] = []; // Array to store error logs
+  // uploading: boolean = false;
+  // hasErrors: boolean = false; // To track if there are any errors
+  // errorLogs: string[] = []; // Array to store error logs
 
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService, private customerService: CustomerService) {}
 
 
 
@@ -37,6 +44,34 @@ export class CustomerValidationComponent {
         'contains'
     );
 }
+
+ngOnInit() {
+  console.log('Component initialized');
+  this.loadBatches(1, 10); // Load the first page with a page size of 10
+}
+
+loadBatches(page: number, pageSize: number) {
+  this.loading = true;
+  this.customerService.getCustomerValidateBatchesByPages(page, pageSize).subscribe(
+    (response) => {
+      this.loading = false;
+      console.log('Fetched data:', response); // Log the entire response
+      // Extracting the results from the response
+      if (response && response.data && response.data.results) {
+        this.batches = response.data.results; // Assign the results to batches
+      } else {
+        this.batches = []; // Fallback to an empty array if no results
+      }
+    },
+    (error) => {
+      this.loading = false;
+      console.error('Error fetching batches:', error); // Log the error
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load batches.' });
+    }
+  );
+}
+
+
   exportData() {
     this.loading=true;
 

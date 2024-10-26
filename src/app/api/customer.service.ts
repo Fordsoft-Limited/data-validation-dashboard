@@ -82,6 +82,8 @@ export class CustomerService {
   }
 
 
+
+
   getCustomerValidateBatchesByUuid(uid: string): Observable<any> {
     return this.http.get<any>(this.baseUrl +
       `/validate/batches/uid?uid=${uid}`)
