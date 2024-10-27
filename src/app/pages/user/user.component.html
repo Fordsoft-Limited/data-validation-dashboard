@@ -12,9 +12,9 @@
       [(selection)]="selectedUsers"
       dataKey="id"
       [rowHover]="true"
-      [rows]="5"
+      [rows]="pageSize"
+      (onPage)="onPageChange($event)"
       [showCurrentPageReport]="true"
-      [rowsPerPageOptions]="[5, 10, 20]"
       [loading]="loading"
       [paginator]="true"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -110,7 +110,7 @@
                               [(ngModel)]="user.date_createde" />
                       </ng-template>
                       <ng-template pTemplate="output">
-                          {{user.date | date: 'MM/dd/yyyy'}}
+                          {{user.date_created | date}}
                       </ng-template>
                   </p-cellEditor>
               </td>

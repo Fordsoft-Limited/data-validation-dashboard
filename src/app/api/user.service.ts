@@ -1,4 +1,4 @@
-import { HttpClient,HttpHeaders } from '@angular/common/http';
+import { HttpClient,HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { catchError, Observable } from 'rxjs';
@@ -41,13 +41,17 @@ export class UserService {
   // }
 
 
-  getUserList(): Observable<any> {
+  getUserList(page: number, pageSize: number): Observable<any> {
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('page_size', pageSize.toString());
     return this.http.get<any>(this.baseUrl +
-      `/list`)
+      `/list`,{params})
       .pipe(
         catchError(err => this.base.errorHandler(err))
       )
   }
+
 
   logOutUser(payload: logout): Observable<any> {
     return this.http.post<any>(this.baseUrl +

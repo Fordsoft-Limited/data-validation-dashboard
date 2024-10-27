@@ -21,6 +21,9 @@ export class UserComponent implements OnInit {
   clonedUsers: { [s: string]: addUser } = {}; // Update type here
   activityValues: number[] = [0, 100];
   searchValue: string = '';
+  currentPage: number = 1;
+  pageSize : number = 10;
+  totalRecords : number = 0
   user: addUser = new addUser(); 
 
   fetchError: string = ''; // For error messages
@@ -37,42 +40,68 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
       // Load users data
-      this.loadUsers();
-      this.fetchUsers();
+      this.loadUsers(this.currentPage,this.pageSize);
+      // this.fetchUsers();
   }
 
 
-  fetchUsers(): void {
-    this.userService.getUserList().subscribe(
-      (data) => {
-        this.users = data;
-        this.loading = false;
-      },
-      (error) => {
-        this.fetchError = 'Error fetching users: ' + error.message;
-        this.loading = false;
+  // fetchUsers(): void {
+  //   this.userService.getUserList().subscribe(
+  //     (data) => {
+  //       this.users = data;
+  //       this.loading = false;
+  //     },
+  //     (error) => {
+  //       this.fetchError = 'Error fetching users: ' + error.message;
+  //       this.loading = false;
+  //     }
+  //   );
+  // }
+
+//   loadUsers(): void {
+//     this.loading = true; // Set loading to true while fetching data
+//     this.userService.getUserList().subscribe(
+//         (data: addUser[]) => {
+//             this.users = data; // Assign fetched users to the users array
+//             this.loading = false; // Set loading to false after fetching
+//         },
+//         (error) => {
+//             this.messageService.add({
+//                 severity: 'error',
+//                 summary: 'Error',
+//                 detail: 'Failed to load users.',
+//             });
+//             this.loading = false; // Set loading to false on error
+//         }
+//     );
+// }
+
+
+loadUsers(page:number,pageSize:number) {
+  this.loading = true;
+  this.userService.getUserList(page,pageSize).subscribe(
+    (response) => {
+      this.loading = false;
+      if (response && response.data && response.data.results) {
+        this.users = response.data.results;
+        this.totalRecords = response.data.count; 
+      } else {
+        this.users = []; 
+        this.messageService.add({ severity: 'info', summary: 'No Data', detail: 'No batches found.' });
       }
-    );
-  }
-
-  loadUsers(): void {
-    this.loading = true; // Set loading to true while fetching data
-    this.userService.getUserList().subscribe(
-        (data: addUser[]) => {
-            this.users = data; // Assign fetched users to the users array
-            this.loading = false; // Set loading to false after fetching
-        },
-        (error) => {
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'Failed to load users.',
-            });
-            this.loading = false; // Set loading to false on error
-        }
-    );
+    },
+    (error) => {
+      this.loading = false;
+      console.error('Error fetching batches:', error); // Log the error
+      this.users = []; // Clear batches on error
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load batches.' });
+    }
+  );
 }
-
+onPageChange(event:any){
+  this.currentPage = event.page + 1;
+  this.loadUsers(this.currentPage,this.pageSize);
+}
   onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal(
           (event.target as HTMLInputElement).value,
