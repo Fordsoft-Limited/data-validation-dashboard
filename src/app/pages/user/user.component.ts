@@ -5,6 +5,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Table } from 'primeng/table';
 import { UserService } from '../../api/user.service';
 import { addUser } from '../../model/user';
+import { AuthService } from '../../auth/service/auth.service';
 
 @Component({
   selector: 'app-user',
@@ -18,10 +19,13 @@ export class UserComponent implements OnInit {
   selectedUsers!: addUser[];
   statuses!: SelectItem[];
   loading: boolean = true;
+  hasErrors : boolean = false
   clonedUsers: { [s: string]: addUser } = {}; // Update type here
   activityValues: number[] = [0, 100];
   searchValue: string = '';
   currentPage: number = 1;
+  userAddedError: boolean = false;
+  errorMessage: string = "";
   pageSize : number = 10;
   totalRecords : number = 0
   user: addUser = new addUser(); 
@@ -35,7 +39,8 @@ export class UserComponent implements OnInit {
 
   constructor(
       private userService: UserService,
-      private messageService: MessageService
+      private messageService: MessageService,
+      private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -45,41 +50,21 @@ export class UserComponent implements OnInit {
   }
 
 
-  // fetchUsers(): void {
-  //   this.userService.getUserList().subscribe(
-  //     (data) => {
-  //       this.users = data;
-  //       this.loading = false;
-  //     },
-  //     (error) => {
-  //       this.fetchError = 'Error fetching users: ' + error.message;
-  //       this.loading = false;
-  //     }
-  //   );
-  // }
-
-//   loadUsers(): void {
-//     this.loading = true; // Set loading to true while fetching data
-//     this.userService.getUserList().subscribe(
-//         (data: addUser[]) => {
-//             this.users = data; // Assign fetched users to the users array
-//             this.loading = false; // Set loading to false after fetching
-//         },
-//         (error) => {
-//             this.messageService.add({
-//                 severity: 'error',
-//                 summary: 'Error',
-//                 detail: 'Failed to load users.',
-//             });
-//             this.loading = false; // Set loading to false on error
-//         }
-//     );
-// }
-
 
 loadUsers(page:number,pageSize:number) {
+  const token = this.authService.getToken();
+  console.log(token);
+if (!token) {
+  this.loading = false;
+  this.hasErrors = true;
+  this.errorMessage = 'No authentication token found. Please log in again.';
+  setTimeout(() => {
+    this.userAddedError = false;
+  }, 3000);
+  return; // Exit the function early
+}
   this.loading = true;
-  this.userService.getUserList(page,pageSize).subscribe(
+  this.userService.getUserList(page,pageSize,token).subscribe(
     (response) => {
       this.loading = false;
       if (response && response.data && response.data.results) {
@@ -114,31 +99,6 @@ onPageChange(event:any){
       this.filter.nativeElement.value = '';
   }
 
-//   onRowEditInit(user: addUser) { // Change type to addUser
-//       this.clonedUsers[user.id as string] = { ...user };
-//   }
-
-//   onRowEditSave(user: addUser) { // Change type to addUser
-//       if (user.name) {
-//           delete this.clonedUsers[user.id as string];
-//           this.messageService.add({
-//               severity: 'success',
-//               summary: 'Success',
-//               detail: 'User is updated',
-//           });
-//       } else {
-//           this.messageService.add({
-//               severity: 'error',
-//               summary: 'Error',
-//               detail: 'Invalid Name',
-//           });
-//       }
-//   }
-
-//   onRowEditCancel(user: addUser, index: number) { // Change type to addUser
-//       this.users[index] = this.clonedUsers[user.id as string];
-//       delete this.clonedUsers[user.id as string];
-//   }
 
   getSeverity(status: string | undefined): 'success' | 'info' | 'warning' | 'danger' | null | undefined {
       if (!status) {

@@ -31,17 +31,13 @@ export class UserService {
 
     return this.http.post(`${this.baseUrl}/create`, payload, { headers });
   }
-  // createUser(payload: addUser): Observable<any> {
-    
-  //   return this.http.post<any>(this.baseUrl +
-  //     `/create`, payload)
-  //     .pipe(
-  //       catchError(err => this.base.errorHandler(err))
-  //     )
-  // }
+ 
 
-
-  getUserList(page: number, pageSize: number): Observable<any> {
+  getUserList(page: number, pageSize: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
     const params = new HttpParams()
     .set('page', page.toString())
     .set('page_size', pageSize.toString());

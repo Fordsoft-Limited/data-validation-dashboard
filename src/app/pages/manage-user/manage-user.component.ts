@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { addUser } from '../../model/user';
+import { Router } from '@angular/router';
 import { UserService } from '../../api/user.service';
 import { AuthService } from '../../auth/service/auth.service';
 
@@ -30,31 +31,13 @@ export class ManageUserComponent implements OnInit {
   successMessage: string = '';      // Success message text
   errorMessage: string = '';   
 
-  constructor(private userService: UserService, private authService: AuthService) {
+  constructor(private userService: UserService, private authService: AuthService, private router: Router,) {
     this.role = [
       { name: 'Admin', code: 'ADMIN' },
       { name: 'User', code: 'USER' },
       { name: 'APPROVAl', code: 'APPROVAl' },
     ];
   }
-
-//   ngOnInit(): void {
-//     this.userForm = new FormGroup({
-//         name: new FormControl('', [
-//             Validators.required,
-//             Validators.pattern('^[a-zA-Z ]+$'),
-//         ]),
-//         username: new FormControl('', [
-//             Validators.required
-//         ]),
-//         password: new FormControl('', [
-//             Validators.required,
-//             Validators.minLength(4),
-//         ]),
-//         confirmPassword: new FormControl('', Validators.required),
-//         role: new FormControl('', Validators.required), // Ensure role is required
-//     });
-// }
 
 passwordMatchValidator(form: FormGroup): { [key: string]: boolean } | null {
   const password = form.get('password')?.value;
@@ -80,40 +63,6 @@ ngOnInit(): void {
 
   
 
-//   onSubmit() {
-//     this.submitted = true;
-
-//     if (this.userForm.valid) {
-//         const payload: addUser = {
-//             username: this.userForm.value.username,
-//             name: this.userForm.value.name,
-//             role: this.selectedRole[0], // Use the first selected role
-//             password: this.userForm.value.password
-//         };
-
-//         console.log('Payload to create user:', payload); // Log payload for debugging
-
-//         this.userService.createUser(payload).subscribe({
-//             next: (response) => {
-//                 console.log('User created:', response);
-//                 this.userAddedSuccess = true; 
-//                 alert(`Thank You ${this.userForm.value.name}`);
-//                 this.userForm.reset();
-//                 setTimeout(() => this.userAddedSuccess = false, 3000);
-//             },
-//             error: (error) => {
-//                 console.error('Error creating user:', error);
-//                 if (error.error && error.error.message) {
-//                     alert(`Error creating user: ${error.error.message}`);
-//                 } else {
-//                     alert('There was an error creating the user.');
-//                 }
-//             }
-//         });
-//     } else {
-//         console.log('Form is not valid', this.userForm.errors);
-//     }
-// }
 onSubmit() {
   this.submitted = true;
     this.isLoading = true;
@@ -136,7 +85,7 @@ onSubmit() {
     setTimeout(() => {
       this.userAddedError = false;
     }, 3000);
-    return; // Exit the function early
+    return; 
   }
     this.userService.createUser(payload,token).subscribe({
       next: (response) => {
@@ -144,8 +93,7 @@ onSubmit() {
         this.successMessage = 'Success! Your account has been successfully created!';
         this.userForm.reset();
         this.isLoading = false;
-        // Show a success message using toast or another UI element
-        // Hide the success message after a few seconds
+        this.router.navigate(['/user-management']);
         setTimeout(() => {
           this.userAddedSuccess = false;
         }, 3000);

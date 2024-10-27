@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { CustomerService } from '../../api/customer.service';
+import { AuthService } from '../../auth/service/auth.service';
 
 
 @Component({
@@ -17,6 +18,8 @@ export class CustomerValidationComponent {
   batches: any[] = [];
   uploading: boolean = false;
   hasErrors: boolean = false;
+  userAddedError: boolean = false;
+  errorMessage: string = "";
   errorLogs: string[] = [];
   currentPage: number = 1;
   totalRecords: number = 0; 
@@ -26,7 +29,7 @@ export class CustomerValidationComponent {
 
 
 
-  constructor(private messageService: MessageService, private customerService: CustomerService) {}
+  constructor(private messageService: MessageService, private customerService: CustomerService,private authService: AuthService) {}
 
 
 
@@ -43,8 +46,19 @@ ngOnInit() {
   this.loadBatches(this.currentPage, this.pageSize); // Load the first page with a page size of 10
 }
 loadBatches(page: number, pageSize: number) {
+  const token = this.authService.getToken();
+  console.log(token);
+if (!token) {
+  this.loading = false;
+  this.hasErrors = true;
+  this.errorMessage = 'No authentication token found. Please log in again.';
+  setTimeout(() => {
+    this.userAddedError = false;
+  }, 3000);
+  return; // Exit the function early
+}
   this.loading = true;
-  this.customerService.getCustomerValidateBatchesByPages(page, pageSize).subscribe(
+  this.customerService.getCustomerValidateBatchesByPages(page, pageSize, token).subscribe(
     (response) => {
       this.loading = false;
       if (response && response.data && response.data.results) {

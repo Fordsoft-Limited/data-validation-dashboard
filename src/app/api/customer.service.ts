@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams,HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { customerApproveOrReject, customerValidateBulk, validateCustomer } from '../model/customer';
@@ -69,7 +69,11 @@ export class CustomerService {
       )
   }
 
-  getCustomerValidateBatchesByPages(page: number, pageSize: number): Observable<any> {
+  getCustomerValidateBatchesByPages(page: number, pageSize: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json' // Add any other headers if necessary
+    });
     const params = new HttpParams()
     .set('page', page.toString())
     .set('page_size', pageSize.toString());
