@@ -25,11 +25,15 @@ export class ManageUserComponent implements OnInit {
   visible: boolean = false;
 
   userAddedSuccess: boolean = false;
+  userAddedError: boolean = false;  // New property to show error message
+  successMessage: string = '';      // Success message text
+  errorMessage: string = '';   
 
   constructor(private userService: UserService) {
     this.role = [
       { name: 'Admin', code: 'ADMIN' },
       { name: 'User', code: 'USER' },
+      { name: 'APPROVAl', code: 'APPROVAl' },
     ];
   }
 
@@ -109,10 +113,11 @@ ngOnInit(): void {
 //         console.log('Form is not valid', this.userForm.errors);
 //     }
 // }
-
 onSubmit() {
   this.submitted = true;
-  this.isLoading = true;
+    this.isLoading = true;
+    this.userAddedSuccess = false;
+    this.userAddedError = false;
 
   if (this.userForm.valid) {
     const payload: addUser = {
@@ -121,17 +126,30 @@ onSubmit() {
       role: this.userForm.value.role,
       password: this.userForm.value.password
     };
-
-    this.userService.createUser(payload).subscribe({
+  
+    this.userService.createUser(payload,"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMwMDQzNjA0LCJpYXQiOjE3Mjk5NTcyMDQsImp0aSI6IjhiNTkwY2RlN2JjMDQ5Y2RhZDQ2MzE2ZjQwZGZhOTVhIiwidXNlcl9pZCI6MSwibmFtZSI6Ik9kb2ZpbiBPeWVqaWRlIiwicm9sZSI6IkFETUlOIiwic2x1ZyI6Im95ZWppZGUiLCJ1c2VybmFtZSI6Im95ZWppZGUiLCJpc19hY3RpdmUiOnRydWV9.PcvKj6bsjJD_t14SjRGwlQ4sqGOzzJFgStlzLz76ONY").subscribe({
       next: (response) => {
         this.userAddedSuccess = true;
+        this.successMessage = 'Success! Your account has been successfully created!';
         this.userForm.reset();
         this.isLoading = false;
         // Show a success message using toast or another UI element
+        // Hide the success message after a few seconds
+        setTimeout(() => {
+          this.userAddedSuccess = false;
+        }, 3000);
+        
       },
       error: (error) => {
         this.isLoading = false;
-        // Handle error as described above
+        this.userAddedError = true;
+        this.errorMessage = error.status === 401 
+          ? 'You are not authenticated to create a user.' 
+          : 'There was an error creating the user.';
+
+          setTimeout(() => {
+            this.userAddedError = false;
+          }, 3000);
       }
     });
   } else {

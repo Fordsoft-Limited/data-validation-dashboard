@@ -15,14 +15,16 @@ import { addUser } from '../../model/user';
 export class UserComponent implements OnInit {
   userForm!: FormGroup;
   users!: addUser[];
-  selectedUsers!: User[];
+  selectedUsers!: addUser[];
   statuses!: SelectItem[];
   loading: boolean = true;
   clonedUsers: { [s: string]: addUser } = {}; // Update type here
   activityValues: number[] = [0, 100];
   searchValue: string = '';
-  user: User = {};
-  
+  user: addUser = new addUser(); 
+
+  fetchError: string = ''; // For error messages
+
   visible: boolean = false;
   userAddedSuccess: boolean = false;
 
@@ -36,6 +38,21 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
       // Load users data
       this.loadUsers();
+      this.fetchUsers();
+  }
+
+
+  fetchUsers(): void {
+    this.userService.getUserList().subscribe(
+      (data) => {
+        this.users = data;
+        this.loading = false;
+      },
+      (error) => {
+        this.fetchError = 'Error fetching users: ' + error.message;
+        this.loading = false;
+      }
+    );
   }
 
   loadUsers(): void {

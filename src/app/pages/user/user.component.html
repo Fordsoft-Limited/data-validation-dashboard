@@ -1,7 +1,13 @@
 <div class="card">
+
+    <!-- Error Message -->
+  <div *ngIf="fetchError" class="error-message">
+    <p>{{ fetchError }}</p>
+  </div>
+
   <p-toast></p-toast>
   
-  <p-table [value]="users" dataKey="id" editMode="row" [tableStyle]="{'min-width': '100rem'}"
+  <p-table *ngIf="users && users.length" [value]="users" dataKey="id" editMode="row" [tableStyle]="{'min-width': '100rem'}"
       #dt1
       [(selection)]="selectedUsers"
       dataKey="id"
@@ -13,7 +19,7 @@
       [paginator]="true"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       [filterDelay]="0"
-      [globalFilterFields]="['name', 'role', 'email', 'status']"
+      [globalFilterFields]="['name', 'role', 'username', 'status', 'date_created']"
   >
   <ng-template pTemplate="caption">
       <div class="flex-container">
@@ -33,7 +39,7 @@
           <tr>
               
               <th style="width:10%">Name</th>
-              <th style="width:10%">Email</th>
+              <th style="width:10%">User Name</th>
               <th style="width:10%">Role</th>
               <th style="width: 10%">Status</th>
              <th style="width: 10%;"> Date</th>
@@ -41,7 +47,7 @@
              </tr>
       </ng-template>
       <ng-template pTemplate="body" let-user let-editing="editing" let-ri="rowIndex">
-          <tr [pEditableRow]="user">
+          <tr [pEditableRow]="users">
               
               <td>
                   
@@ -100,8 +106,8 @@
                   <p-cellEditor>
                       <ng-template pTemplate="input">
                           <input 
-                              pInputText type="text" 
-                              [(ngModel)]="user.date" />
+                              pInputText type="date" 
+                              [(ngModel)]="user.date_createde" />
                       </ng-template>
                       <ng-template pTemplate="output">
                           {{user.date | date: 'MM/dd/yyyy'}}
@@ -146,6 +152,14 @@
   </p-table>
 
 </div>
+
+
+<script>
+    // Show error message using p-toast if there’s an error
+    if (fetchError) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: fetchError });
+    }
+  </script>
 
 
 

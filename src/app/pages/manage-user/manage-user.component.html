@@ -1,5 +1,18 @@
 <div class="card">
     <span class="text-900 text-xl font-bold mb-4 block">Manage User</span>
+
+     <!-- Success Notification -->
+     <div *ngIf="userAddedSuccess" class="text-center"
+     style="border: 1px solid #218838; background-color: #28a745; color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+  <p><i class="pi pi-check-circle" style="margin-right: 5px;"></i> {{ successMessage }}</p>
+</div>
+
+<!-- Error Notification -->
+<div *ngIf="userAddedError" class="text-center"
+     style="border: 1px solid #c82333; background-color: #dc3545; color: white; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+  <p><i class="pi pi-exclamation-triangle" style="margin-right: 5px;"></i> {{ errorMessage }}</p>
+</div>
+
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <div class="grid">
         <div class="col-12 lg:col-2">
@@ -7,6 +20,9 @@
           <p class="m-0 p-0 text-600 line-height-3 mr-3">Welcome to the user creation process! Please fill out the required fields to set up your account.</p>
 
         </div>
+
+        
+
         <div class="col-12 lg:col-10">
           <div class="grid formgrid p-fluid">
             <div class="field mb-4 col-10">
