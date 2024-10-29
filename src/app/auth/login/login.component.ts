@@ -1,4 +1,3 @@
-
 import { Component } from '@angular/core';
 import { LayoutService } from '../../layout/service/app.layout.service';
 import { Router } from '@angular/router';
@@ -7,6 +6,7 @@ import { LoginModel } from '../model/loginModel';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EntranceService } from '../../api/entrance.service';
 import { entranceLogin } from '../../model/user';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +28,8 @@ export class LoginComponent {
     private layoutService: LayoutService,
     private router: Router,
     private snackbarService: SnackbarService,
-    private entranceService:EntranceService
+    private entranceService:EntranceService,
+    private authService: AuthService
   ) {}
 
   get dark(): boolean {
@@ -44,47 +45,96 @@ export class LoginComponent {
   } 
 
 
-  onSubmit() {
-    this.isLoading = true;  // Start the loading spinner
+//   onSubmit() {
+//     this.isLoading = true;  // Start the loading spinner
   
-    // Reset the messages
-    this.loginSuccess = false;
-    this.loginError = false;
+//     // Reset the messages
+//     this.loginSuccess = false;
+//     this.loginError = false;
+  
+//     const username = this.loginForm.get('username')?.value;
+//     const password = this.loginForm.get('password')?.value;
+  
+//     // Check if username or password is missing
+//     if (!username) {
+//         this.errorMessage = 'The email/username field must not be left empty.';
+//         this.loginError = true; // Show error notification
+//         this.autoDismissError();
+//         this.isLoading = false;  // Stop the loading spinner
+//     } else if (!password) {
+//         this.errorMessage = 'The password field must not be left empty.';
+//         this.loginError = true; // Show error notification
+//         this.autoDismissError();
+//         this.isLoading = false;  // Stop the loading spinner
+//     } else {
+//         // Call the backend login API using the service
+//         const loginPayload = { username, password };  // Create payload
+
+//         this.entranceService.entranceLogin(loginPayload).subscribe({
+//             next: (response) => {
+//                 this.isLoading = false;  // Stop the loading spinner
+//                 this.loginSuccess = true; // Show success notification
+//                 this.autoDismissSuccess();
+//                 const token = response.data.access_token;// Make sure this path is correct
+//                 console.log('Received token:', token); // Debug log
+            
+//                 this.authService.setToken(token); // Save the token
+//                 this.router.navigate(['/app']);  // Navigate after successful login
+//             },
+//             error: (error) => {
+//                 this.isLoading = false;  // Stop the loading spinner
+//                 this.errorMessage = 'Invalid credentials, please try again.';
+//                 this.loginError = true; // Show error notification
+//                 this.autoDismissError();
+//             }
+//         });
+//     }
+// }
+
+onSubmit() {
+    this.isLoading = true;
   
     const username = this.loginForm.get('username')?.value;
     const password = this.loginForm.get('password')?.value;
   
-    // Check if username or password is missing
-    if (!username) {
-        this.errorMessage = 'The email/username field must not be left empty.';
-        this.loginError = true; // Show error notification
-        this.autoDismissError();
-        this.isLoading = false;  // Stop the loading spinner
-    } else if (!password) {
-        this.errorMessage = 'The password field must not be left empty.';
-        this.loginError = true; // Show error notification
-        this.autoDismissError();
-        this.isLoading = false;  // Stop the loading spinner
-    } else {
-        // Call the backend login API using the service
-        const loginPayload = { username, password };  // Create payload
-
-        this.entranceService.entranceLogin(loginPayload).subscribe({
-            next: (response) => {
-                this.isLoading = false;  // Stop the loading spinner
-                this.loginSuccess = true; // Show success notification
-                this.autoDismissSuccess();
-                this.router.navigate(['/app']);  // Navigate after successful login
-            },
-            error: (error) => {
-                this.isLoading = false;  // Stop the loading spinner
-                this.errorMessage = 'Invalid credentials, please try again.';
-                this.loginError = true; // Show error notification
-                this.autoDismissError();
-            }
-        });
+    if (!username || !password) {
+      this.errorMessage = 'Both username and password are required.';
+      this.loginError = true;
+      this.isLoading = false;
+      return;
     }
-}
+  
+    const loginPayload = { username, password };
+  
+    //const encryptedPayload = this.authService.encryptPayload(loginPayload);
+    const encryptedPayload = this.authService.encryptPayload(loginPayload);
+
+   
+    // Send the login request to the API
+    this.entranceService.entranceLogin(loginPayload).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        const token = response.data?.access_token;
+        console.log('Received token:', token);
+  
+        if (token) {
+          this.authService.setToken(token);           // Encrypt and store token
+          this.authService.setLoginData(username, password); // Encrypt and store login data
+          this.router.navigate(['/app']);             // Redirect to dashboard
+        } else {
+          this.errorMessage = 'Login failed. Please try again.';
+          this.loginError = true;
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        // this.errorMessage = 'Invalid credentials, please try again.';
+        this.errorMessage = error.error.errorMessage;
+        this.loginError = true;
+      }
+    });
+  }
+  
 
   private autoDismissError() {
     setTimeout(() => {

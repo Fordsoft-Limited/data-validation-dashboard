@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { RippleModule } from 'primeng/ripple';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptorService } from './service/token-interceptor.service';
 export const securityRoutes: Routes = [
   {
     path: '',
@@ -25,7 +27,8 @@ export const securityRoutes: Routes = [
 @NgModule({
   declarations: [
     LoginComponent,
-    ForgetPasswordComponent
+    ForgetPasswordComponent,
+ 
   ],
   imports: [
     CommonModule,
@@ -38,6 +41,9 @@ export const securityRoutes: Routes = [
     RippleModule,
     ReactiveFormsModule
 
-  ]
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }
+  ],
 })
 export class AuthModule { }
