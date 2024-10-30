@@ -1,90 +1,109 @@
-<div class="grid">
-  <div class="col-12">
-    <div class="card px-6 py-6">
-      <p-toast></p-toast>
-
-      <p-toolbar styleClass="mb-4">
-        <ng-template pTemplate="left">
-          <div class="card flex justify-content-center gap-3">
-            <a routerLink="/app/bulk-customer-validation"   class="p-button font-bold">
-              <i class="pi pi-upload"></i>  
-            </a>
-        </div>
-        </ng-template>
-        <ng-template pTemplate="center">
-          <div *ngIf="totalRecords > 0" class="total-count">
-            Total Batches: {{ totalRecords }}
-          </div>
-        </ng-template>
-        <ng-container pTemplate="center" *ngIf="hasErrors">
-          <button
-            pButton
-            label="Download Error Logs"
-            (click)="downloadErrorLogs()"
-          ></button>
-        </ng-container>
-
-        <ng-template pTemplate="right">
-          <button
-          [loading]="loading"
-            pButton
-            pRipple
-            label="Export"
-            icon="pi pi-download"
-            class="p-button-help"
-            (click)="exportData()"
-          ></button>
-        </ng-template>
-        
-      </p-toolbar>
-
-      <p-table [value]="batches" [loading]="loading" [paginator]="true" [rows]="pageSize"   
-      [totalRecords]="totalRecords" (onPage)="onPageChange($event)">
-        <ng-template pTemplate="header">
+<div class="card">
+  <p-toast />
+  <p-table [value]="batches" dataKey="batch_code" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)"
+  [paginator]="true" [rows]="pageSize"  [totalRecords]="totalRecords" (onPage)="onPageChange($event)">
+      <ng-template pTemplate="caption">
+        <p-toolbar styleClass="mb-4">
+          <ng-template pTemplate="left">
+            <div class="card flex justify-content-center gap-3">
+              <a routerLink="/app/bulk-customer-validation" class="p-button font-bold">
+                <i class="pi pi-upload"></i>
+              </a>
+            </div>
+            
+            <p-chip styleClass="pl-0 pr-3 ml-4" >
+                <span class="bg-primary border-circle w-2rem h-2rem flex align-items-center justify-content-center">
+                    <div *ngIf="totalRecords > 0" class="total-count">
+                        {{ totalRecords }}
+                      </div>
+                </span>
+                <span class="ml-2 font-medium">
+                    Total Batches
+                </span>
+            </p-chip>
+          </ng-template>
+          
+          <ng-container pTemplate="center" *ngIf="hasErrors">
+            <button
+              pButton
+              label="Download Error Logs"
+              (click)="downloadErrorLogs()"
+            ></button>
+          </ng-container>
+          <ng-template pTemplate="right">
+            <button
+              [loading]="loading"
+              pButton
+              pRipple
+              label="Export"
+              icon="pi pi-download"
+              class="p-button-help"
+              (click)="exportData()"
+            ></button>
+          </ng-template>
+        </p-toolbar>
+          
+      </ng-template>
+      <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="batch_code">
-              Batch Code <p-sortIcon field="batch_code"></p-sortIcon>
-            </th>
-            <th pSortableColumn="validation_type">
-              Validation Type <p-sortIcon field="validation_type"></p-sortIcon>
-            </th>
-            <th pSortableColumn="total_approved">
-              Total Approved <p-sortIcon field="total_approved"></p-sortIcon>
-            </th>
-            <th pSortableColumn="total_rejected">
-              Total Rejected <p-sortIcon field="total_rejected"></p-sortIcon>
-            </th>
-            <th pSortableColumn="total_record">
-              Total Record <p-sortIcon field="total_record"></p-sortIcon>
-            </th>
-            <th pSortableColumn="date_created">
-              Created Date <p-sortIcon field="date_created"></p-sortIcon>
-            </th>
-            <th pSortableColumn="created_by.name">
-              Uploaded By <p-sortIcon field="created_by.name"></p-sortIcon>
-            </th>
+              <th style="width: 5rem"></th>
+              <th pSortableColumn="batch_code">Batch Code <p-sortIcon field="batch_code" /></th>
+              <th pSortableColumn="validation_type">Vildation Type <p-sortIcon field="validation_type" /></th>
+              <th pSortableColumn="approved_rejected">Approved/Rejected <p-sortIcon field="approved_rejected" /></th>
+              <th pSortableColumn="total_record">Total Record <p-sortIcon field="total_record" /></th>
+              <th pSortableColumn="date_created">Created Dated <p-sortIcon field="date_created" /></th>
+              <th pSortableColumn="created_by.name">Uploaded By <p-sortIcon field="created_by.name" /></th>
           </tr>
-        </ng-template>
-      
-        <ng-template pTemplate="body" let-batch>
+      </ng-template>
+      <ng-template pTemplate="body" let-batch let-expanded="expanded">
           <tr>
-            <td>{{ batch.batch_code }}</td>
-            <td>{{ batch.validation_type }}</td>
-            <td>{{ batch.total_approved }}</td>
-            <td>{{ batch.total_rejected }}</td>
-            <td>{{ batch.total_record }}</td>
-            <td>{{ batch.date_created | date }}</td>
-           <td>{{ batch.created_by.name }}</td>
+              <td>
+                  <p-button type="button" pRipple [pRowToggler]="batch" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+              </td>
+              <td>{{ batch.batch_code }}</td>
+              <td>{{ batch.validation_type }}</td>              
+              <td>{{ batch.total_approved }}/{{ batch.total_rejected }}</td>
+              <td>{{batch.total_record}}</td>
+              <td>{{ batch.date_created  | date}}</td>
+              <td>{{ batch.created_by.name }}</td>
           </tr>
-        </ng-template>
-      </p-table>
-
-      <!-- Progress Bar and Toast for Real-time Feedback -->
-      <div class="p-col-12">
-        <p-progressBar *ngIf="uploading" mode="indeterminate"></p-progressBar>
-      </div>
-
-      <!-- Download Error Logs Button -->
-    </div>
-  </div>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-batch>
+          <tr>
+              <td colspan="7">
+                  <div class="p-3">
+                      <p-table [value]="batch.uploads" dataKey="batch_code">
+                          <ng-template pTemplate="header">
+                              <tr>
+                                  <th pSortableColumn="batch_code">C/N <p-sortIcon field="batch_code" /></th>
+                                  <th pSortableColumn="description">Description <p-sortIcon field="description" /></th>
+                                  <th pSortableColumn="date">Date <p-sortIcon field="date" /></th>
+                                  <th pSortableColumn="posted_by">posted_by <p-sortIcon field="posted_by" /></th>
+                                  <th pSortableColumn="status">Status <p-sortIcon field="status" /></th>
+                                  <th style="width: 4rem"></th>
+                              </tr>
+                          </ng-template>
+                          <ng-template pTemplate="body" let-upload>
+                              <tr>
+                                  <td>{{upload.batch_code }}</td>
+                                  <td>{{ upload.description }}</td>
+                                  <td>{{ upload.date }}</td>
+                                  <td>{{ upload.posted_by }}</td>
+                                  <td>
+                                    <p-tag [value]="upload.status" [severity]="getStatusSeverity(upload.status)" />
+                                </td>
+                                  <td><p-button type="button" icon="pi pi-search" /></td>
+                              </tr>
+                          </ng-template>
+                          <ng-template pTemplate="emptymessage">
+                              <tr>
+                                  <td colspan="6">There are no bulk upload yet.</td>
+                              </tr>
+                          </ng-template>
+                      </p-table>
+                  </div>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
 </div>

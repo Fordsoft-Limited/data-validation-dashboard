@@ -26,3 +26,19 @@ export class entranceLogin{
     username!: string
     password!: string
 }
+
+
+
+
+export class Product {
+    id?: string;
+    code?: string;
+    name?: string;
+    description?: string;
+    price?: number;
+    quantity?: number;
+    inventoryStatus?: string;
+    category?: string;
+    image?: string;
+    rating?: number;
+}
