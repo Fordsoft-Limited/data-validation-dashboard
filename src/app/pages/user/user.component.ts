@@ -1,88 +1,92 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MessageService, ConfirmationService, SelectItem  } from 'primeng/api';
-import { UserService } from './service/user.service';
+import { MessageService, ConfirmationService, SelectItem } from 'primeng/api';
 import { User } from './model/user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Table } from 'primeng/table';
-
+import { UserService } from '../../api/user.service';
+import { addUser } from '../../model/user';
+import { AuthService } from '../../auth/service/auth.service';
 
 @Component({
   selector: 'app-user',
   providers: [MessageService, ConfirmationService],
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']  // Fixed property name (styleUrls instead of styleUrl)
+  styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
-  userForm!: FormGroup;  // Declare userForm
-  users!: User[];
-  selectedUsers!: User[];
+  userForm!: FormGroup;
+  users!: addUser[];
+  selectedUsers!: addUser[];
   statuses!: SelectItem[];
   loading: boolean = true;
-  clonedUsers: { [s: string]: User } = {};
+  hasErrors : boolean = false
+  clonedUsers: { [s: string]: addUser } = {}; // Update type here
   activityValues: number[] = [0, 100];
-  searchValue: string = ''; // Initialize searchValue
-  user: User = {};
-  userDialog: boolean = false;
-  submitted: boolean = false;
-  deleteUserDialog: boolean = false;
-  deleteUsersDialog: boolean = false;
-  selectedRole: string[] = [];
-  role: any[];
-  ingredient!: string;
+  searchValue: string = '';
+  currentPage: number = 1;
+  userAddedError: boolean = false;
+  errorMessage: string = "";
+  pageSize : number = 10;
+  totalRecords : number = 0
+  user: addUser = new addUser(); 
+
+  fetchError: string = ''; // For error messages
 
   visible: boolean = false;
-
   userAddedSuccess: boolean = false;
-
 
   @ViewChild('filter') filter!: ElementRef;
 
   constructor(
       private userService: UserService,
-      private messageService: MessageService
-  ) {
-      this.role = [
-          { name: 'Admin', code: 'ADMIN' },
-          { name: 'User', code: 'USER' },
-      ];
-  }
+      private messageService: MessageService,
+      private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-      // Initialize userForm with passwordMatchValidator
-      this.userForm = new FormGroup({
-          name: new FormControl('', [
-              Validators.required, Validators.pattern('^[a-zA-Z ]+$'),  ]),
-          role: new FormControl([], [Validators.required]),
-          email: new FormControl('', [ Validators.required, Validators.pattern(
-                  '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
-              ),]),
-          password: new FormControl('', [ Validators.required,Validators.minLength(4),]),
-          cfPassword: new FormControl('', Validators.required), // Rename to match the validator
-          inventoryStatus: new FormControl(''),
-          date: new FormControl(''),
-      }); // Add validator here
-
       // Load users data
-      this.userService.getUsersMini().then((data) => {
-          this.users = data;
-          this.loading = false;
-      });
-
-      // Set the statuses
-      this.statuses = [
-          { label: 'Enable', value: 'ENABLE' },
-          { label: 'Disable', value: 'DISABLE' },
-      ];
+      this.loadUsers(this.currentPage,this.pageSize);
+      // this.fetchUsers();
   }
 
-  // Custom validator function to check if passwords match
-  passwordMatchValidator(form: FormGroup) {
-      const password = form.get('password')?.value;
-      const confirmPassword = form.get('confirmPassword')?.value;
-    
-      return password === confirmPassword ? null : { passwordMismatch: true };
-  }
 
+
+loadUsers(page:number,pageSize:number) {
+  const token = this.authService.getToken();
+  console.log(token);
+if (!token) {
+  this.loading = false;
+  this.hasErrors = true;
+  this.errorMessage = 'No authentication token found. Please log in again.';
+  setTimeout(() => {
+    this.userAddedError = false;
+  }, 3000);
+  return; // Exit the function early
+}
+  this.loading = true;
+  this.userService.getUserList(page,pageSize,token).subscribe(
+    (response) => {
+      this.loading = false;
+      if (response && response.data && response.data.results) {
+        this.users = response.data.results;
+        this.totalRecords = response.data.count; 
+      } else {
+        this.users = []; 
+        this.messageService.add({ severity: 'info', summary: 'No Data', detail: 'No batches found.' });
+      }
+    },
+    (error) => {
+      this.loading = false;
+      console.error('Error fetching batches:', error); // Log the error
+      this.users = []; // Clear batches on error
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load batches.' });
+    }
+  );
+}
+onPageChange(event:any){
+  this.currentPage = event.page + 1;
+  this.loadUsers(this.currentPage,this.pageSize);
+}
   onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal(
           (event.target as HTMLInputElement).value,
@@ -95,96 +99,19 @@ export class UserComponent implements OnInit {
       this.filter.nativeElement.value = '';
   }
 
-  onRowEditInit(user: User) {
-      this.clonedUsers[user.id as string] = { ...user };
-  }
-
-  onRowEditSave(user: User) {
-      if (user.name) {
-          delete this.clonedUsers[user.id as string];
-          this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: 'User is updated',
-          });
-      } else {
-          this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Invalid Name',
-          });
-      }
-  }
-
-  onRowEditCancel(user: User, index: number) {
-      this.users[index] = this.clonedUsers[user.id as string];
-      delete this.clonedUsers[user.id as string];
-  }
 
   getSeverity(status: string | undefined): 'success' | 'info' | 'warning' | 'danger' | null | undefined {
       if (!status) {
-          return undefined; // Or return null based on your preference
+          return undefined;
       }
-  
+
       switch (status.toUpperCase()) {
           case 'ENABLE':
-              return 'success';  // Green badge for "ENABLE"
+              return 'success';
           case 'DISABLE':
-              return 'danger';   // Red badge for "DISABLE"
+              return 'danger';
           default:
-              return undefined;  // Default case for other statuses
+              return undefined;
       }
   }
-
-  openNew() {
-      this.user = {};
-      this.submitted = false;
-      this.userDialog = true;
-  }
-
-  hideDialog() {
-      this.userDialog = false;
-      this.submitted = false;
-  }
-
-  addUser() {
-      this.submitted = true;
-  
-      // Check if the form is valid before proceeding
-      if (this.userForm.valid) {
-          // Handle product save logic here (assuming user data is bound to the form)
-          this.users = [...this.users]; // Update the users array
-  
-          // Show success notification
-          this.userAddedSuccess = true; 
-          alert(`Thank You ${this.userForm.value.name}`); // Success message (optional)
-  
-          // Close the dialog and reset the form after submission
-          this.userDialog = false;
-          this.userForm.reset(); // Reset the form
-          
-          // Hide the notification after 3 seconds
-          setTimeout(() => {
-              this.userAddedSuccess = false;
-          }, 3000);
-      } else {
-          // You can add additional logic to handle invalid form submission if needed
-          console.log('Form is not valid');
-      }
-  }
-  
-
-  get name() {
-      return this.userForm.get('name');
-  }
-  get email() {
-      return this.userForm.get('email');
-  }
-  get password() {
-      return this.userForm.get('password');
-  }
-  get cfPassword() {
-      return this.userForm.get('cfPassword');
-  }
- 
 }

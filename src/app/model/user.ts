@@ -18,11 +18,27 @@ export class changePassword{
     new_password!: string
 }
 
-export class refreshToken{
+export class refreshToken{  
     refresh!: string
 }
 
 export class entranceLogin{
     username!: string
     password!: string
+}
+
+
+
+
+export class Product {
+    id?: string;
+    code?: string;
+    name?: string;
+    description?: string;
+    price?: number;
+    quantity?: number;
+    inventoryStatus?: string;
+    category?: string;
+    image?: string;
+    rating?: number;
 }

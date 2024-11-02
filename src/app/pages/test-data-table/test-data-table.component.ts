@@ -34,21 +34,21 @@ export class TestDataTableComponent {
   constructor(private productService: ProductService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
-      this.productService.getProducts().then(data => this.products = data);
+    //   this.productService.getProducts().then(data => this.products = data);
 
-      this.cols = [
-          { field: 'product', header: 'Product' },
-          { field: 'price', header: 'Price' },
-          { field: 'category', header: 'Category' },
-          { field: 'rating', header: 'Reviews' },
-          { field: 'inventoryStatus', header: 'Status' }
-      ];
+    //   this.cols = [
+    //       { field: 'product', header: 'Product' },
+    //       { field: 'price', header: 'Price' },
+    //       { field: 'category', header: 'Category' },
+    //       { field: 'rating', header: 'Reviews' },
+    //       { field: 'inventoryStatus', header: 'Status' }
+    //   ];
 
-      this.statuses = [
-          { label: 'INSTOCK', value: 'instock' },
-          { label: 'LOWSTOCK', value: 'lowstock' },
-          { label: 'OUTOFSTOCK', value: 'outofstock' }
-      ];
+    //   this.statuses = [
+    //       { label: 'INSTOCK', value: 'instock' },
+    //       { label: 'LOWSTOCK', value: 'lowstock' },
+    //       { label: 'OUTOFSTOCK', value: 'outofstock' }
+    //   ];
   }
 
   openNew() {

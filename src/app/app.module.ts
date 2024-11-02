@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppLayoutModule } from './layout/app.layout.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SharedModule } from './shared/shared.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { SharedModule } from './shared/shared.module';
   imports: [
     AppRoutingModule,
     AppLayoutModule,
+    HttpClientModule,
     BrowserModule,
     ProgressSpinnerModule,
     BrowserAnimationsModule,

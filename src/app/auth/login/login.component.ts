@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { LoginModel } from '../model/loginModel';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { EntranceService } from '../../api/entrance.service';
+import { entranceLogin } from '../../model/user';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,8 +14,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  
   loginForm!: FormGroup;
-  loginModel!: LoginModel[];
+  loginModel!: entranceLogin[];
   loginSuccess: boolean = false;
   loginError: boolean = false;
   rememberMe: boolean = false;
@@ -23,7 +27,9 @@ export class LoginComponent {
   constructor(
     private layoutService: LayoutService,
     private router: Router,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService,
+    private entranceService:EntranceService,
+    private authService: AuthService
   ) {}
 
   get dark(): boolean {
@@ -32,75 +38,70 @@ export class LoginComponent {
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
-        emailPhone: new FormControl('', [Validators.required, Validators.pattern(
-            '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
-        ),]),
+        username: new FormControl('', [Validators.required]),
         password: new FormControl('',  [Validators.required, Validators.minLength(4)])
     });
 
   } 
 
 
-  onSubmit() {
-    this.isLoading = true;  // Start the loading spinner
+onSubmit() {
+    this.isLoading = true;
   
-    // Reset the messages
-    this.loginSuccess = false;
-    this.loginError = false;
-  
-    const emailPhone = this.loginForm.get('emailPhone')?.value;
+    const username = this.loginForm.get('username')?.value;
     const password = this.loginForm.get('password')?.value;
   
-    // Check if emailPhone or password is missing
-    if (!emailPhone) {
-        this.errorMessage = 'The email/username field must not be left empty.';
-        this.loginError = true; // Show error notification
-        this.autoDismissError();
-        this.isLoading = false;  // Stop the loading spinner
-    } else if (!password) {
-        this.errorMessage = 'The password field must not be left empty.';
-        this.loginError = true; // Show error notification
-        this.autoDismissError();
-        this.isLoading = false;  // Stop the loading spinner
-    } else {
-        // Simulate login process (you can replace this with actual login logic)
-        setTimeout(() => {
-          this.isLoading = false;  // Stop the loading spinner
-  
-          // Simulate login success
-          const isLoginSuccessful = true;  // Replace with actual login logic
-  
-          if (isLoginSuccessful) {
-            this.loginSuccess = true; // Show success notification
-            this.autoDismissSuccess();
-            this.router.navigate(['/app']);  // Navigate after successful login
-          } else {
-            this.errorMessage = 'Invalid credentials, please try again.';
-            this.loginError = true; // Show error notification
-            this.autoDismissError();
-          }
-        }, 2000); // Simulate a 2-second delay
+    if (!username || !password) {
+      this.errorMessage = 'Both username and password are required.';
+      this.loginError = true;
+      this.isLoading = false;
+      return;
     }
+  
+    const loginPayload = { username, password };
+    const encryptedPayload = this.authService.encryptPayload(loginPayload);
+
+   
+    // Send the login request to the API
+    this.entranceService.entranceLogin(loginPayload).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        const token = response.data?.access_token;
+        console.log('Received token:', token);
+  
+        if (token) {
+          this.authService.setToken(token); 
+          this.authService.setLoginData(username, password); 
+          this.autoDismissSuccess();
+          this.router.navigate(['/app']);          
+        } else {
+          this.errorMessage = 'Login failed. Please try again.';
+          this.loginError = true;
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = 'Invalid credentials, please try again.';
+        this.loginError = true;
+        this.autoDismissError();
+      }
+    });
   }
   
-
-
   private autoDismissError() {
     setTimeout(() => {
         this.loginError = false;
-    }, 4000); // Change to 3000 for 3 seconds
+    }, 4000);
 }
-
-// Function to auto-dismiss success notification
 private autoDismissSuccess() {
     setTimeout(() => {
         this.loginSuccess = false;
-    }, 4000); // Change to 3000 for 3 seconds
+    }, 4000); 
 }
 
 
-get emailPhone() {
-    return this.loginForm.get('emailPhone');
+get username() {
+    return this.loginForm.get('username');
 }
 get password() {
     return this.loginForm.get('password');

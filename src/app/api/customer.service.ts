@@ -96,7 +96,11 @@ saveBulkCustomers(customers: validateCustomer[]): Observable<any> {
       )
   }
 
-  getCustomerValidateBatchesByPages(page: number, pageSize: number): Observable<any> {
+  getCustomerValidateBatchesByPages(page: number, pageSize: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json' // Add any other headers if necessary
+    });
     const params = new HttpParams()
     .set('page', page.toString())
     .set('page_size', pageSize.toString());
@@ -107,6 +111,8 @@ saveBulkCustomers(customers: validateCustomer[]): Observable<any> {
         catchError(err => this.base.errorHandler(err))
       )
   }
+
+
 
 
   getCustomerValidateBatchesByUuid(uid: string): Observable<any> {
