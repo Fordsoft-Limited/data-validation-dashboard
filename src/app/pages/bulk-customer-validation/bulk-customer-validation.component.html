@@ -3,36 +3,50 @@
   <!-- Header Section -->
   <div class="col-12 mt-2">
     <!-- <h3>Bulk Customer Validation</h3> -->
+
+    
+
   </div>
 
   <!-- File Upload Section -->
   <div class="col-12" style="width: 100%; max-width: 700px; margin: 10px auto; padding: 10px; box-sizing: border-box;">
     <p-fileUpload 
-      name="demo[]" 
-      (onUpload)="handleUpload($event)" 
-      [multiple]="true" 
-      accept=".xlsx,.csv" 
-      [maxFileSize]="1000000">
-      <ng-template pTemplate="content">
-        <ul *ngIf="uploadedFiles.length" style="list-style-type: none; padding: 0; margin: 0;">
-          <li *ngFor="let file of uploadedFiles" style="word-wrap: break-word; margin-bottom: 5px;">
-            {{ file.name }} - {{ file.size }} bytes
-          </li>
-        </ul>
-      </ng-template>
-    </p-fileUpload>
+  name="file" 
+  [multiple]="false" 
+  accept=".xlsx,.csv" 
+  [maxFileSize]="1000000" 
+  customUpload="true" 
+  (uploadHandler)="onFileUpload($event)">
   
+  <ng-template pTemplate="content">
+      <ul *ngIf="uploadedFiles.length" style="list-style-type: none; padding: 0; margin: 0;">
+          <li *ngFor="let file of uploadedFiles" style="word-wrap: break-word; margin-bottom: 5px;">
+              <!-- {{ file.name }} - {{ file.size }} bytes -->
+          </li>
+      </ul>
+  </ng-template>
+</p-fileUpload>
+
     <p-message *ngIf="uploadError" severity="error" text="uploadError"></p-message>
     <button *ngIf="uploadError" (click)="retryUpload()">Retry Upload</button>
+    
+    <!-- Messages Display Area -->
+    <div *ngIf="uploadSuccess" class="alert alert-success mt-3">{{ uploadSuccess }}</div>
+    <div *ngIf="uploadError" class="alert alert-danger mt-3">{{ uploadError }}</div>
   
     <p-message *ngIf="uploadSuccess" severity="success" text="uploadSuccess"></p-message>
-  </div>
 
-  <!-- Progress Bar Section -->
+     <!-- Progress Bar Section -->
   <div class="col-12 card mt-2" style="width: 100%; max-width: 700px; margin: 10px auto; padding: 20px;">
     <h6 style="text-align: left; margin: 0 0 10px;">Upload Progress</h6>
     <p-progressBar [value]="progressValue"></p-progressBar>
   </div>
+
+  <button pButton label="Cancel Upload" icon="pi pi-times" (click)="cancelUpload()" [disabled]="!isUploading"></button>
+
+
+  </div>
+
 
   <div class="col-12" style="width: 100%; max-width: 700px; margin: 1px auto; padding: 20px">
     <p-messages 
@@ -63,6 +77,15 @@
 </li>
   </ul>
 </div>
+
+
+
+<div *ngIf="uploadResponse">
+<p>{{ uploadResponse.message }}</p>
+</div>
+
+
+
 
 </div>
 

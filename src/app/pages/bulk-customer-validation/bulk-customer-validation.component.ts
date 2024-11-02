@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import * as XLSX from 'xlsx';
+import { CustomerService } from '../../api/customer.service';
+import { customerValidateBulk, validateCustomer, ValidationError } from '../../model/customer';
+import { CustomerMapper2 } from './customerMapper2';
 
-interface Customer {
-  email?: string;
-  status?: string;
-  errorReason?: string;
-}
+
 
 @Component({
   selector: 'app-bulk-customer-validation',
@@ -15,85 +14,115 @@ interface Customer {
   providers: [MessageService]
 })
 export class BulkCustomerValidationComponent implements OnInit {
+objectKeys(_t10: ValidationError): any {
+throw new Error('Method not implemented.');
+}
   uploadedFiles: any[] = [];
   messages: any[] = []; // Messages for notifications
-  customers: Customer[] = [];
+  customers: validateCustomer[] = [];
   uploadError: string | null = null; // For storing upload errors
   uploadSuccess: string | null = null; // For storing upload success messages
   isProcessing: boolean = false;
   progressValue: number = 0;
+  isUploading = false;
+  private abortController = new AbortController(); // for cancellation
 
-  constructor(private messageService: MessageService) {}
+  uploadResponse: any;
+  errors: ValidationError[] = [];
+
+  private readonly allowedFileTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv'];
+  private readonly maxFileSize = 1 * 1024 * 1024; // 1MB in bytes
+
+
+
+
+  constructor(private messageService: MessageService, private service: CustomerService) {}
 
   ngOnInit() {}
 
-  handleUpload(event: any) {
-    console.log('Upload event:', event); // Log the upload event
 
-    this.uploadedFiles = event.files; // Store uploaded files
-    const file = event.files[0];
 
-    if (!file) {
-      this.addMessage('error', 'No file selected. Please upload a file.');
-      return;
-    }
+// Triggered when files are selected
+onFileUpload(event: any) {
+  this.uploadedFiles = event.files;
 
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
-      const firstSheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[firstSheetName];
-      this.customers = XLSX.utils.sheet_to_json(worksheet);
-      this.validateData(this.customers);
-      this.uploadSuccess = 'File uploaded and validated successfully!'; // Set success message
-      this.addMessage('success', this.uploadSuccess); // Add to messages
-    };
-
-    reader.onerror = () => {
-      this.uploadError = 'Error reading file. Please try again.'; // Set error message
-      this.addMessage('error', this.uploadError); // Add to messages
-    };
-
-    reader.readAsArrayBuffer(file);
+  for (let file of event.files) {
+    this.readAndUploadFile(file);
   }
+}
 
-  validateData(data: Customer[]) {
-    this.isProcessing = true;
+
+ // Reads and uploads the file content as customer data
+ public readAndUploadFile(file: File) {
+  const reader = new FileReader();
+
+  reader.onloadstart = () => {
+    this.isUploading = true;
     this.progressValue = 0;
-    const totalRecords = data.length;
-    let validCount = 0;
-    let invalidCount = 0;
-  
-    data.forEach((customer: Customer, index: number) => {
-      // Validate the customer data
-      customer.status = customer.email ? 'Valid' : 'Invalid';
-      customer.errorReason = customer.email ? '' : 'Missing email address';
-  
-      if (customer.status === 'Invalid') {
-        invalidCount++;
-      } else {
-        validCount++;
-      }
-  
-      // Update progress bar
-      this.progressValue = ((index + 1) / totalRecords) * 100;
-      this.addMessage('info', `Validating record ${index + 1} of ${totalRecords}`);
-    });
-  
-    this.isProcessing = false;
-  
-    // Summary report
-    const summaryMessage = `Validation complete. ${validCount} valid records, ${invalidCount} invalid records.`;
-    this.addMessage('success', summaryMessage);
-  
-    if (invalidCount > 0) {
-      this.uploadError = 'Some records are invalid. Check details in the table.';
-      this.addMessage('error', this.uploadError);
-    }
-  }
-  
+  };
 
+  reader.onprogress = (event) => {
+    if (event.lengthComputable) {
+      this.progressValue = Math.round((event.loaded / event.total) * 100);
+    }
+  };
+
+  reader.onload = (e: any) => {
+    this.progressValue = 100;
+    const data = new Uint8Array(e.target.result);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const jsonData: any[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+    // Filter out empty rows and columns
+    const filteredData = jsonData
+      .filter((row: any[]) => row.some(cell => cell !== null && cell !== undefined && cell !== ''))  // Remove empty rows
+      .map((row: any[]) => row.filter(cell => cell !== null && cell !== undefined && cell !== '')); // Remove empty columns in each row
+
+    // Map filtered data to `validateCustomer` instances
+    const customers: validateCustomer[] = CustomerMapper2.mapJsonToCustomers(filteredData);
+
+    // Debugging: Inspect the mapped payload before uploading
+    console.log('Mapped Customers Payload:', customers);
+
+    // Start the upload by calling the service
+    this.service.saveBulkCustomers(customers).subscribe({
+      next: (response) => {
+        this.isUploading = false;
+        this.progressValue = 0;
+        console.log('Bulk save successful', response);
+      },
+      error: (error) => {
+        this.isUploading = false;
+        this.progressValue = 0; // Reset progress on error
+
+        // Enhanced error handling: Log detailed error information
+        console.error('Bulk save failed or cancelled:', error);
+
+      },
+    });
+  };
+
+  reader.onerror = (error) => {
+    this.isUploading = false;
+    this.progressValue = 0;
+    console.error('Error reading file:', error);
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
+
+
+// Method to cancel upload
+cancelUpload() {
+  if (this.isUploading) {
+    this.abortController.abort(); // Trigger the cancellation
+    this.isUploading = false;
+    this.progressValue = 0;
+    console.log('Upload cancelled');
+  }
+}
 
   addMessage(severity: string, summary: string) {
     this.messages.push({ severity, summary, detail: summary });
@@ -104,4 +133,8 @@ export class BulkCustomerValidationComponent implements OnInit {
     this.uploadedFiles = []; // Reset the uploaded files
     this.uploadError = ''; // Clear the error message
   }
+
+
+  
+
 }

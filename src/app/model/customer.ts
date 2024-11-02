@@ -57,6 +57,10 @@ export interface validateCustomer {
     meter_ct_ratio: string;
     date_created: any;  
   }
+
+  export interface ValidationError {
+    [key: string]: string[];
+  }  
   
 
   export interface customerValidateBulk{
