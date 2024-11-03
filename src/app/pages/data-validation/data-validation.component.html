@@ -1,127 +1,130 @@
 <div class="card">
-  <form [formGroup]="filterForm" (ngSubmit)="filterData()">
-      <div class="flex gap-5 mb-4 justify-content-center flex-wrap">
-        <div class="flex flex-column gap-2">
-          <label for="dateRange">Date Range:</label>
-          <div class="flex gap-2"> 
-              <input type="date" formControlName="dateRange" pInputText class="date-range"/>
-              <input type="date" formControlName="dateRange" pInputText class="date-range"/>
+    <form [formGroup]="filterForm" (ngSubmit)="filterData()">
+        <div class="flex gap-5 mb-4 justify-content-center flex-wrap">
+          <div class="flex flex-column gap-2">
+            <label for="dateRange">Date Range:</label>
+            <div class="flex gap-2"> 
+                <input type="date" formControlName="dateRange" pInputText class="date-range"/>
+                <input type="date" formControlName="dateRange" pInputText class="date-range"/>
+            </div>
+            
           </div>
-          
-        </div>
-  
-        <div class="flex flex-column gap-2">
-          <label for="feeder">Feeder:</label>
-          <p-dropdown formControlName="feeder" [options]="feeders" placeholder="Select Feeder"></p-dropdown>
-        </div>
-  
-        <div class="flex flex-column gap-2">
-          <label for="businessUnit">Business Unit:</label>
-          <p-dropdown formControlName="businessUnit" [options]="businessUnits" placeholder="Select Business Unit"></p-dropdown>
-        </div>
-  
-        <p-button type="submit" label="Filter" [loading]="loading" [outlined]="true"severity="secondary" class="mt-4"></p-button>
-      </div>
-  </form>
-
-  <p-table #dt1 [value]="filteredDataValidations" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
-      [loading]="loading" [paginator]="true" [globalFilterFields]="['feeder', 'meterNo', 'date', 'status']"
-      (onRowSelect)="showDetails($event.data)">
-      <ng-template pTemplate="caption">
-          <div class="flex">
-              <!-- <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" /> -->
-
-              <p-button label="Review" [loading]="loading" (click)="navigateToDetails()" [disabled]="!selectedDataValidation" class="ml-3"></p-button>
-              
-              <!-- <p-button label="Show Details" (click)="navigateToDetails()"   class="ml-3"></p-button> -->
-              <span class="p-input-icon-left ml-auto">
-                  <i class="pi pi-search"></i>
-                  <input pInputText type="text" [(ngModel)]="searchValue" #filter
-                      (input)="onGlobalFilter(dt1, $event)" placeholder="Keyword Search">
-              </span>
+    
+          <div class="flex flex-column gap-2">
+            <label for="feeder">Feeder:</label>
+            <p-dropdown formControlName="feeder" [options]="feeders" placeholder="Select Feeder"></p-dropdown>
           </div>
-      </ng-template>
-      <ng-template pTemplate="header">
-          <tr>
-              <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
-              <th style="min-width:15rem">
-                  <div class="flex align-items-center">
-                      Customer ID
-                      <!-- <p-columnFilter type="text" field="id" display="menu" /> -->
-                  </div>
-              </th>
-              <th style="min-width:15rem">
-                  <div class="flex align-items-center">
-                      Feeder
-                      <p-columnFilter type="text" field="feeder" display="menu" />
-                  </div>
-              </th>
-              <th style="min-width:15rem">
-                  <div class="flex align-items-center">
-                      Meter No
-                      <p-columnFilter type="text" field="district" display="menu" />
-                  </div>
-              </th>
-
-              <th style="min-width:10rem">
-                  <div class="flex align-items-center">
-                      Date
-                      <p-columnFilter type="date" field="date" display="menu" />
-                  </div>
-              </th>
-
-              <th style="min-width:10rem">
-                  <div class="flex align-items-center">
-                      Status
-                      <p-columnFilter field="status" matchMode="equals" display="menu">
-                          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                              <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)"
-                                  placeholder="Any">
-                                  <ng-template let-option pTemplate="item">
-                                      <p-tag [value]="option.value" [severity]="getSeverity(option.label)" />
-                                  </ng-template>
-                              </p-dropdown>
-                          </ng-template>
-                      </p-columnFilter>
-                  </div>
-              </th>
-
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-dataValidation>
-          <tr  class="cursor-pointer">
-              <td  >
-                  <p-tableCheckbox [value]="dataValidation" />
-              </td>
-              <td>
-
-                  {{dataValidation.customerId}}
-              </td>
-              <td>
-
-                  {{dataValidation.feeder}}
-              </td>
-              <td>
-                  {{dataValidation.meterNo}}
-              </td>
-
-              <td>
-                  {{ dataValidation.date | date: 'MM/dd/yyyy' }}
-              </td>
-
-              <td>
-                  <p-tag [value]="dataValidation.status" [severity]="getSeverity(dataValidation.status)" />
-              </td>
-
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="emptymessage">
-          <tr>
-              <td colspan="7">No customers found.</td>
-          </tr>
-      </ng-template>
-  </p-table>
-</div>
-
-
-
+    
+          <div class="flex flex-column gap-2">
+            <label for="businessUnit">Business Unit:</label>
+            <p-dropdown formControlName="businessUnit" [options]="businessUnits" placeholder="Select Business Unit"></p-dropdown>
+          </div>
+    
+          <p-button type="submit" label="Filter" [loading]="loading" [outlined]="true"severity="secondary" class="mt-4"></p-button>
+        </div>
+    </form>
+  
+    <p-table #dt1 [value]="filteredCustomers" dataKey="uid" [(selection)]="selectedCustomers" [rows]="10" 
+             [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
+             [globalFilterFields]="['feeder', 'meterNo', 'date', 'status']" (onRowSelect)="showDetails($event.data)">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <!-- <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" /> -->
+  
+                <p-button label="Review" [loading]="loading" (click)="navigateToDetails()" 
+                          [disabled]="selectedCustomers.length === 0" class="ml-3"></p-button>
+                
+                <!-- <p-button label="Show Details" (click)="navigateToDetails()"   class="ml-3"></p-button> -->
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" [(ngModel)]="searchValue" #filter
+                        (input)="onGlobalFilter(dt1, $event)" placeholder="Keyword Search">
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+                <th style="min-width:15rem">
+                    <div class="flex align-items-center">
+                        Customer ID
+                        <!-- <p-columnFilter type="text" field="id" display="menu" /> -->
+                    </div>
+                </th>
+                <th style="min-width:15rem">
+                    <div class="flex align-items-center">
+                        Feeder
+                        <p-columnFilter type="text" field="feeder" display="menu" />
+                    </div>
+                </th>
+                <th style="min-width:15rem">
+                    <div class="flex align-items-center">
+                        Meter No
+                        <p-columnFilter type="text" field="district" display="menu" />
+                    </div>
+                </th>
+  
+                <th style="min-width:10rem">
+                    <div class="flex align-items-center">
+                        Date
+                        <p-columnFilter type="date" field="date" display="menu" />
+                    </div>
+                </th>
+  
+                <th style="min-width:10rem">
+                    <div class="flex align-items-center">
+                        Status
+                        <p-columnFilter field="status" matchMode="equals" display="menu">
+                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)"
+                                    placeholder="Any">
+                                    <ng-template let-option pTemplate="item">
+                                        <p-tag [value]="option.value" [severity]="getSeverity(option.label)" />
+                                    </ng-template>
+                                </p-dropdown>
+                            </ng-template>
+                        </p-columnFilter>
+                    </div>
+                </th>
+  
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-filteredCustomer>
+            <tr  class="cursor-pointer">
+                <td  >
+                    <p-tableCheckbox [value]="filteredCustomer" />
+                </td>
+  
+                <td>
+  
+                    {{filteredCustomer.customer_id}}
+                </td>
+                <td>
+  
+                    {{filteredCustomer.feeder}}
+                </td>
+                <td>
+                    {{filteredCustomer.meter_no}}
+                </td>
+  
+                <td>
+                    {{ filteredCustomer.date_created | date: 'MM/dd/yyyy' }}
+                </td>
+  
+                <td>
+                    <p-tag [value]="filteredCustomer.approval_status" [severity]="getSeverity(filteredCustomer.approval_status)" />
+                </td>
+  
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="7">No customers found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+  </div>
+  
+  
+  
+  

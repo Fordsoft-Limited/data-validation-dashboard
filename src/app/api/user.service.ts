@@ -49,6 +49,8 @@ export class UserService {
   }
 
 
+
+
   logOutUser(payload: logout): Observable<any> {
     return this.http.post<any>(this.baseUrl +
       `/logout`, payload)
