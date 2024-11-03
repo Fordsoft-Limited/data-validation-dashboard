@@ -4,24 +4,38 @@ import { DataValidation } from '../model/bulk-validation';
 import { DataValidationService } from '../service/data-validation.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Customer } from '../../../shared/model/customer';
-import { CustomerService } from '../../../shared/services/customer.service';
+//import { CustomerService } from '../../../shared/services/customer.service';
+import { CustomerService } from '../../../api/customer.service';
+import { AuthService } from '../../../auth/service/auth.service';
+
+interface RecordData {
+  newData: any;
+  oldData: any;
+}
 @Component({
   selector: 'app-data-verification',
   templateUrl: './data-verification.component.html',
   styleUrls: ['./data-verification.component.scss'],
   providers: [ConfirmationService, MessageService]
 })
+
+
 export class DataVerificationComponent implements OnInit {
 
   // selectedRecords: any[] = [];
   // currentRecord: any; // Use this to track the selected record
-  selectedRecords: Customer[] = []; // Change type to DataValidation
-  currentRecord!: Customer ;
+  selectedRecords: any[] = [];
+  currentRecord!: {
+    newData: any;
+    oldData: any;
+  };
   currentIndex: number = 0;
+  
   comments: string = '';
   rejectDialog: boolean = false;
   reviewDialog: boolean = false;
   rejectReason: string = '';
+  currentNewData : any;
   statusCodes: any[] = []; // Array for status codes
   accountTypes: any[] = []; // Array for account types
   supplyTypes: any[] = []; // Array for supply types
@@ -42,9 +56,22 @@ export class DataVerificationComponent implements OnInit {
 
 
   constructor(private router: Router,
-    private dataValidationService: DataValidationService ,private confirmationService: ConfirmationService, private messageService: MessageService, private  customerService:CustomerService) {
+    private dataValidationService: DataValidationService ,
+    private confirmationService: ConfirmationService, 
+    private messageService: MessageService, 
+    private  customerService:CustomerService,
+  private authService: AuthService) {
     
-  
+      const navigation = this.router.getCurrentNavigation();
+      this.selectedRecords = navigation?.extras.state?.['selectedCustomers'] || [];
+      // for (let i = 0; i < this.selectedRecords.length;i++){
+      //   this.currentRecord = this.selectedRecords[i] || null;
+      // }
+      
+  }
+
+  get totalSelectedRecords(): number {
+    return this.selectedRecords.length;
   }
 
   confirm1(event: Event) {
@@ -84,21 +111,65 @@ confirm2(event: Event) {
       }
   });
 }
-  onRecordSelect(selectedRecord: any) {
-    this.currentRecord = selectedRecord; // Set the current record to the selected one
+
+
+ngOnInit() {
+  console.log('Selected Customers:', this.selectedRecords);
+  this.initializeDropdowns();
+    if (this.selectedRecords.length > 0) {
+      this.loadCustomerByUid(this.selectedRecords[this.currentIndex].uid);
+    }
+    console.log(this.currentIndex);
+}
+  loadCustomerByUid(uid: string) {
+    const token = this.authService.getToken();
+    if (!token) {
+     
+    //  this.errorMessage = 'No authentication token found. Please log in again.';
+      return; // Exit the function early
+    }
+  
+    this.customerService.getCustomerById(uid, token).subscribe(
+      (response: any) => {
+        if (response.code === 200 ) {
+          this.currentRecord = {
+            newData: response.data.new,
+            oldData: response.data.old
+          };
+        }
+        console.log(this.currentRecord.newData.customer_full_name);
+      },
+      (error) => {
+        console.error('Error fetching customer data:', error);
+      }
+    );
   }
-  ngOnInit() {
-    // const state = history.state;
-    // if (state.selectedRecords) {
-    //   this.selectedRecords = state.selectedRecords;
-    //   this.currentRecord = this.selectedRecords[0]; // Display the first record initially
-    // }
-    this.customerService.getCustomer().then((data) => {
-      this.selectedRecords = data;
-      this.currentRecord = this.selectedRecords[0] || null; // Display the first record initially
-    });
-    this.initializeDropdowns();
-  }
+
+  // onRecordSelect(selectedRecord: any) {
+  //   this.currentRecord = selectedRecord;
+  //   console.log('Selected Record:', this.currentRecord);
+  //   if (this.currentRecord) {
+  //     console.log(this.currentRecord.newData);
+  // }
+  // }
+
+//   onRecordSelect(record: { newData: any; oldData: any }) {
+//     this.currentRecord = record;
+//     this.loadCustomerByUid(record.uid);
+//     if (this.currentRecord) {
+//            console.log(this.currentRecord.newData);
+//        }
+// }
+
+
+onSelectedRecordChange(index: number) {
+  // const recordUid = selectedRecord.uid;
+  // this.loadCustomerByUid(recordUid);
+
+  this.currentIndex = index;
+  this.loadCustomerByUid(this.selectedRecords[this.currentIndex].uid);
+  console.log('Current index updated to:', this.currentIndex);
+}
 
   initializeDropdowns(): void {
     // Populate the dropdowns with data
@@ -253,4 +324,63 @@ confirm2(event: Event) {
   isLastRecord(): boolean {
     return this.currentIndex === this.selectedRecords.length - 1;
   }
+
+
+
+
+  customerFields: { name: string; key: keyof any }[] = [
+    { name: 'Customer Full Name', key: 'customer_full_name' },
+    { name: 'Account Number', key: 'account_no' },
+    { name: 'Meter Number', key: 'meter_no' },
+    { name: 'Address', key: 'address' },
+    { name: 'City', key: 'city' },
+    { name: 'LGA', key: 'lga' },
+    { name: 'State', key: 'state' },
+    { name: 'Nearest Landmark', key: 'nearest_landmark' },
+    { name: 'Setup Date', key: 'setup_date' },
+    { name: 'Latitude', key: 'latitude' },
+    { name: 'Longitude', key: 'longitude' },
+    { name: 'Customer ID', key: 'customer_id' },
+    { name: 'CIN', key: 'cin' },
+    { name: 'Application Date', key: 'application_date' },
+    { name: 'Mobile Number', key: 'mobile' },
+    { name: 'Email', key: 'email' },
+    { name: 'Status Code', key: 'status_code' },
+    { name: 'Account Type', key: 'account_type' },
+    { name: 'Current Tariff Code', key: 'current_tariff_code' },
+    { name: 'Correct Tariff Code', key: 'correct_tariff_code' },
+    { name: 'Tariff Class', key: 'tariff_class' },
+    { name: 'Feeder', key: 'feeder' },
+    { name: 'Feeder ID', key: 'feeder_id' },
+    { name: 'Service Center', key: 'service_center' },
+    { name: 'Distribution Name', key: 'distribution_name' },
+    { name: 'DSS ID', key: 'dss_id' },
+    { name: 'LT Pole ID', key: 'lt_pole_id' },
+    { name: 'Service Wire', key: 'service_wire' },
+    { name: 'Upriser', key: 'upriser' },
+    { name: 'Region', key: 'region' },
+    { name: 'Business Hub', key: 'business_hub' },
+    { name: 'Account Category', key: 'account_category' },
+    { name: 'Connection Type', key: 'connection_type' },
+    { name: "Customer's Nature of Business", key: 'cust_nature_of_business' },
+    { name: 'Customer NIN', key: 'customer_nin' },
+    { name: 'Customer Supply Type', key: 'customer_supply_type' },
+    { name: 'Customer Estimated Load', key: 'customer_estimated_load' },
+    { name: 'Customer Has Meter', key: 'cust_has_meter' },
+    { name: 'Customer Meter Category', key: 'customer_meter_category' },
+    { name: 'Customer Meter Manufacturer', key: 'customer_meter_manufacturer' },
+    { name: 'Customer Meter Sealed', key: 'customer_meter_saled' },
+    { name: 'Customer Meter Accessible', key: 'customer_meter_accessible' },
+    { name: 'Customer Meter Location', key: 'customer_meter_location' },
+    { name: 'Customer Bill Name', key: 'customer_bill_name' },
+    { name: 'Customer Has Account Number', key: 'customer_has_account_no' },
+    { name: 'Customer Group', key: 'customer_group' },
+    { name: 'Is Landlord', key: 'is_landlord' },
+    { name: 'Landlord Name', key: 'landlord_name' },
+    { name: 'Landlord Phone', key: 'landlord_phone' },
+    { name: 'Tenant Name', key: 'tenant_name' },
+    { name: 'Tenant Phone', key: 'tenant_phone' },
+    { name: 'Meter CT Ratio', key: 'meter_ct_ratio' },
+    { name: 'Customer Batch', key: 'customer_group' },
+];
 }

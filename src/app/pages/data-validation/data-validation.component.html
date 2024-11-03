@@ -24,14 +24,15 @@
       </div>
   </form>
 
-  <p-table #dt1 [value]="filteredDataValidations" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
-      [loading]="loading" [paginator]="true" [globalFilterFields]="['feeder', 'meterNo', 'date', 'status']"
-      (onRowSelect)="showDetails($event.data)">
+  <p-table #dt1 [value]="filteredCustomers" dataKey="uid" [(selection)]="selectedCustomers" [rows]="10" 
+           [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
+           [globalFilterFields]="['feeder', 'meterNo', 'date', 'status']" (onRowSelect)="showDetails($event.data)">
       <ng-template pTemplate="caption">
           <div class="flex">
               <!-- <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" /> -->
 
-              <p-button label="Review" [loading]="loading" (click)="navigateToDetails()" [disabled]="!selectedDataValidation" class="ml-3"></p-button>
+              <p-button label="Review" [loading]="loading" (click)="navigateToDetails()" 
+                        [disabled]="selectedCustomers.length === 0" class="ml-3"></p-button>
               
               <!-- <p-button label="Show Details" (click)="navigateToDetails()"   class="ml-3"></p-button> -->
               <span class="p-input-icon-left ml-auto">
@@ -88,29 +89,30 @@
 
           </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-dataValidation>
+      <ng-template pTemplate="body" let-filteredCustomer>
           <tr  class="cursor-pointer">
               <td  >
-                  <p-tableCheckbox [value]="dataValidation" />
-              </td>
-              <td>
-
-                  {{dataValidation.customerId}}
-              </td>
-              <td>
-
-                  {{dataValidation.feeder}}
-              </td>
-              <td>
-                  {{dataValidation.meterNo}}
+                  <p-tableCheckbox [value]="filteredCustomer" />
               </td>
 
               <td>
-                  {{ dataValidation.date | date: 'MM/dd/yyyy' }}
+
+                  {{filteredCustomer.customer_id}}
+              </td>
+              <td>
+
+                  {{filteredCustomer.feeder}}
+              </td>
+              <td>
+                  {{filteredCustomer.meter_no}}
               </td>
 
               <td>
-                  <p-tag [value]="dataValidation.status" [severity]="getSeverity(dataValidation.status)" />
+                  {{ filteredCustomer.date_created | date: 'MM/dd/yyyy' }}
+              </td>
+
+              <td>
+                  <p-tag [value]="filteredCustomer.approval_status" [severity]="getSeverity(filteredCustomer.approval_status)" />
               </td>
 
           </tr>

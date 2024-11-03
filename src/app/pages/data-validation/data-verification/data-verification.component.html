@@ -1,348 +1,106 @@
 <div class="card">
 
-    <div class="flex justify-content-between  pb-3 mb-2 border-300  border-bottom-1">
+  <div class="flex justify-content-between  pb-3 mb-2 border-300  border-bottom-1">
 
-      <div class="flex flex-column p-0 m-0">
-         <h5 class="-mt-1">Checker</h5>
-         <h6 class="-mt-1">Total item: 27</h6>
+    <div class="flex flex-column p-0 m-0">
+      <h5 class="-mt-1">Checker</h5>
+      <h6 class="-mt-1">Total item: {{totalSelectedRecords}}</h6>
+    </div>
+
+
+    <div class="flex flex-wrap gap-3">
+      <p-toast />
+      <p-confirmPopup />
+      <button pButton label="Reject Selection" class="p-button-danger" [outlined]="true"
+        (click)="confirm2($event)"></button>
+      <button pButton label="Approve Selection" class="p-button-success" (click)="confirm1($event)"
+        [outlined]="true"></button>
+      <button pButton label="Review All" class="p-button-primary" (click)="approveRecord()" [outlined]="true"></button>
+    </div>
+
+  </div>
+  <div class="grid max-h-33rem">
+
+    <div class="col-12 md:col-4 h-auto">
+      <div class="selected-records-list">
+        <p-table #dt [value]="selectedRecords" [globalFilterFields]="['cin', 'customerFullName']" [paginator]="true"
+          [rows]="10" [rowsPerPageOptions]="[10, 20, 30, 40, 50]" (onRowSelect)="onSelectedRecordChange($event.data)">
+
+          <ng-template pTemplate="header">
+            <tr>
+
+              <th pSortableColumn="cin" style="min-width:20rem">CIN <p-sortIcon field="cin"></p-sortIcon></th>
+              <!-- <th pSortableColumn="customerFullName">Customer Name <p-sortIcon field="customerFullName"></p-sortIcon>
+              </th> -->
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-selectedRecord>
+            <tr (click)="currentRecord = selectedRecord" class="cursor-pointer">
+
+              <td>{{ selectedRecord.cin }}</td>
+              <!-- <td>{{ selectedRecord.customerFullName }}</td> -->
+            </tr>
+          </ng-template>
+        </p-table>
       </div>
-       
+    </div>
+    <div class="col-none md:col-1">
+      <p-divider layout="vertical" />
+    </div>
 
-        <div class="flex flex-wrap gap-3">
-          <p-toast />
-          <p-confirmPopup />
-            <button pButton label="Reject Selection" class="p-button-danger" [outlined]="true" (click)="confirm2($event)"></button>
-            <button pButton label="Approve Selection" class="p-button-success" (click)="confirm1($event)"  [outlined]="true"></button>
-            <button pButton label="Review All" class="p-button-primary" (click)="approveRecord()" [outlined]="true"></button>
+    <div class="col-12 md:col-7 ">
+      <div *ngIf="currentRecord"  class="p-formgrid grid h-30rem overflow-scroll overflow-x-hidden">
+       
+        <div *ngFor="let field of customerFields" class="field col-6 flex flex-column gap-2 field-container">
+          <label>{{ field.name }}</label>
+      
+          <div *ngIf="currentRecord.newData" class="data new-data">
+              <span>{{ currentRecord.newData[field.key] }}</span>
+          </div>
+          <div *ngIf="currentRecord?.oldData" class="data existing-data">
+              <span>{{ currentRecord.oldData[field.key] }}</span>
+          </div>
+      </div>
+
+        
+      </div>
+      <!-- <div class="p-formgrid grid h-30rem overflow-scroll overflow-x-hidden">
+
+        <div  *ngFor="let field of customerFields" class="field col-6 flex flex-column gap-2 field-container">
+
+          <label>{{ field.name }}</label>
+          <div  class="data new-data">
+
+            <span>{{ currentRecord.newData[field.key] }}</span>
+          </div>
+          <div  class="data existing-data">
+
+            <span> {{ currentRecord.oldData[field.key] }}</span>
+          </div>
         </div>
+
+      </div> -->
+
 
     </div>
-    <div class="grid max-h-33rem">
 
-        <div class="col-12 md:col-4 h-auto">
-            <div class="selected-records-list">
-                <p-table #dt [value]="selectedRecords" [globalFilterFields]="['cin', 'customerFullName']"
-                    [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 30, 40, 50]"
-                    (onRowSelect)="onRecordSelect($event.data)">
+  </div>
 
-                    <ng-template pTemplate="header">
-                        <tr >
-                           
-                            <th pSortableColumn="cin">CIN <p-sortIcon field="cin"></p-sortIcon></th>
-                            <th pSortableColumn="customerFullName">Customer Name <p-sortIcon
-                                    field="customerFullName"></p-sortIcon></th>
-                        </tr>
-                    </ng-template>
-
-                    <ng-template pTemplate="body" let-selectedRecord>
-                        <tr (click)="currentRecord = selectedRecord" class="cursor-pointer">
-                          
-                            <td>{{ selectedRecord.cin }}</td>
-                            <td>{{ selectedRecord.customerFullName }}</td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-            </div>
-        </div>
-        <div class="col-none md:col-1">
-           <p-divider layout="vertical" />
-        </div>
-       
-        <div class="col-12 md:col-7 ">
-            <div *ngIf="currentRecord" class="p-formgrid grid h-30rem overflow-scroll overflow-x-hidden">
-
-              <div class="field col-6 flex flex-column gap-2">
-                <label for="fullName">Customer Name</label>
-                <input [disabled]="true" pInputText id="fullName" [(ngModel)]="currentRecord.customerFullName"
-                    required />
-                    <small><b>Incoming Customer Name: </b>{{ currentRecord.customerFullName }}</small>
-            </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="customerId">Customer ID</label>
-                    <input [disabled]="true" pInputText id="customerId" [(ngModel)]="currentRecord.customerId"
-                        required />
-
-                      <small><b>Incoming Customer Id: </b>{{ currentRecord.customerId }}</small>
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="cin">CIN</label>
-                    <input [disabled]="true" pInputText id="cin" [(ngModel)]="currentRecord.cin" required  />
-                    <small><b>Incoming CIN: </b>{{ currentRecord.cin }}</small>
-                </div>
-
-               
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="accountNo">Account No</label>
-                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.accountNo" required />
-                    <small><b>Incoming Account No: </b>{{ currentRecord.accountNo }}</small>
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="accountNo">Meter No</label>
-                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.meterNo" required />
-                    <small><b>Incoming Meter No: </b>{{ currentRecord.meterNo }}</small>
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="accountNo">City</label>
-                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.city" required />
-                    <small><b>Incoming City: </b>{{ currentRecord.city }}</small>
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="accountNo">City</label>
-                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.city" required />
-                    <small><b>Incoming City: </b>{{ currentRecord.city }}</small>
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="accountNo">Nearest Landmark</label>
-                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.nearestLandmark"
-                        required />
-                        <small><b>Incoming Nearest Landmark: </b>{{ currentRecord.nearestLandmark }}</small>
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="accountNo">SetUp Date</label>
-                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.date" required />
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="accountNo">Latitude</label>
-                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.latitude" required />
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="longitude">Longitude</label>
-                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.longitude" required />
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="applicationDate">Application Date</label>
-                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.applicationDate"
-                        required />
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="applicationDate">Dss Id</label>
-                    <input [disabled]="true" pInputText id="accountNo" [(ngModel)]="currentRecord.dssId" required />
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="email">Email</label>
-                    <input [disabled]="true" pInputText id="email" [(ngModel)]="currentRecord.email" required />
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="mobile">Mobile</label>
-                    <input [disabled]="true" pInputText id="email" [(ngModel)]="currentRecord.mobile" required />
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="feeder">Feeder</label>
-                    <input [disabled]="true"pInputText id="feeder" [(ngModel)]="currentRecord.feeder" required />
-                  </div>
-                  
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="feederId">Feeder ID</label>
-                    <input [disabled]="true" pInputText id="feederId" [(ngModel)]="currentRecord.feederId" required />
-                  </div>
-
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="serviceCenter">Service Center</label>
-                    <input [disabled]="true" pInputText id="serviceCenter" [(ngModel)]="currentRecord.serviceCenter" required />
-                  </div>
-                  
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="distributionName">Distribution Name</label>
-                    <input [disabled]="true" pInputText id="distributionName" [(ngModel)]="currentRecord.distributionName" required />
-                  </div>
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="ltPoleId">LT Pole ID</label>
-                    <input [disabled]="true" pInputText id="ltPoleId" [(ngModel)]="currentRecord.ltPoleId" required />
-                  </div>
-                  
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="serviceWire">Service Wire</label>
-                    <input [disabled]="true" pInputText id="serviceWire" [(ngModel)]="currentRecord.serviceWire" required />
-                  </div>
-
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="upriser">Upriser</label>
-                    <input [disabled]="true" pInputText id="upriser" [(ngModel)]="currentRecord.upriser" required />
-                  </div>
-                  
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="region">Region</label>
-                    <input [disabled]="true"pInputText id="region" [(ngModel)]="currentRecord.region" required />
-                  </div>
-                  
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="businessHub">Business Hub</label>
-                    <input [disabled]="true" pInputText id="businessHub" [(ngModel)]="currentRecord.businessHub" required />
-                  </div>
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="custNatureOfBusiness">Customer Nature of Business</label>
-                    <input [disabled]="true" pInputText id="custNatureOfBusiness" [(ngModel)]="currentRecord.custNatureOfBusiness" required />
-                  </div>
-                  
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="customerNIN">Customer NIN</label>
-                    <input [disabled]="true" pInputText id="customerNIN" [(ngModel)]="currentRecord.customerNIN" required />
-                  </div>
-
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="customerEstimatedLoad">Customer Estimated Load </label>
-                    <input [disabled]="true" pInputText id="customerNIN" [(ngModel)]="currentRecord.customerEstimatedLoad" required />
-                  </div>
-
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="customerMeterManufacturer">Customer Meter Manufacturer </label>
-                    <input [disabled]="true" pInputText id="customerNIN" [(ngModel)]="currentRecord.customerMeterManufacturer" required />
-                  </div>
-
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="customerBillName">Customer Bill Name</label>
-                    <input [disabled]="true" pInputText id="customerNIN" [(ngModel)]="currentRecord.customerBillName" required />
-                  </div>
-
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="meterCTRatio">Customer Bill Name</label>
-                    <input [disabled]="true" pInputText id="customerNIN" [(ngModel)]="currentRecord.meterCTRatio" required />
-                  </div>
-
-
-                <!-- Additional fields for meter number, address, etc., follow the same structure -->
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="statusCode">LGA</label>
-                    <p-dropdown id="statusCode" [(ngModel)]="currentRecord.lga" [options]="statusCodes"
-                        placeholder="Select Status Code" required></p-dropdown>
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="statusCode">State</label>
-                    <p-dropdown id="statusCode" [(ngModel)]="currentRecord.state" [options]="statusCodes"
-                        placeholder="Select Status Code" required></p-dropdown>
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="statusCode">Status Code</label>
-                    <p-dropdown id="statusCode" [(ngModel)]="currentRecord.statusCode" [options]="statusCodes"
-                        placeholder="Select Status Code" required></p-dropdown>
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="accountType">Account Type</label>
-                    <p-dropdown id="accountType" [(ngModel)]="currentRecord.supplyType" [options]="accountTypes"
-                        placeholder="Select Account Type" required></p-dropdown>
-                </div>
-
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="supplyType">Supply Type</label>
-                    <p-dropdown id="supplyType" [(ngModel)]="currentRecord.supplyType" [options]="supplyTypes"
-                    optionLabel="label"  optionValue="value"    placeholder="Select Supply Type" required></p-dropdown>
-                </div>
-                <div class="field col-6 flex flex-column gap-2">
-                    <label for="currentTariffCode">Current Tariff Code</label>
-                    <p-dropdown id="currentTariffCode"  [(ngModel)]="currentRecord.currentTariffCode" [options]="currentTariffCode"  optionLabel="label"
-                    optionValue="value" placeholder="Select Current Tariff Code" required></p-dropdown>
-                  </div>
-                  
-                  <!-- Dropdown for Tariff Code -->
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="tariffClass">Tariff Class</label>
-                    <p-dropdown id="tariffClass" [(ngModel)]="currentRecord.tariffClass" [options]="tariffCode" placeholder="Select Tariff Code" required></p-dropdown>
-                  </div>
-                  
-                  <!-- Dropdown for Correct Tariff Code -->
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="correctTariffCode">Correct Tariff Code</label>
-                    <p-dropdown id="correctTariffCode" [(ngModel)]="currentRecord.correctTariffCode" [options]="correctTariffCode" placeholder="Select correctTariff" required></p-dropdown>
-                  </div>
-                  
-                  <!-- Dropdown for Customer Has Meter -->
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="customerHasMeter">Customer Has Meter</label>
-                    <p-dropdown id="customerHasMeter" [(ngModel)]="currentRecord.custHasMeter" [options]="customerHasMeter" placeholder="Select Meter Status" required></p-dropdown>
-                  </div>
-                  
-                  <!-- Dropdown for Account Category -->
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="accountCategory">Account Category</label>
-                    <p-dropdown id="accountCategory" [(ngModel)]="currentRecord.accountCategory" [options]="accountCategory" placeholder="Select  Category" required></p-dropdown>
-                  </div>
-                  
-                  <!-- Dropdown for Connection Type -->
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="connectionType">Connection Type</label>
-                    <p-dropdown id="connectionType" [(ngModel)]="currentRecord.connectionType" [options]="connectionType" placeholder="Select  Type" required></p-dropdown>
-                  </div>
-                  
-                  <!-- Dropdown for Customer Meter Category -->
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="customerMeterCategory">Customer Meter Category</label>
-                    <p-dropdown id="customerMeterCategory" [(ngModel)]="currentRecord.customerMeterCategory" [options]="customerMeterCategory" placeholder="Select Meter Category" required></p-dropdown>
-                  </div>
-                  
-                  <!-- Dropdown for Meter Location -->
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="customerMeterLocation">Meter Location</label>
-                    <p-dropdown id="customerMeterLocation" [(ngModel)]="currentRecord.customerMeterLocation" [options]="meterLocation" placeholder="Select Meter Location" required></p-dropdown>
-                  </div>
-                  
-                  <!-- Dropdown for Customer Meter Accessible -->
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="customerMeterAccessible">Meter Accessible</label>
-                    <p-dropdown id="customerMeterAccessible" [(ngModel)]="currentRecord.customerMeterAccessible" [options]="customerMeterAccessible" placeholder="Select Accessibility" required></p-dropdown>
-                  </div>
-                  
-                  <!-- Dropdown for Customer Meter Sealed -->
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="customerMeterSealed">Meter Sealed</label>
-                    <p-dropdown id="customerMeterSealed" [(ngModel)]="currentRecord.customerMeterSaled" [options]="customerMeterSealed" placeholder="Select Seal Status" required></p-dropdown>
-                  </div>
-                  
-                  <!-- Dropdown for Customer Has Account No -->
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="customerHasAccountNo">Customer Has Account No</label>
-                    <p-dropdown id="customerHasAccountNo" [(ngModel)]="currentRecord.customerHasAccountNo" [options]="customerHasAccountNo" placeholder="Select Account" required></p-dropdown>
-                  </div>
-                  
-                  <!-- Dropdown for Customer Group -->
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="customerGroup">Customer Group</label>
-                    <p-dropdown id="customerGroup" [(ngModel)]="currentRecord.customerGroup" [options]="customerGroup" placeholder="Select Group" required></p-dropdown>
-                  </div>
-                  
-                  <!-- Dropdown for Is Landlord -->
-                  <div class="field col-6 flex flex-column gap-2">
-                    <label for="isLandlord">Is Landlord</label>
-                    <p-dropdown id="isLandlord" [(ngModel)]="currentRecord.isLandlord" [options]="isLandlord" placeholder="Select Yes or No" required></p-dropdown>
-                  </div>
-            </div>
-
-           
-        </div>
-    </div>
 </div>
 
 
 
-<p-dialog header="Review Record" [(visible)]="reviewDialog"    [style]="{ width: '50rem' }">
-    <div class="p-field">
+<p-dialog header="Review Record" [(visible)]="reviewDialog" [style]="{ width: '50rem' }">
+  <div class="p-field">
 
-    </div>
-    <div class="field col flex flex-column gap-2">
-      <label>Comments</label>
-      <textarea pInputTextarea [(ngModel)]="comments" rows="5"></textarea>
-    </div>
-    <div class="p-mt-2 flex gap-4">
-      <button pButton label="Approve" class="p-button-success" (click)="confirmReview()"></button>
-      <button pButton label="Cancel" class="p-button-secondary" (click)="cancelReview()"></button>
-    </div>
-  </p-dialog>
-
-  
+  </div>
+  <div class="field col flex flex-column gap-2">
+    <label>Comments</label>
+    <textarea pInputTextarea [(ngModel)]="comments" rows="5"></textarea>
+  </div>
+  <div class="p-mt-2 flex gap-4">
+    <button pButton label="Approve" class="p-button-success" (click)="confirmReview()"></button>
+    <button pButton label="Cancel" class="p-button-secondary" (click)="cancelReview()"></button>
+  </div>
+</p-dialog>

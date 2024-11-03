@@ -24,8 +24,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DataVerificationComponent } from './data-verification/data-verification.component';
+//import { CustomerDetailsModule } from '../customer-details/customer-details.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-
+import { CustomerDetailFieldComponent } from '../customer-details/customer-detail-field/customer-detail-field.component';
 export const dataValidationRoutes: Routes = [
   {
     path: '',
@@ -43,10 +44,11 @@ export const dataValidationRoutes: Routes = [
 @NgModule({
   declarations: [
     DataValidationComponent,
-    DataVerificationComponent
+    DataVerificationComponent,
+    // CustomerDetailFieldComponent
   ],
   imports: [
-
+    
   CommonModule,
    SharedModule,
    CommonModule,

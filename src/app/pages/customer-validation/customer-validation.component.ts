@@ -1,6 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { CustomerService } from '../../api/customer.service';
+import { AuthService } from '../../auth/service/auth.service';
+
 
 @Component({
   selector: 'app-customer-validation',
@@ -12,21 +15,21 @@ export class CustomerValidationComponent {
   uploadedFiles: any[] = [];
   searchValue: string = ''; // Initialize searchValue
   loading:boolean = false;
+  batches: any[] = [];
+  uploading: boolean = false;
+  hasErrors: boolean = false;
+  userAddedError: boolean = false;
+  errorMessage: string = "";
+  errorLogs: string[] = [];
+  currentPage: number = 1;
+  totalRecords: number = 0; 
+  pageSize: number = 10;
 
   @ViewChild('filter') filter!: ElementRef;
 
 
-  batches = [
-    { batchCode: 'BATCH001', startDate: new Date(), endDate: null, status: 'Pending', uploadedBy: 'Admin',fileName: "example.jpg", fileSize: "512 Bytes" },
-    { batchCode: 'BATCH002', startDate: new Date(), endDate: new Date(), status: 'Completed', uploadedBy: 'Reviewer', fileName: "video.mp4", fileSize: "2.5 GB" },
-    // More sample data...
-  ];
 
-  uploading: boolean = false;
-  hasErrors: boolean = false; // To track if there are any errors
-  errorLogs: string[] = []; // Array to store error logs
-
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService, private customerService: CustomerService,private authService: AuthService) {}
 
 
 
@@ -37,6 +40,48 @@ export class CustomerValidationComponent {
         'contains'
     );
 }
+
+ngOnInit() {
+  console.log('Component initialized');
+  this.loadBatches(this.currentPage, this.pageSize); // Load the first page with a page size of 10
+}
+loadBatches(page: number, pageSize: number) {
+  const token = this.authService.getToken();
+  console.log(token);
+if (!token) {
+  this.loading = false;
+  this.hasErrors = true;
+  this.errorMessage = 'No authentication token found. Please log in again.';
+  setTimeout(() => {
+    this.userAddedError = false;
+  }, 3000);
+  return; // Exit the function early
+}
+  this.loading = true;
+  this.customerService.getCustomerValidateBatchesByPages(page, pageSize, token).subscribe(
+    (response) => {
+      this.loading = false;
+      if (response && response.data && response.data.results) {
+        this.batches = response.data.results;
+        this.totalRecords = response.data.count; 
+      } else {
+        this.batches = []; 
+        this.messageService.add({ severity: 'info', summary: 'No Data', detail: 'No batches found.' });
+      }
+    },
+    (error) => {
+      this.loading = false;
+      console.error('Error fetching batches:', error); // Log the error
+      this.batches = []; // Clear batches on error
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load batches.' });
+    }
+  );
+}
+onPageChange(event: any) {
+  this.currentPage = event.page + 1; // PrimeNG pagination is 0-based
+  this.loadBatches(this.currentPage, this.pageSize); // Load the new page
+}
+
   exportData() {
     this.loading=true;
 

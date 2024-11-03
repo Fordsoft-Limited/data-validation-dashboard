@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams,HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { customerApproveOrReject, customerValidateBulk, validateCustomer } from '../model/customer';
@@ -45,9 +45,13 @@ export class CustomerService {
 
   // Get Request  
 
-  getCustomerById(uid: string) {
-    return this.http.get<any>(this.baseUrl +
-      `/uid?uid=${uid}`)
+  getCustomerById(uid: string , token:string) {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json' // Add any other headers if necessary
+    });
+    
+    return this.http.get<any>(`${this.baseUrl}/${uid}`, { headers })
       .pipe(
         catchError(err => this.base.errorHandler(err))
       )
@@ -69,7 +73,11 @@ export class CustomerService {
       )
   }
 
-  getCustomerValidateBatchesByPages(page: number, pageSize: number): Observable<any> {
+  getCustomerValidateBatchesByPages(page: number, pageSize: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json' // Add any other headers if necessary
+    });
     const params = new HttpParams()
     .set('page', page.toString())
     .set('page_size', pageSize.toString());
@@ -80,6 +88,25 @@ export class CustomerService {
         catchError(err => this.base.errorHandler(err))
       )
   }
+
+  getCustomersWithAwaitingReview(page: number, pageSize: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,  // Include the token in the header
+      'Content-Type': 'application/json'
+    });
+  
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('page_size', pageSize.toString())
+      .set('approval_status', 'Awaiting review');
+  
+    return this.http.get<any>(`${this.baseUrl}/status/`,{ headers, params })
+      .pipe(
+        catchError(err => this.base.errorHandler(err))
+      );
+  }
+  
+
 
 
   getCustomerValidateBatchesByUuid(uid: string): Observable<any> {

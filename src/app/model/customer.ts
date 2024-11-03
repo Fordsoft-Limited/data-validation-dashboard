@@ -56,6 +56,7 @@ export interface validateCustomer {
     tenant_phone: string;
     meter_ct_ratio: string;
     date_created: any;  
+    uid:string;
   }
   
 

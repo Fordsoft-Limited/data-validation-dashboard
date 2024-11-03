@@ -45,52 +45,6 @@ export class LoginComponent {
   } 
 
 
-//   onSubmit() {
-//     this.isLoading = true;  // Start the loading spinner
-  
-//     // Reset the messages
-//     this.loginSuccess = false;
-//     this.loginError = false;
-  
-//     const username = this.loginForm.get('username')?.value;
-//     const password = this.loginForm.get('password')?.value;
-  
-//     // Check if username or password is missing
-//     if (!username) {
-//         this.errorMessage = 'The email/username field must not be left empty.';
-//         this.loginError = true; // Show error notification
-//         this.autoDismissError();
-//         this.isLoading = false;  // Stop the loading spinner
-//     } else if (!password) {
-//         this.errorMessage = 'The password field must not be left empty.';
-//         this.loginError = true; // Show error notification
-//         this.autoDismissError();
-//         this.isLoading = false;  // Stop the loading spinner
-//     } else {
-//         // Call the backend login API using the service
-//         const loginPayload = { username, password };  // Create payload
-
-//         this.entranceService.entranceLogin(loginPayload).subscribe({
-//             next: (response) => {
-//                 this.isLoading = false;  // Stop the loading spinner
-//                 this.loginSuccess = true; // Show success notification
-//                 this.autoDismissSuccess();
-//                 const token = response.data.access_token;// Make sure this path is correct
-//                 console.log('Received token:', token); // Debug log
-            
-//                 this.authService.setToken(token); // Save the token
-//                 this.router.navigate(['/app']);  // Navigate after successful login
-//             },
-//             error: (error) => {
-//                 this.isLoading = false;  // Stop the loading spinner
-//                 this.errorMessage = 'Invalid credentials, please try again.';
-//                 this.loginError = true; // Show error notification
-//                 this.autoDismissError();
-//             }
-//         });
-//     }
-// }
-
 onSubmit() {
     this.isLoading = true;
   
@@ -105,8 +59,6 @@ onSubmit() {
     }
   
     const loginPayload = { username, password };
-  
-    //const encryptedPayload = this.authService.encryptPayload(loginPayload);
     const encryptedPayload = this.authService.encryptPayload(loginPayload);
 
    
@@ -118,9 +70,10 @@ onSubmit() {
         console.log('Received token:', token);
   
         if (token) {
-          this.authService.setToken(token);           // Encrypt and store token
-          this.authService.setLoginData(username, password); // Encrypt and store login data
-          this.router.navigate(['/app']);             // Redirect to dashboard
+          this.authService.setToken(token); 
+          this.authService.setLoginData(username, password); 
+          this.autoDismissSuccess();
+          this.router.navigate(['/app']);          
         } else {
           this.errorMessage = 'Login failed. Please try again.';
           this.loginError = true;
@@ -128,25 +81,23 @@ onSubmit() {
       },
       error: (error) => {
         this.isLoading = false;
-        // this.errorMessage = 'Invalid credentials, please try again.';
+        //this.errorMessage = 'Invalid credentials, please try again.';
         this.errorMessage = error.error.errorMessage;
         this.loginError = true;
+        this.autoDismissError();
       }
     });
   }
   
-
   private autoDismissError() {
     setTimeout(() => {
         this.loginError = false;
-    }, 4000); // Change to 3000 for 3 seconds
+    }, 4000);
 }
-
-// Function to auto-dismiss success notification
 private autoDismissSuccess() {
     setTimeout(() => {
         this.loginSuccess = false;
-    }, 4000); // Change to 3000 for 3 seconds
+    }, 4000); 
 }
 
 
