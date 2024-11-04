@@ -66,7 +66,7 @@ export interface validateCustomer {
   }
 
   export interface customerApproveOrReject{
-    uuid: string
+    uid: string
     approval_status: string
     approval_comments: string
   }

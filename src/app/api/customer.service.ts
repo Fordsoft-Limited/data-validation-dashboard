@@ -34,14 +34,18 @@ export class CustomerService {
   }
 
 
-  customerApproveOrReject(payload: customerApproveOrReject): Observable<any> {
+  customerApproveOrReject(payload: customerApproveOrReject, token: string): Observable<any> {
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json' // Add any other headers if necessary
+    });
     return this.http.post<any>(this.baseUrl +
-      `/vet/approve-or-reject`, payload)
+      `/vet/approve-or-reject`, payload, { headers })
       .pipe(
         catchError(err => this.base.errorHandler(err))
       )
   }
-
 
   // Get Request  
 
