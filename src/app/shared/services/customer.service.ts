@@ -2,12 +2,30 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Customer } from '../model/customer';
+import { CUSTOMER_REGION } from '../constants';
 @Injectable({
   providedIn: 'root',
 })
 export class CustomerService {
+
   private customers: Customer[] = this.getCustomers();
   private newCustomers: Customer[] = this.getNewCustomers();
+
+   getBusinessHubs(regionName: string): string[] {
+    const region = CUSTOMER_REGION.find(region => region.name === regionName);
+    return region ? region.businessHubs.map(hub => hub.name) : [];
+  }
+  
+  // Function to get service centres for a selected business hub as an array of strings
+   getServiceCentres(regionName: string, businessHubName: string): string[] {
+    const region = CUSTOMER_REGION.find(region => region.name === regionName);
+    if (region) {
+      const businessHub = region.businessHubs.find(hub => hub.name === businessHubName);
+      return businessHub ? businessHub.serviceCentres.map(sc => sc.name) : [];
+    }
+    return [];
+  }
+  
   getCustomers(): Customer[] {
     return [
       {

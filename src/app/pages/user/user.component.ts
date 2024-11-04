@@ -106,10 +106,14 @@ onPageChange(event:any){
       }
 
       switch (status.toUpperCase()) {
-          case 'ENABLE':
+          case 'ACTIVE':
               return 'success';
-          case 'DISABLE':
+          case 'INACTIVE':
               return 'danger';
+          case 'ADMIN':
+              return 'info';
+          case 'USER':
+                return 'warning';
           default:
               return undefined;
       }

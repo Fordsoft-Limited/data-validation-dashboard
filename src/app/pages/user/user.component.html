@@ -84,7 +84,7 @@
                               required />
                       </ng-template>
                       <ng-template pTemplate="output">
-                          {{user.role}}
+                          <p-badge [value]="user.role" [severity]="getSeverity(user.role)"></p-badge> 
                       </ng-template>
                   </p-cellEditor>
               </td>
@@ -94,11 +94,11 @@
                           <p-dropdown 
                               [options]="statuses" 
                               appendTo="body" 
-                              [(ngModel)]="user.inventoryStatus">
+                              [(ngModel)]="user.status">
                           </p-dropdown>    
                       </ng-template>
                       <ng-template pTemplate="output">
-                          <p-badge [value]="user.inventoryStatus" [severity]="getSeverity(user.inventoryStatus)"></p-badge> 
+                          <p-badge [value]="user.status" [severity]="getSeverity(user.status)"></p-badge> 
                       </ng-template>
                   </p-cellEditor>
               </td>
