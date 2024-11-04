@@ -27,11 +27,7 @@
     "@fullcalendar/timegrid": "^6.0.3",
     "bcryptjs": "^2.4.3",
     "chart.js": "^3.3.2",
-<<<<<<< HEAD
-    "file-saver": "^2.0.5",
-=======
     "crypto-js": "^4.2.0",
->>>>>>> 13fd6625ff58f0b95a341340ca8ce330dd322b39
     "primeflex": "^3.3.1",
     "primeicons": "^6.0.1",
     "primeng": "^17.2.0",

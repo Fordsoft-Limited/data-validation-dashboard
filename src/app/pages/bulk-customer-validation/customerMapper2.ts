@@ -51,15 +51,11 @@ export class CustomerMapper2 {
       customer_group: row[45] || '',
       is_landlord: row[46] || '',
       landlord_name: row[47] || '',
-      approved_by: row[48] || 0,
-      approval_comments: row[49] || '',
-      aproval_status: row[50] || '',
-      date_approved: row[51] || null,
-      landlord_phone: row[52] || '',
-      tenant_name: row[53] || '',
-      tenant_phone: row[54] || '',
-      meter_ct_ratio: row[55] || '',
-      date_created: row[56] || null
+      landlord_phone: row[48] || '',
+      tenant_name: row[49] || '',
+      tenant_phone: row[50] || '',
+      meter_ct_ratio: row[51] || '',
+      
     }));
   }
 }
