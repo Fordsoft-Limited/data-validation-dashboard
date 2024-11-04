@@ -114,6 +114,7 @@ onPageChange(event:any){
 }
 
 
+
 getSeverityStatus(status: string) {
   switch (status) {
       case 'ACTIVE':
@@ -124,6 +125,7 @@ getSeverityStatus(status: string) {
           return 'warning';
       default:
           return 'danger'; // Default for any unexpected statuses
+      
   }
 }
 

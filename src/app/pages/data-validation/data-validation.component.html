@@ -59,7 +59,13 @@
                 </th>
                 <th style="min-width:15rem">
                     <div class="flex align-items-center">
-                        Meter No
+                        Account No
+                        <p-columnFilter type="text" field="district" display="menu" />
+                    </div>
+                </th>
+                <th style="min-width:15rem">
+                    <div class="flex align-items-center">
+                        Metter No
                         <p-columnFilter type="text" field="district" display="menu" />
                     </div>
                 </th>
@@ -97,16 +103,18 @@
   
                 <td>
   
-                    {{filteredCustomer.customer_id}}
+                    {{filteredCustomer.customer_no}}
                 </td>
                 <td>
   
                     {{filteredCustomer.feeder}}
                 </td>
                 <td>
+                    {{filteredCustomer.account_no}}
+                </td>
+                <td>
                     {{filteredCustomer.meter_no}}
                 </td>
-  
                 <td>
                     {{ filteredCustomer.date_created | date: 'MM/dd/yyyy' }}
                 </td>
