@@ -8,30 +8,33 @@
   <!-- File Upload Section -->
   <div class="col-12" style="width: 100%; max-width: 700px; margin: 10px auto; padding: 10px; box-sizing: border-box;">
     <p-fileUpload 
-      name="demo[]" 
-      (onUpload)="handleUpload($event)" 
-      [multiple]="true" 
-      accept=".xlsx,.csv" 
-      [maxFileSize]="1000000">
-      <ng-template pTemplate="content">
-        <ul *ngIf="uploadedFiles.length" style="list-style-type: none; padding: 0; margin: 0;">
+  name="file" 
+  [multiple]="false" 
+  accept=".xlsx,.csv" 
+  [maxFileSize]="1000000"
+  #fileUpload 
+  customUpload="true" 
+  (uploadHandler)="onFileUpload($event)">
+  
+  <ng-template pTemplate="content">
+      <ul *ngIf="uploadedFiles.length" style="list-style-type: none; padding: 0; margin: 0;">
           <li *ngFor="let file of uploadedFiles" style="word-wrap: break-word; margin-bottom: 5px;">
-            {{ file.name }} - {{ file.size }} bytes
+              <!-- {{ file.name }} - {{ file.size }} bytes -->
           </li>
-        </ul>
-      </ng-template>
-    </p-fileUpload>
-  
-    <p-message *ngIf="uploadError" severity="error" text="uploadError"></p-message>
-    <button *ngIf="uploadError" (click)="retryUpload()">Retry Upload</button>
-  
-    <p-message *ngIf="uploadSuccess" severity="success" text="uploadSuccess"></p-message>
-  </div>
+      </ul>
+  </ng-template>
+</p-fileUpload>
 
-  <!-- Progress Bar Section -->
+    <!-- Messages Display Area -->
+    <div *ngIf="uploadSuccess" class="alert alert-success mt-3">{{ uploadSuccess }}</div>
+
+     <!-- Progress Bar Section -->
   <div class="col-12 card mt-2" style="width: 100%; max-width: 700px; margin: 10px auto; padding: 20px;">
     <h6 style="text-align: left; margin: 0 0 10px;">Upload Progress</h6>
     <p-progressBar [value]="progressValue"></p-progressBar>
+    <p *ngIf="isProcessing">Uploading, please wait...</p>
+  </div>
+  <button *ngIf="isProcessing" pButton label="Cancel Upload" icon="pi pi-times" (click)="cancelUpload()" [disabled]="!isUploading"></button>
   </div>
 
   <div class="col-12" style="width: 100%; max-width: 700px; margin: 1px auto; padding: 20px">
@@ -43,7 +46,20 @@
   </div>
 
   <!-- Error Report Section -->
-<div class="col-12" style="width: 100%; max-width: 700px; margin: 3px auto; padding: 10px; margin-top: -50px;">
+
+  <div class="col-12" style="width: 100%; max-width: 700px; margin: 3px auto; padding: 10px; margin-top: -50px;">
+    <div class="text-900 font-semibold text-lg mt-5 mb-3 border-bottom-1 surface-border py-3">Error Report</div>
+    <ul class="list-none p-0 m-0">
+      <li *ngFor="let error of errors" class="flex flex-column gap-3 md:flex-row md:align-items-center p-2 border-bottom-1 surface-border">
+        <div class="flex align-items-center flex-1">
+          <div *ngFor="let message of error | keyvalue" style="word-break: break-word;">
+            <label class="font-medium ml-2">{{ message.value.join(', ') }}</label>
+          </div>
+        </div>
+      </li>
+    </ul>
+</div>
+<!-- <div class="col-12" style="width: 100%; max-width: 700px; margin: 3px auto; padding: 10px; margin-top: -50px;">
   <div class="text-900 font-semibold text-lg mt-5 mb-3 border-bottom-1 surface-border py-3">Error Report</div>
   <ul class="list-none p-0 m-0">
     <li  class="flex flex-column gap-3 md:flex-row md:align-items-center p-2 border-bottom-1 surface-border">
@@ -62,8 +78,9 @@
   </div>
 </li>
   </ul>
+</div> -->
+<div *ngIf="uploadResponse">
+<p>{{ uploadResponse.message }}</p>
 </div>
 
 </div>
-
-
