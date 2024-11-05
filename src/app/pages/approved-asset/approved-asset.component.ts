@@ -228,4 +228,7 @@ export class ApprovedAssetComponent implements OnInit{
         return 'info';
     }
   }
+
+
+  
 }
