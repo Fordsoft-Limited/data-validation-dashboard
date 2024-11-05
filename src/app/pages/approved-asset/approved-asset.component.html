@@ -30,8 +30,13 @@
 
       <div class="flex gap-2 mt-4">
         <p-button type="submit" [loading]="loading" label="Filter"></p-button>
-        <p-button type="button" [loading]="isResetLoading" label="Reset Filter" [outlined]="true"
-          (click)="resetFilter()" severity="danger"></p-button>
+          
+     
+        <p-button
+          [loading]="loading"  label="Export" icon="pi pi-download" class="p-button-help"></p-button>
+     
+        <!-- <p-button type="button" [loading]="isResetLoading" label="Reset Filter" [outlined]="true"
+          (click)="resetFilter()" severity="danger"></p-button> -->
       </div>
     </div>
   </form>

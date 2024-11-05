@@ -50,6 +50,7 @@
               <th pSortableColumn="batch_code">Batch Code <p-sortIcon field="batch_code" /></th>
               <th pSortableColumn="validation_type">Vildation Type <p-sortIcon field="validation_type" /></th>
               <th pSortableColumn="approved_rejected">Approved/Rejected <p-sortIcon field="approved_rejected" /></th>
+              <th pSortableColumn="total_error">Error Count <p-sortIcon field="total_error" /></th>
               <th pSortableColumn="total_record">Total Record <p-sortIcon field="total_record" /></th>
               <th pSortableColumn="date_created">Created Dated <p-sortIcon field="date_created" /></th>
               <th pSortableColumn="created_by.name">Uploaded By <p-sortIcon field="created_by.name" /></th>
@@ -63,6 +64,7 @@
               <td>{{ batch.batch_code }}</td>
               <td>{{ batch.validation_type }}</td>              
               <td>{{ batch.total_approved }}/{{ batch.total_rejected }}</td>
+              <td>{{batch.total_error}}</td>
               <td>{{batch.total_record}}</td>
               <td>{{ batch.date_created  | date}}</td>
               <td>{{ batch.created_by.name }}</td>
