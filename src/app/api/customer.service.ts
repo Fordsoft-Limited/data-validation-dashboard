@@ -50,6 +50,23 @@ export class CustomerService {
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
+  getCustomersWithApprovedOrRejectedStatus(page: number, pageSize: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,  // Include the token in the header
+      'Content-Type': 'application/json'
+    });
+  
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('page_size', pageSize.toString())
+      .set('approval_status', 'Approved,Rejected'); // Set to only show Approved and Rejected
+  
+    return this.http.get<any>(`${this.baseUrl}/status/`, { headers, params })
+      .pipe(
+        catchError(err => this.base.errorHandler(err))
+      );
+  }
+
   getCustomerValidateBatches(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/validate/batches`)
       .pipe(catchError(err => this.base.errorHandler(err)));
@@ -65,6 +82,23 @@ export class CustomerService {
       .set('page_size', pageSize.toString());
 
     return this.http.get<any>(`${this.baseUrl}/validate/batches-pages`, { headers, params })
+      .pipe(catchError(err => this.base.errorHandler(err)));
+  }
+
+
+  
+  getNewCustomerFilterByPages(page: number, pageSize: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    
+    const params = new HttpParams()
+      .set('category', 'New Customer') // Ensure the category matches the intended filter
+      .set('page', page.toString())
+      .set('page_size', pageSize.toString());
+  
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 

@@ -1,5 +1,6 @@
 export interface Customer {
     id?:number;
+    uid?: string;
     customerFullName: string;
     accountNo: string;
     meterNo: string;
@@ -56,5 +57,4 @@ export interface Customer {
     comments?: string;
     supplyType: string;
     status?:string;
-   
   }

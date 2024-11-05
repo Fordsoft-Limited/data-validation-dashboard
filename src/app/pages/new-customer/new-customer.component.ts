@@ -1,29 +1,37 @@
 import { Component ,OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { Table } from 'primeng/table';
+import { MessageService } from 'primeng/api';
+import { ProductService } from '../../api/product.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Customer } from '../../shared/model/customer';
-import { CustomerService } from '../../shared/services/customer.service';
+import { CustomerService } from '../../api/customer.service';
+import { AuthService } from '../../auth/service/auth.service';
 
 @Component({
   selector: 'app-new-customer',
   templateUrl: './new-customer.component.html',
-  styleUrl: './new-customer.component.scss' 
+  styleUrls: ['./new-customer.component.scss' ],
+  providers: [MessageService,ProductService ]
 })
 export class NewCustomerComponent implements OnInit {
   newCustomers !: Customer[];
 
-  filteredNewCustomers  : Customer[]=[];
-
+  filteredNewCustomers  : any[]=[];
   loading: boolean = false;
+  hasErrors: boolean = false;
+  errorMessage: string ='';
+  totalRecords: number = 0; 
 
   isFilterLoading: boolean = false;
   isResetLoading: boolean = false;
+  userAddedError: boolean = false;
 
   isShowDetails:boolean = false;
 
   searchValue: string = '';
-
+  currentPage: number = 1;
+  pageSize: number = 10;
   showDetailsDialog: boolean = false;
 
   selectedNewCustomer: Customer | null = null
@@ -33,7 +41,7 @@ export class NewCustomerComponent implements OnInit {
   businessUnits = [{ label: 'Business Unit 1', value: 'Business Unit 1' }, { label: 'Business Unit 2', value: 'Business Unit 2' }];
   regions =[{label: 'Region 1', value: 'Region1'}, { label: 'Region 2', value: 'Region2' }];
 
-  constructor( private fb: FormBuilder, private customerService:CustomerService,private router: Router,  ){
+  constructor( private fb: FormBuilder, private customerService:CustomerService,private router: Router, private authService:AuthService,private messageService: MessageService  ){
 
   }
 
@@ -45,14 +53,42 @@ export class NewCustomerComponent implements OnInit {
       region:['']
     });
 
-    this.customerService.getCustomer().then((data) => {
-      this.newCustomers = data;
-      this.filteredNewCustomers = data; // Initially display all records
-      this.loading = false;
-    });
+    this.loadNewCustomer(this.currentPage, this.pageSize);
   }
 
   
+loadNewCustomer(page:number,pageSize:number) {
+  const token = this.authService.getToken();
+  console.log(token);
+if (!token) {
+  this.loading = false;
+  this.hasErrors = true;
+  this.errorMessage = 'No authentication token found. Please log in again.';
+  setTimeout(() => {
+    this.userAddedError = false;
+  }, 3000);
+  return; // Exit the function early
+}
+  this.loading = true;
+  this.customerService.getNewCustomerFilterByPages(page,pageSize,token).subscribe(
+    (response) => {
+      this.loading = false;
+      if (response && response.data && response.data.results) {
+        this.filteredNewCustomers  = response.data.results;
+        this.totalRecords = response.data.count; 
+      } else {
+        this.filteredNewCustomers = []; 
+        this.messageService.add({ severity: 'info', summary: 'No Data', detail: 'No new customer found.' });
+      }
+    },
+    (error) => {
+      this.loading = false;
+      console.error('Error fetching new customer:', error); // Log the error
+      this.filteredNewCustomers  = []; // Clear batches on error
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load customers.' });
+    }
+  );
+}
 
   filterData() {
     this.loading = true;
@@ -92,11 +128,9 @@ export class NewCustomerComponent implements OnInit {
     return recordTime >= startTime && recordTime <= endTime;
   }
 
-
   showDetails(record: Customer) {
-    // Implement the function to show record details
-    this.selectedNewCustomer = {...record};
-
+    const uid = record.uid; // Access uid directly from record
+    this.selectedNewCustomer = { ...record }; // Set the selected customer
   }
 
   navigateToCustomerDetails(){
@@ -105,7 +139,7 @@ export class NewCustomerComponent implements OnInit {
       this.isShowDetails=false;
        if (this.selectedNewCustomer) {
      //  this.showDetailsDialog = true; // Open the dialog
-     this.router.navigate(['/app/customer-details', this.selectedNewCustomer.id]);
+     this.router.navigate(['/app/customer-details', this.selectedNewCustomer.uid]);
     }
     },2000)
   

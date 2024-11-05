@@ -1,136 +1,157 @@
 import { Component, OnInit } from '@angular/core';
-import { Customer } from '../../shared/model/customer';
-import { CustomerService } from '../../shared/services/customer.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../auth/service/auth.service';
+import { CustomerService } from '../../api/customer.service';
+import { Customer } from '../../shared/model/customer';
+
 @Component({
   selector: 'app-customer-details',
   templateUrl: './customer-details.component.html',
-  styleUrl: './customer-details.component.scss'
+  styleUrls: ['./customer-details.component.scss']
 })
 export class CustomerDetailsComponent implements OnInit {
- // customerId: number = 1001;
-  // customerId: number;
-  customerId: number  = 0; 
-  customer: Customer | null = null;
-  newData: Customer | null = null;
-  existingData: Customer | null = null;
+  customerId: string = '';
+  customer: any | null = null;
+  newData: any | null = null;
+  existingData: any | null = null;
+  event: any | null = null;
 
-
-  constructor(private customerService: CustomerService, private route: ActivatedRoute, private router: Router) {
-    // this.customerId=0;
-  }
+  constructor(
+    private customerService: CustomerService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    const idParam = this.route.snapshot.paramMap.get('id');
-    this.customerId = idParam ? +idParam : 0; // Update customerId based on route parameter
-    this.loadCustomerDetails();
+    const idParam = this.route.snapshot.paramMap.get('uid');
+    this.customerId = idParam ? idParam : '';
+    this.loadCustomerDetails(this.customerId);
+    console.log(this.customerId)
+    console.log(idParam)
   }
-  // loadCustomerDetails(): void {
-  //   // Fetch existing customer data
-  //   this.customerService.getCustomerById(this.customerId).then(existingCustomer => {
-  //     this.existingData = existingCustomer;
-  //     // Fetch new customer data
-  //     return this.customerService.getNewCustomerById(this.customerId);
-  //   }).then(newCustomer => {
-  //     this.newData = newCustomer;
 
-     
-     
-  //   }).catch(error => {
-  //     console.error('Error fetching customer data', error);
-  //   });
-  // }
+  loadCustomerDetails(uid: string): void {
+    const token = this.authService.getToken();
 
-  loadCustomerDetails(): void {
-    if (this.customerId !== null) {
-      this.customerService.getCustomerById(this.customerId).then(existingCustomer => {
-        this.existingData = existingCustomer;
-        return this.customerService.getNewCustomerById(this.customerId);
-      }).then(newCustomer => {
-        this.newData = newCustomer;
-      }).catch(error => {
-        console.error('Error fetching customer data', error);
-      });
+    if (!token) {
+      console.error('No authentication token found. Please log in again.');
+      return;
+    }
+
+    if (this.customerId) {
+      this.customerService.getCustomerById(uid, token)
+        .subscribe(
+
+          (response: any) => {
+            console.log('API response:', response);
+            if (response.code === 200) {
+              
+              const { new: newCustomer, old: existingCustomer } = response.data;
+              this.newData = newCustomer;
+              this.existingData = existingCustomer;
+              this.event =this.newData.events;
+              console.log('New Data:', this.newData);
+            console.log('Existing Data:', this.existingData);
+            console.log('Event:', this.event);
+            }
+          },
+          (error) => {
+            console.error('Error fetching customer data:', error);
+          }
+          // response => {
+          //   if (response.code === 200) {
+          //     const { new: newCustomer, old: existingCustomer } = response.data;
+          //     this.newData = newCustomer.new;
+          //     this.existingData = existingCustomer.old;
+              
+          //     console.log(newCustomer)
+          //   } else {
+          //     console.error('Unexpected response structure', response);
+          //   }
+          // },
+          // error => {
+          //   console.error('Error fetching customer data', error);
+          // }
+
+        );
     }
   }
 
- 
+  goBack() {
+    window.history.back();
+  }
 
+  // Data Entry History for Events
   dataEntryHistory = [
-    { content: 'Updated meter number', date_created: '2023-10-01',icon: 'pi pi-cloud-upload' ,color:'#10e01a'},
-    { content: 'Changed tariff code', date_created: '2023-09-15' ,icon: 'pi pi-eraser',color:'#f5d902'},
-    { content: 'Updated contact number', date_created: '2023-08-20' ,icon: 'pi pi-cloud-upload',color:'#dd02f5'},
-    { content: 'Address correction', date_created: '2023-07-10' ,icon: 'pi pi-pencil',color:'#f57c02'}
+    { content: "Description", date_created: this.newData?.events?.description, icon: 'pi pi-cloud-upload', color: '#10e01a' },
+    { content: 'Category', date_created: this.newData?.events?.category, icon: 'pi pi-eraser', color: '#f5d902' },
+    { content: 'Status', date_created: this.newData?.events?.status, icon: 'pi pi-cloud-upload', color: '#dd02f5' },
+    { content: 'Posted By', date_created: this.newData?.events?.posted_by?.name, icon: 'pi pi-pencil', color: '#f57c02' }
   ];
 
   events = this.dataEntryHistory.map(entry => ({
     status: entry.content,
     date: entry.date_created,
-    icon: entry.icon, // Optionally add an icon
-    color: entry.color      // Optionally add a color
+    icon: entry.icon,
+    color: entry.color
   }));
-  // Navigation method to go back
-  goBack() {
-    window.history.back();
-   }
 
 
-
-   customerFields: { name: string; key: keyof Customer }[] = [
-    { name: 'Customer Full Name', key: 'customerFullName' },
-    { name: 'Account Number', key: 'accountNo' },
-    { name: 'Meter Number', key: 'meterNo' },
+   customerFields: { name: string; key: keyof any }[] = [
+    { name: 'Customer Full Name', key: 'customer_full_name' },
+    { name: 'Account Number', key: 'account_no' },
+    { name: 'Meter Number', key: 'meter_no' },
     { name: 'Address', key: 'address' },
     { name: 'City', key: 'city' },
     { name: 'LGA', key: 'lga' },
     { name: 'State', key: 'state' },
-    { name: 'Nearest Landmark', key: 'nearestLandmark' },
-    { name: 'Setup Date', key: 'applicationDate' },
+    { name: 'Nearest Landmark', key: 'nearest_landmark' },
+    { name: 'Setup Date', key: 'setup_date' },
     { name: 'Latitude', key: 'latitude' },
     { name: 'Longitude', key: 'longitude' },
-    { name: 'Customer ID', key: 'customerId' },
+    { name: 'Customer ID', key: 'customer_id' },
     { name: 'CIN', key: 'cin' },
-    { name: 'Application Date', key: 'applicationDate' },
+    { name: 'Application Date', key: 'application_date' },
     { name: 'Mobile Number', key: 'mobile' },
     { name: 'Email', key: 'email' },
-    { name: 'Status Code', key: 'statusCode' },
-    { name: 'Account Type', key: 'accountType' },
-    { name: 'Current Tariff Code', key: 'currentTariffCode' },
-    { name: 'Correct Tariff Code', key: 'correctTariffCode' },
-    { name: 'Tariff Class', key: 'tariffClass' },
+    { name: 'Status Code', key: 'status_code' },
+    { name: 'Account Type', key: 'account_type' },
+    { name: 'Current Tariff Code', key: 'current_tariff_code' },
+    { name: 'Correct Tariff Code', key: 'correct_tariff_code' },
+    { name: 'Tariff Class', key: 'tariff_class' },
     { name: 'Feeder', key: 'feeder' },
-    { name: 'Feeder ID', key: 'feederId' },
-    { name: 'Service Center', key: 'serviceCenter' },
-    { name: 'Distribution Name', key: 'distributionName' },
-    { name: 'DSS ID', key: 'dssId' },
-    { name: 'LT Pole ID', key: 'ltPoleId' },
-    { name: 'Service Wire', key: 'serviceWire' },
+    { name: 'Feeder ID', key: 'feeder_id' },
+    { name: 'Service Center', key: 'service_center' },
+    { name: 'Distribution Name', key: 'distribution_name' },
+    { name: 'DSS ID', key: 'dss_id' },
+    { name: 'LT Pole ID', key: 'lt_pole_id' },
+    { name: 'Service Wire', key: 'service_wire' },
     { name: 'Upriser', key: 'upriser' },
     { name: 'Region', key: 'region' },
-    { name: 'Business Hub', key: 'businessHub' },
-    { name: 'Account Category', key: 'accountCategory' },
-    { name: 'Connection Type', key: 'connectionType' },
-    { name: "Customer's Nature of Business", key: 'custNatureOfBusiness' },
-    { name: 'Customer NIN', key: 'customerNIN' },
-    { name: 'Customer Supply Type', key: 'customerSupplyType' },
-    { name: 'Customer Estimated Load', key: 'customerEstimatedLoad' },
-    { name: 'Customer Has Meter', key: 'custHasMeter' },
-    { name: 'Customer Meter Category', key: 'customerMeterCategory' },
-    { name: 'Customer Meter Manufacturer', key: 'customerMeterManufacturer' },
-    { name: 'Customer Meter Sealed', key: 'customerMeterSaled' },
-    { name: 'Customer Meter Accessible', key: 'customerMeterAccessible' },
-    { name: 'Customer Meter Location', key: 'customerMeterLocation' },
-    { name: 'Customer Bill Name', key: 'customerBillName' },
-    { name: 'Customer Has Account Number', key: 'customerHasAccountNo' },
-    { name: 'Customer Group', key: 'customerGroup' },
-    { name: 'Is Landlord', key: 'isLandlord' },
-    { name: 'Landlord Name', key: 'landlordName' },
-    { name: 'Landlord Phone', key: 'landlordPhone' },
-    { name: 'Tenant Name', key: 'tenantName' },
-    { name: 'Tenant Phone', key: 'tenantPhone' },
-    { name: 'Meter CT Ratio', key: 'supplyType' },
-    { name: 'Customer Batch', key: 'customerGroup' },
-    //{ name: 'Slug', key: 'slug' }
+    { name: 'Business Hub', key: 'business_hub' },
+    { name: 'Account Category', key: 'account_category' },
+    { name: 'Connection Type', key: 'connection_type' },
+    { name: "Customer's Nature of Business", key: 'cust_nature_of_business' },
+    { name: 'Customer NIN', key: 'customer_nin' },
+    { name: 'Customer Supply Type', key: 'customer_supply_type' },
+    { name: 'Customer Estimated Load', key: 'customer_estimated_load' },
+    { name: 'Customer Has Meter', key: 'cust_has_meter' },
+    { name: 'Customer Meter Category', key: 'customer_meter_category' },
+    { name: 'Customer Meter Manufacturer', key: 'customer_meter_manufacturer' },
+    { name: 'Customer Meter Sealed', key: 'customer_meter_saled' },
+    { name: 'Customer Meter Accessible', key: 'customer_meter_accessible' },
+    { name: 'Customer Meter Location', key: 'customer_meter_location' },
+    { name: 'Customer Bill Name', key: 'customer_bill_name' },
+    { name: 'Customer Has Account Number', key: 'customer_has_account_no' },
+    { name: 'Customer Group', key: 'customer_group' },
+    { name: 'Is Landlord', key: 'is_landlord' },
+    { name: 'Landlord Name', key: 'landlord_name' },
+    { name: 'Landlord Phone', key: 'landlord_phone' },
+    { name: 'Tenant Name', key: 'tenant_name' },
+    { name: 'Tenant Phone', key: 'tenant_phone' },
+    { name: 'Meter CT Ratio', key: 'meter_ct_ratio' },
+    { name: 'Customer Batch', key: 'customer_group' },
   ];
   
 }

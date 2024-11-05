@@ -33,6 +33,9 @@ export class DataValidationComponent implements OnInit {
   pageSize : number = 20;
   feeders: string[] = ['Feeder1', 'Feeder2', 'Feeder3'];
   businessUnits: string[] = ['Hub1', 'Hub2', 'Hub3'];
+  newCustomers !: Customer[];
+  isResetLoading: boolean = false;
+  filteredNewCustomers  : Customer[]=[];
 
   @ViewChild('filter') filter!: ElementRef;
 
@@ -48,8 +51,23 @@ export class DataValidationComponent implements OnInit {
       businessUnit: [],
     });
   }
+
+  regions =[{label: 'Region 1', value: 'Region1'}, { label: 'Region 2', value: 'Region2' }];
+
+
   ngOnInit(): void {
     this.loadCustomers(this.currentPage, this.pageSize);
+  }
+
+
+  resetFilter() {
+    this.isResetLoading=true;
+    setTimeout(() => {
+      this.isResetLoading=false;
+      this.filterForm.reset();  // Reset the form fields
+      this.filteredNewCustomers = [...this.newCustomers];  // Restore the original list
+    },2000)
+    
   }
   
   loadCustomers(page: number, pageSize: number): void {

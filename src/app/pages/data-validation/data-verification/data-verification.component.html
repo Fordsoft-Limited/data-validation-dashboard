@@ -15,7 +15,7 @@
           (click)="confirm2($event)"></button>
         <button pButton label="Approve Selection" class="p-button-success" (click)="confirm1($event)"
           [outlined]="true"></button>
-        <button pButton label="Review All" class="p-button-primary" (click)="approveRecord()" [outlined]="true"></button>
+        <button pButton label="Review All" class="p-button-primary" (click)="approveRecord()" [outlined]="true" disabled></button>
       </div>
   
     </div>
@@ -29,7 +29,7 @@
             <ng-template pTemplate="header">
               <tr>
   
-                <th pSortableColumn="cin" style="min-width:20rem">CIN <p-sortIcon field="cin"></p-sortIcon></th>
+                <th pSortableColumn="customer_no" style="min-width:20rem">Customer No <p-sortIcon field="customer_no"></p-sortIcon></th>
                 <!-- <th pSortableColumn="customerFullName">Customer Name <p-sortIcon field="customerFullName"></p-sortIcon>
                 </th> -->
               </tr>
@@ -38,7 +38,7 @@
             <ng-template pTemplate="body" let-selectedRecord>
               <tr (click)="onSelectedRecordChange(selectedRecord)"  class="cursor-pointer">
   
-                <td>{{ selectedRecord.cin }}</td>
+                <td>{{ selectedRecord.customer_no }}</td>
                 <!-- <td>{{ selectedRecord.customerFullName }}</td> -->
               </tr>
             </ng-template>
@@ -84,10 +84,7 @@
   
   
       </div>
-  <div class="col-12 flex justify-content-end gap-3 ">
-    <button pButton label="Next" class="p-button-primary" (click)="nextRecord()"
-          [outlined]="true"></button>
-  </div>
+  
       
   
     </div>

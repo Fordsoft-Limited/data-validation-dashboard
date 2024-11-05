@@ -155,12 +155,7 @@ export class DataVerificationComponent implements OnInit {
             );
         },
         reject: () => {
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Rejected',
-                detail: 'You have rejected the record.',
-                life: 3000,
-            });
+        
         },
     });
 }
@@ -235,11 +230,7 @@ export class DataVerificationComponent implements OnInit {
         );
     },
       reject: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Rejected',
-          detail: 'You have rejected',
-        });
+       
       },
     });
   }
@@ -462,6 +453,7 @@ export class DataVerificationComponent implements OnInit {
 
   customerFields: { name: string; key: keyof any }[] = [
     { name: 'Customer Full Name', key: 'customer_full_name' },
+    { name: 'Customer ID', key: 'customer_id' },
     { name: 'Account Number', key: 'account_no' },
     { name: 'Meter Number', key: 'meter_no' },
     { name: 'Address', key: 'address' },
@@ -470,11 +462,10 @@ export class DataVerificationComponent implements OnInit {
     { name: 'State', key: 'state' },
     { name: 'Nearest Landmark', key: 'nearest_landmark' },
     { name: 'Setup Date', key: 'setup_date' },
+    { name: 'Application Date', key: 'application_date' },
     { name: 'Latitude', key: 'latitude' },
     { name: 'Longitude', key: 'longitude' },
-    { name: 'Customer ID', key: 'customer_id' },
     { name: 'CIN', key: 'cin' },
-    { name: 'Application Date', key: 'application_date' },
     { name: 'Mobile Number', key: 'mobile' },
     { name: 'Email', key: 'email' },
     { name: 'Status Code', key: 'status_code' },

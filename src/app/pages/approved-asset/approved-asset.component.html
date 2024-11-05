@@ -50,22 +50,24 @@
     <ng-template pTemplate="header">
       <tr>
         <th style="width: 4rem"><p-tableRadioButton /></th>
-        <th style="min-width:15rem">CIN</th>
+        <th style="min-width:15rem">Customer No</th>
         <th style="min-width:15rem">Customer Name</th>
         <th style="min-width:15rem">Feeder</th>
+        <th style="min-width:15rem">Status</th>
         <th style="min-width:10rem">Date Captured</th>
-        <th style="min-width:10rem">Date Approved</th>
+        <th style="min-width:10rem">Date Modified</th>
       </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-record>
       <tr class="cursor-pointer">
         <td><p-tableRadioButton [value]="record" /></td>
-        <td>{{ record.cin }}</td>
-        <td>{{ record.customerFullName }}</td>
+        <td>{{ record.customer_no }}</td>
+        <td>{{ record.customer_full_name }}</td>
         <td>{{ record.feeder }}</td>
-        <td>{{ record.date | date: 'MM/dd/yyyy' }}</td>
-        <td>{{ record.dateApproved | date: 'MM/dd/yyyy' }}</td>
+        <td> <p-tag [value]="record.approval_status" [severity]="getSeverity(record.approval_status)" /></td>
+        <td>{{ record. date_created | date: 'MM/dd/yyyy' }}</td>
+        <td>{{ record.last_modified | date: 'MM/dd/yyyy' }}</td>
       </tr>
     </ng-template>
 
