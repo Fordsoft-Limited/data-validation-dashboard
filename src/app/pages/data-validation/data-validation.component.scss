@@ -16,3 +16,18 @@ p-table {
   width: 50px;
   height: 50px;
 }
+
+
+
+/* Add any custom styling you might need for the dropdowns or form */
+.flex {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.flex-column {
+  flex-direction: column;
+}
+.gap-2 {
+  gap: 8px; /* Adjust as needed */
+}

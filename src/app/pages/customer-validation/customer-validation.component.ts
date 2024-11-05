@@ -44,7 +44,7 @@ export class CustomerValidationComponent {
   ngOnInit() {
     this.loadBatches(this.currentPage, this.pageSize);
 
-    this.productService.getProductsWithOrdersSmall().then((data) => (this.products = data));
+    // this.productService.getProductsWithOrdersSmall().then((data) => (this.products = data));
 }
 
 
@@ -121,10 +121,10 @@ if (!token) {
     }
   );
 }
-onPageChange(event: any) {
-  this.currentPage = event.page + 1; // PrimeNG pagination is 0-based
-  this.loadBatches(this.currentPage, this.pageSize); // Load the new page
-}
+// onPageChange(event: any) {
+//   this.currentPage = event.page + 1; // PrimeNG pagination is 0-based
+//   this.loadBatches(this.currentPage, this.pageSize); // Load the new page
+// }
 
   
 

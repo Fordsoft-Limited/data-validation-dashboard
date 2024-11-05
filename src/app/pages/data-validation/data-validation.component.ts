@@ -3,12 +3,29 @@ import { Router } from '@angular/router';
 import { Table } from 'primeng/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Customer } from '../../shared/model/customer';
-//import { CustomerService } from '../../shared/services/customer.service';
+import {  Customer } from '../../shared/model/customer';
 import { CustomerService } from '../../api/customer.service';
-import { validateCustomer } from '../../model/customer';
 import { AuthService } from '../../auth/service/auth.service';
+import { CUSTOMER_REGION } from '../../shared/constants';
 
+export interface ServiceCentre {
+  name: string;
+}
+
+export interface BusinessHub {
+  name: string;
+  serviceCentres: ServiceCentre[];
+}
+
+export interface Region {
+  name: string;
+  businessHubs: BusinessHub[];
+}
+
+export interface DropdownOption {
+  label: string;
+  value: any; // Can be BusinessHub or ServiceCentre, depending on the context
+}
 @Component({
   selector: 'app-data-validation',
   templateUrl: './data-validation.component.html',
@@ -19,7 +36,9 @@ export class DataValidationComponent implements OnInit {
   customers!: any[];
   filteredCustomers: any[] = [];
   selectedCustomers: any[] = [];
-
+  regions: DropdownOption[] = [];
+  businessUnits: DropdownOption[] = [];
+  feeders: DropdownOption[] = [];  
   loading: boolean = false;
   statuses!: any[];
 
@@ -31,8 +50,6 @@ export class DataValidationComponent implements OnInit {
   filterForm!: FormGroup;
   currentPage: number = 1;
   pageSize : number = 20;
-  feeders: string[] = ['Feeder1', 'Feeder2', 'Feeder3'];
-  businessUnits: string[] = ['Hub1', 'Hub2', 'Hub3'];
   newCustomers !: Customer[];
   isResetLoading: boolean = false;
   filteredNewCustomers  : Customer[]=[];
@@ -52,11 +69,55 @@ export class DataValidationComponent implements OnInit {
     });
   }
 
-  regions =[{label: 'Region 1', value: 'Region1'}, { label: 'Region 2', value: 'Region2' }];
-
-
   ngOnInit(): void {
     this.loadCustomers(this.currentPage, this.pageSize);
+
+    this.filterForm = this.fb.group({
+      region: [null],
+      businessUnit: [null],
+      feeder: [null]
+    });
+
+    this.regions = CUSTOMER_REGION.map(region => ({
+      label: region.name,  // Display the region name
+      value: region        // Store the entire region object as value
+    }));
+
+
+  }
+
+  onRegionChange(event: any): void {
+    const selectedRegion = event.value;
+    this.updateBusinessUnits(selectedRegion);
+    this.filterForm.get('businessUnit')?.reset(); // Reset the business unit dropdown
+    this.filterForm.get('feeder')?.reset(); // Reset the service dropdown
+  }
+
+  // On business hub change, update the feeders (service centres)
+  onBusinessHubChange(event: any): void {
+    const selectedHub = event.value;
+    this.updateFeeders(selectedHub);
+    this.filterForm.get('feeder')?.reset(); // Reset the service dropdown
+  }
+
+  // Update the business hubs based on selected region
+  private updateBusinessUnits(region: Region): void {
+    this.businessUnits = region.businessHubs.map(hub => ({
+      label: hub.name,
+      value: hub
+    }));
+  }
+
+  // Update the service centres (feeders) based on selected business hub
+  private updateFeeders(businessHub: BusinessHub): void {
+    if (businessHub && businessHub.serviceCentres) {
+      this.feeders = businessHub.serviceCentres.map((service: ServiceCentre) => ({
+        label: service.name,
+        value: service
+      }));
+    } else {
+      this.feeders = [];
+    }
   }
 
 
@@ -160,12 +221,12 @@ export class DataValidationComponent implements OnInit {
   //   }
   // }
 
-  // rejectRecord() {
-  //   if (this.selectedCustomer) {
-  //     this.selectedCustomer.status = 'Rejected';
-  //     this.selectedCustomer.comments = this.comments;
-  //   }
-  // }
+  rejectRecord() {
+    if (this.selectedCustomer) {
+      this.selectedCustomer.status = 'Rejected';
+      this.selectedCustomer.comments = this.comments;
+    }
+  }
 
   // nextRecord() {
   //   const currentIndex = this.customers.findIndex(

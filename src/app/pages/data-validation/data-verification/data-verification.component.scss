@@ -24,6 +24,12 @@
   .existing-data , .no-data-exist{
     background-color: #f0f0f0; /* Light grey background for existing data */
   }
+
+  .active-row{
+    background-color: #e0dddd;
+    color: rgb(13, 13, 150);
+    font-weight: bold;
+  }
   
   .empty-data{
     padding: 0.5rem;

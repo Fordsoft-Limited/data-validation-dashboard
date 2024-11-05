@@ -7,7 +7,25 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Customer } from '../../shared/model/customer';
 import { CustomerService } from '../../api/customer.service';
 import { AuthService } from '../../auth/service/auth.service';
+import { CUSTOMER_REGION } from '../../shared/constants';
+export interface ServiceCentre {
+  name: string;
+}
 
+export interface BusinessHub {
+  name: string;
+  serviceCentres: ServiceCentre[];
+}
+
+export interface Region {
+  name: string;
+  businessHubs: BusinessHub[];
+}
+
+export interface DropdownOption {
+  label: string;
+  value: any; // Can be BusinessHub or ServiceCentre, depending on the context
+}
 @Component({
   selector: 'app-new-customer',
   templateUrl: './new-customer.component.html',
@@ -22,7 +40,9 @@ export class NewCustomerComponent implements OnInit {
   hasErrors: boolean = false;
   errorMessage: string ='';
   totalRecords: number = 0; 
-
+  regions: DropdownOption[] = [];
+  businessUnits: DropdownOption[] = [];
+  feeders: DropdownOption[] = [];  
   isFilterLoading: boolean = false;
   isResetLoading: boolean = false;
   userAddedError: boolean = false;
@@ -31,27 +51,33 @@ export class NewCustomerComponent implements OnInit {
 
   searchValue: string = '';
   currentPage: number = 1;
-  pageSize: number = 10;
+  pageSize: number = 20;
   showDetailsDialog: boolean = false;
 
   selectedNewCustomer: Customer | null = null
 
   filterForm!: FormGroup;
-  feeders = [{ label: 'Feeder 1', value: 'Feeder1' }, { label: 'Feeder 2', value: 'Feeder2' }];  // Example data
-  businessUnits = [{ label: 'Business Unit 1', value: 'Business Unit 1' }, { label: 'Business Unit 2', value: 'Business Unit 2' }];
-  regions =[{label: 'Region 1', value: 'Region1'}, { label: 'Region 2', value: 'Region2' }];
-
+  
   constructor( private fb: FormBuilder, private customerService:CustomerService,private router: Router, private authService:AuthService,private messageService: MessageService  ){
-
+    this.filterForm = this.fb.group({
+      dateRange: [],
+      feeder: [],
+      businessUnit: [],
+    });
   }
 
   ngOnInit(): void {
     this.filterForm = this.fb.group({
-      dateRange: [''],
-      feeder: [''],
-      businessUnit: [''],
-      region:['']
+      region: [null],
+      businessUnit: [null],
+      feeder: [null]
     });
+
+    this.regions = CUSTOMER_REGION.map(region => ({
+      label: region.name,  // Display the region name
+      value: region        // Store the entire region object as value
+    }));
+
 
     this.loadNewCustomer(this.currentPage, this.pageSize);
   }
@@ -88,6 +114,40 @@ if (!token) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load customers.' });
     }
   );
+}
+
+onRegionChange(event: any): void {
+  const selectedRegion = event.value;
+  this.updateBusinessUnits(selectedRegion);
+  this.filterForm.get('businessUnit')?.reset(); // Reset the business unit dropdown
+  this.filterForm.get('feeder')?.reset(); // Reset the service dropdown
+}
+
+// On business hub change, update the feeders (service centres)
+onBusinessHubChange(event: any): void {
+  const selectedHub = event.value;
+  this.updateFeeders(selectedHub);
+  this.filterForm.get('feeder')?.reset(); // Reset the service dropdown
+}
+
+// Update the business hubs based on selected region
+private updateBusinessUnits(region: Region): void {
+  this.businessUnits = region.businessHubs.map(hub => ({
+    label: hub.name,
+    value: hub
+  }));
+}
+
+// Update the service centres (feeders) based on selected business hub
+private updateFeeders(businessHub: BusinessHub): void {
+  if (businessHub && businessHub.serviceCentres) {
+    this.feeders = businessHub.serviceCentres.map((service: ServiceCentre) => ({
+      label: service.name,
+      value: service
+    }));
+  } else {
+    this.feeders = [];
+  }
 }
 
   filterData() {

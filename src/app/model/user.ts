@@ -1,9 +1,10 @@
 export class addUser{
+    
     username!: string
     name!: string
     role!: string
-    password!: string
-
+    password!: string;
+    editing?: boolean;
 }
 
 export class logout{

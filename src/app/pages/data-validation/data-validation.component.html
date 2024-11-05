@@ -5,17 +5,17 @@
           <div class="flex flex-column gap-2">
               <label for="region">Region:</label>
               <!-- <input type="text" formControlName="region" pInputText placeholder="Enter Region" class="region-input" /> -->
-              <p-dropdown formControlName="region" [options]="regions" placeholder="Enter Region"></p-dropdown>
+              <p-dropdown formControlName="region" [options]="regions" (onChange)="onRegionChange($event)" placeholder="Enter Region"></p-dropdown>
             </div>
   
             <div class="flex flex-column gap-2">
               <label for="businessUnit">Business Unit:</label>
-              <p-dropdown formControlName="businessUnit" [options]="businessUnits" placeholder="Select Business Unit"></p-dropdown>
+              <p-dropdown formControlName="businessUnit" [options]="businessUnits"  (onChange)="onBusinessHubChange($event)" placeholder="Select Business Unit"></p-dropdown>
             </div>
   
             <div class="flex flex-column gap-2">
-              <label for="feeder">Feeder:</label>
-              <p-dropdown formControlName="feeder" [options]="feeders" placeholder="Select Feeder"></p-dropdown>
+              <label for="feeder">Service:</label>
+              <p-dropdown formControlName="feeder" [options]="feeders" placeholder="Select Service"></p-dropdown>
             </div>
   
           <div class="flex flex-column gap-2">
@@ -68,6 +68,7 @@
                 <th style="min-width:15rem">
                     <div class="flex align-items-center">
                         Meter No
+                        <p-columnFilter type="text" field="district" display="menu" />
                     </div>
                 </th>
   
@@ -101,9 +102,11 @@
                     {{filteredCustomer.feeder}}
                 </td>
                 <td>
+                    {{filteredCustomer.account_no}}
+                </td>
+                <td>
                     {{filteredCustomer.meter_no}}
                 </td>
-  
                 <td>
                     {{ filteredCustomer.date_created | date: 'MM/dd/yyyy' }}
                 </td>

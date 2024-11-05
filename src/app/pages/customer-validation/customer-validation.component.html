@@ -1,7 +1,7 @@
 <div class="card">
   <p-toast />
   <p-table [value]="batches" dataKey="batch_code" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)"
-  [paginator]="true" [rows]="pageSize"  [totalRecords]="totalRecords" (onPage)="onPageChange($event)">
+  [paginator]="true" [rows]="10">
       <ng-template pTemplate="caption">
         <p-toolbar styleClass="mb-4">
           <ng-template pTemplate="left">

@@ -23,8 +23,8 @@
   
       <div class="col-12 md:col-4 h-auto">
         <div class="selected-records-list">
-          <p-table #dt [value]="selectedRecords" (onRowSelect)="onSelectedRecordChange($event.data)"  [globalFilterFields]="['cin', 'customerFullName']" [paginator]="true"
-            [rows]="10" [rowsPerPageOptions]="[10, 20, 30, 40, 50]" >
+          <p-table #dt [value]="selectedRecords" (onRowSelect)="onSelectedRecordChange($event.data)"  [globalFilterFields]="['customer_no']" [paginator]="true"
+            [rows]="20" [rowsPerPageOptions]="[10, 20, 30, 40, 50]"  styleClass="p-datatable-striped" >
   
             <ng-template pTemplate="header">
               <tr>
@@ -35,8 +35,9 @@
               </tr>
             </ng-template>
   
-            <ng-template pTemplate="body" let-selectedRecord>
-              <tr (click)="onSelectedRecordChange(selectedRecord)"  class="cursor-pointer">
+            <ng-template pTemplate="body" let-selectedRecord  let-rowIndex="rowIndex">
+              <tr (click)="onSelectedRecordChange(selectedRecord)"  class="cursor-pointer"
+              [ngClass]="{'active-row': rowIndex === currentIndex}"> 
   
                 <td>{{ selectedRecord.customer_no }}</td>
                 <!-- <td>{{ selectedRecord.customerFullName }}</td> -->

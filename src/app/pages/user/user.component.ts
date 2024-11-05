@@ -100,18 +100,64 @@ onPageChange(event:any){
   }
 
 
-  getSeverity(status: string | undefined): 'success' | 'info' | 'warning' | 'danger' | null | undefined {
-      if (!status) {
-          return undefined;
-      }
+  getSeverity(role: string) {
+    switch (role) {
+        case 'ADMIN':
+            return 'success';
+        case 'USER':
+            return 'info'; // Use info for User
+        case 'APPROVAL':
+            return 'warning'; // Use warning for Approval
+        default:
+            return 'danger'; // Default for any unexpected roles
+    }
+}
 
-      switch (status.toUpperCase()) {
-          case 'ENABLE':
-              return 'success';
-          case 'DISABLE':
-              return 'danger';
-          default:
-              return undefined;
+
+
+getSeverityStatus(status: string) {
+  switch (status) {
+      case 'ACTIVE':
+          return 'success';
+      case 'INACTIVE': // Assuming this is what you meant for the empty case
+          return 'info'; 
+      case 'NOT_ACTIVE':
+          return 'warning';
+      default:
+          return 'danger'; // Default for any unexpected statuses
+      
+  }
+}
+
+
+onRowEditInit(user: any) {
+  // Set all users' editing state to false
+  for (const key in this.users) {
+      if (this.users[key]) {
+          this.users[key].editing = false;
       }
   }
+  
+  this.clonedUsers[user.id as string] = { ...user };
+  user.editing = true; // Set editing state for this specific user
+}
+
+onRowEditSave(user: any) {
+    // Allow updating any of the fields optionally
+    if (user.name || user.username || user.role) {
+        delete this.clonedUsers[user.id as string];
+        user.editing = false; // Reset editing state on save
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User updated successfully.' });
+    } else {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'At least one field must be filled out.' });
+    }
+}
+
+onRowEditCancel(user: any) {
+    if (this.clonedUsers[user.id as string]) {
+        Object.assign(user, this.clonedUsers[user.id as string]); // Restore original values
+        delete this.clonedUsers[user.id as string];
+    }
+    user.editing = false; // Reset editing state on cancel
+}
 }

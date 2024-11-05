@@ -66,38 +66,13 @@ export class DataVerificationComponent implements OnInit {
     // for (let i = 0; i < this.selectedRecords.length;i++){
     //   this.currentRecord = this.selectedRecords[i] || null;
     // }
+    this.setCurrentRecord();
   }
 
   get totalSelectedRecords(): number {
     return this.selectedRecords.length;
   }
 
-  // confirm1(event: Event) {
-  //   this.confirmationService.confirm({
-  //     target: event.target as EventTarget,
-  //     message: 'Are you sure you want to approve the selected record?',
-  //     header: 'Confirmation',
-  //     icon: 'pi pi-exclamation-triangle',
-  //     acceptIcon: 'none',
-  //     rejectIcon: 'none',
-  //     rejectButtonStyleClass: 'p-button-text',
-  //     accept: () => {
-  //       this.messageService.add({
-  //         severity: 'info',
-  //         summary: 'Confirmed',
-  //         detail: 'You have accepted',
-  //       });
-  //     },
-  //     reject: () => {
-  //       this.messageService.add({
-  //         severity: 'error',
-  //         summary: 'Rejected',
-  //         detail: 'You have rejected',
-  //         life: 3000,
-  //       });
-  //     },
-  //   });
-  // }
 
 
 
@@ -140,9 +115,10 @@ export class DataVerificationComponent implements OnInit {
                     });
                     this.nextRecord(); 
 
-                    this.selectedRecords = this.selectedRecords.filter(
-                      record => record.uid !== this.currentRecord.newData.uid
-                  );
+                  //   this.selectedRecords = this.selectedRecords.filter(
+                  //     record => record.uid !== this.currentRecord.newData.uid
+                  // );
+                  this.removeCurrentRecordAndRedirectIfEmpty();
                 },
                 (error) => {
                     console.error('Error response:', error); // Log detailed error response
@@ -155,7 +131,13 @@ export class DataVerificationComponent implements OnInit {
             );
         },
         reject: () => {
-        
+            // this.messageService.add({
+            //     severity: 'error',
+            //     summary: '',
+            //     detail: '',
+            //     life: 3000,
+            // });
+           
         },
     });
 }
@@ -200,7 +182,7 @@ export class DataVerificationComponent implements OnInit {
 
         // Define payload based on the current record
         const updatePayload: customerApproveOrReject = {
-            uid: this.currentRecord.newData.uid,  // Double-check this field name
+            uid: this.currentRecord.newData.uid,  // Double-check this field  name
             approval_status: 'Rejected',
             approval_comments: this.comments,
         };
@@ -214,10 +196,11 @@ export class DataVerificationComponent implements OnInit {
                     summary: 'Record Approved',
                     detail: 'Customer record has been approved.',
                 });
-                this.nextRecord(); 
-                this.selectedRecords = this.selectedRecords.filter(
-                  record => record.uid !== this.currentRecord.newData.uid
-              );
+              //   this.nextRecord(); 
+              //   this.selectedRecords = this.selectedRecords.filter(
+              //     record => record.uid !== this.currentRecord.newData.uid
+              // );
+              this.removeCurrentRecordAndRedirectIfEmpty();
             },
             (error) => {
                 console.error('Error response:', error); // Log detailed error response
@@ -230,11 +213,23 @@ export class DataVerificationComponent implements OnInit {
         );
     },
       reject: () => {
-       
+        // this.messageService.add({
+        //   severity: '',
+        //   summary: '',
+        //   detail: '',
+        // });
+      //  this.router.navigate
       },
     });
   }
-
+  private removeCurrentRecordAndRedirectIfEmpty() {
+    this.selectedRecords.shift(); // Remove the first record
+    if (this.selectedRecords.length === 0) {
+      this.redirectToDataValidation();
+    } else {
+      this.setCurrentRecord(); // Load the next record if available
+    }
+  }
   ngOnInit() {
     console.log('Selected Customers:', this.selectedRecords);
     this.initializeDropdowns();
@@ -445,7 +440,23 @@ export class DataVerificationComponent implements OnInit {
   isFirstRecord(): boolean {
     return this.currentIndex === 0;
   }
+  private setCurrentRecord() {
+    if (this.selectedRecords.length > 0) {
+      const uid = this.selectedRecords[0].uid;
+      this.loadCustomerByUid(uid);
+    } else {
+      this.redirectToDataValidation();
+    }
+  }
 
+  private redirectToDataValidation() {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'No more records to process',
+      detail: 'Redirecting to data validation page.',
+    });
+    this.router.navigate(['/app/data-validation']);
+  } 
   // Check if the current record is the last one
   isLastRecord(): boolean {
     return this.currentIndex === this.selectedRecords.length - 1;

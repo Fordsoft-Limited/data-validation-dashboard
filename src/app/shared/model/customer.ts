@@ -58,3 +58,18 @@ export interface Customer {
     supplyType: string;
     status?:string;
   }
+
+  // Define the structure for region, business hub, and service center
+export interface ServiceCentre {
+  name: string;
+}
+
+export interface BusinessHub {
+  name: string;
+  serviceCentres: ServiceCentre[];
+}
+
+export interface Region {
+  name: string;
+  businessHubs: BusinessHub[];
+}

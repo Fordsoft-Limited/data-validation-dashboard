@@ -5,17 +5,17 @@
         <div class="flex flex-column gap-2">
             <label for="region">Region:</label>
             <!-- <input type="text" formControlName="region" pInputText placeholder="Enter Region" class="region-input" /> -->
-            <p-dropdown formControlName="region" [options]="regions" placeholder="Enter Region"></p-dropdown>
+            <p-dropdown formControlName="region" [options]="regions"  (onChange)="onRegionChange($event)" placeholder="Enter Region"></p-dropdown>
           </div>
 
           <div class="flex flex-column gap-2">
             <label for="businessUnit">Business Unit:</label>
-            <p-dropdown formControlName="businessUnit" [options]="businessUnits" placeholder="Select Business Unit"></p-dropdown>
+            <p-dropdown formControlName="businessUnit" (onChange)="onBusinessHubChange($event)"  [options]="businessUnits" placeholder="Select Business Unit"></p-dropdown>
           </div>
 
           <div class="flex flex-column gap-2">
             <label for="feeder">Feeder:</label>
-            <p-dropdown formControlName="feeder" [options]="feeders" placeholder="Select Feeder"></p-dropdown>
+            <p-dropdown formControlName="feeder" [options]="feeders" placeholder="Select Service"></p-dropdown>
           </div>
 
         <div class="flex flex-column gap-2">
@@ -27,14 +27,14 @@
         </div>
   
   
-        <div class="flex gap-2 ">
+        <div class="flex gap-2 mt-5">
           <p-button type="submit" [loading]="loading" label="Filter"></p-button>
           <p-button type="button" [loading]="isResetLoading" label="Reset Filter" [outlined]="true" (click)="resetFilter()" severity="danger"></p-button>
         </div>
       </div>
     </form>
   
-    <p-table [value]="filteredNewCustomers" [loading]="loading" [paginator]="true" [rows]="20"  (onRowSelect)="showDetails($event.data)">
+    <p-table [value]="filteredNewCustomers" [loading]="loading" [paginator]="true" [rows]="10"  (onRowSelect)="showDetails($event.data)">
   
       <ng-template pTemplate="caption">
           <div class="flex">

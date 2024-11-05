@@ -26,6 +26,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DataVerificationComponent } from './data-verification/data-verification.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
+
 export const dataValidationRoutes: Routes = [
   {
     path: '',
