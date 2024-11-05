@@ -74,26 +74,19 @@
           <tr>
               <td colspan="7">
                   <div class="p-3">
-                      <p-table [value]="batch.uploads" dataKey="batch_code">
+                      <p-table [value]="batch.logs" dataKey="uid">
                           <ng-template pTemplate="header">
                               <tr>
                                   
                                   <th pSortableColumn="description">Error Detail </th>
-                                  <th pSortableColumn="date">Date </th>
-                                  <th pSortableColumn="posted_by">posted_by</th>
-                                  <th pSortableColumn="status">Status</th>
-                                  <th style="width: 4rem"></th>
+                                  <th pSortableColumn="posted_by">Event Source</th>
+                                
                               </tr>
                           </ng-template>
-                          <ng-template pTemplate="body" let-upload>
+                          <ng-template pTemplate="body" let-log>
                               <tr>
-                                  <td>{{ upload.description }}</td>
-                                  <td>{{ upload.date }}</td>
-                                  <td>{{ upload.posted_by }}</td>
-                                  <td>
-                                    <p-tag [value]="upload.status" [severity]="getStatusSeverity(upload.status)" />
-                                </td>
-                                  <td><p-button type="button" icon="pi pi-search" /></td>
+                                  <td>{{ log.description }}</td>
+                                  <td>{{ log?.posted_by?.name }}</td>
                               </tr>
                           </ng-template>
                           <ng-template pTemplate="emptymessage">
