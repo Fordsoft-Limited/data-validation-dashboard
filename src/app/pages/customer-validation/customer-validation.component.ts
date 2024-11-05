@@ -91,7 +91,6 @@ getStatusSeverity(status: string): 'success' | 'secondary' | 'info' | 'warning' 
 
 loadBatches(page: number, pageSize: number) {
   const token = this.authService.getToken();
-  console.log(token);
 if (!token) {
   this.loading = false;
   this.hasErrors = true;
@@ -130,20 +129,11 @@ if (!token) {
 
 
 onRowExpand(event: TableRowExpandEvent) {
-  // Collapse all other rows
-  this.batches.forEach(batch => {
-      if (batch.batch_code !== event.data.batch_code) {
-          this.expandedRows[batch.batch_code] = false; // Collapse other rows
-      }
-  });
-
-  this.expandedRows[event.data.batch_code] = true; // Expand the current row
-  this.messageService.add({ severity: 'info', summary: 'Bulk Upload Expanded', detail: event.data.batch_code, life: 3000 });
+  console.log(event)
 }
 
 onRowCollapse(event: TableRowCollapseEvent) {
-  this.expandedRows[event.data.id] = false; // Collapse the current row
-  this.messageService.add({ severity: 'success', summary: 'Close Upload Collapsed', detail: event.data.batch_code, life: 3000 });
+
 }
 
 
