@@ -215,5 +215,9 @@ export class BulkCustomerValidationComponent implements OnInit {
     this.fileUpload.clear(); // This method clears the selected files in PrimeNG FileUpload
     this.uploadedFiles = []; // Clear the uploaded files array
   }
+
+goBack() {
+  window.history.back();
+}
   
 }

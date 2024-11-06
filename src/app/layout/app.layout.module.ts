@@ -95,7 +95,7 @@ export const layoutRoutes: Routes = [
            
           {
             path: 'reports',
-            data:{breadcrumb: 'Approved Record'},
+            data:{breadcrumb: 'Reports'},
             loadChildren: () =>
               import('../pages/approved-asset/approved-asset.module').then(
                 (m) => m.ApprovedAssetModule
