@@ -71,10 +71,13 @@ export class CustomerService {
     return this.http.get<any>(`${this.baseUrl}/validate/batches`)
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
+  viewBatchDetails(uid:string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/validate/batches/${uid}`)
+      .pipe(catchError(err => this.base.errorHandler(err)));
+  }
 
-  getCustomerValidateBatchesByPages(page: number, pageSize: number, token: string): Observable<any> {
+  getCustomerValidateBatchesByPages(page: number, pageSize: number): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
     const params = new HttpParams()

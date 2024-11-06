@@ -6,8 +6,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppLayoutModule } from './layout/app.layout.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { SharedModule } from './shared/shared.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthGuardInterceptor } from './auth-guard.interceptor';
 
 @NgModule({
   declarations: [
@@ -22,7 +22,11 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
   ],
   providers: [
-
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthGuardInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

@@ -6,6 +6,7 @@ import { AuthService } from '../../auth/service/auth.service';
 import { TableRowCollapseEvent, TableRowExpandEvent } from 'primeng/table';
 import { ProductService } from '../../api/product.service';
 import { Product } from '../../model/user';
+import { catchError, Observable, of, tap } from 'rxjs';
 
 
 @Component({
@@ -75,34 +76,10 @@ getStatusSeverity(status: string): 'success' | 'secondary' | 'info' | 'warning' 
 }
 
 
-// expandAll() {
-//   this.expandedRows = this.batches.reduce((acc, batch) => {
-//     if (batch.batch_code !== undefined) { // Ensure 'batch' is used for each array item
-//       acc[batch.batch_code] = true;
-//     }
-//     return acc;
-//   }, {} as Record<string, boolean>);
-// }
-
-// collapseAll() {
-//   this.expandedRows = {}; // Reset expandedRows to collapse all rows
-// }
-
 
 loadBatches(page: number, pageSize: number) {
-  const token = this.authService.getToken();
-  console.log(token);
-if (!token) {
-  this.loading = false;
-  this.hasErrors = true;
-  this.errorMessage = 'No authentication token found. Please log in again.';
-  setTimeout(() => {
-    this.userAddedError = false;
-  }, 3000);
-  return; // Exit the function early
-}
   this.loading = true;
-  this.customerService.getCustomerValidateBatchesByPages(page, pageSize, token).subscribe(
+  this.customerService.getCustomerValidateBatchesByPages(page, pageSize).subscribe(
     (response) => {
       this.loading = false;
       if (response && response.data && response.data.results) {
@@ -121,31 +98,35 @@ if (!token) {
     }
   );
 }
-// onPageChange(event: any) {
-//   this.currentPage = event.page + 1; // PrimeNG pagination is 0-based
-//   this.loadBatches(this.currentPage, this.pageSize); // Load the new page
-// }
 
-  
+listEvents(uid: string): Observable<any> {
+  this.loading = true;
+  return this.customerService.viewBatchDetails(uid).pipe(
+    tap((response) => {
+      this.loading = false;
+    }),
+    catchError((error) => {
+      this.loading = false;
+      console.error('Error fetching batches:', error);
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load batches.' });
+      return of([]); 
+    })
+  );
+}
 
 
 onRowExpand(event: TableRowExpandEvent) {
-  // Collapse all other rows
-  this.batches.forEach(batch => {
-      if (batch.batch_code !== event.data.batch_code) {
-          this.expandedRows[batch.batch_code] = false; // Collapse other rows
-      }
+  if( event.data['logs']==null && event.data?.total_error>0){
+  this.listEvents(event.data.uid).subscribe((data) => {
+    event.data['logs'] = data?.data?.events || [];
   });
-
-  this.expandedRows[event.data.batch_code] = true; // Expand the current row
-  this.messageService.add({ severity: 'info', summary: 'Bulk Upload Expanded', detail: event.data.batch_code, life: 3000 });
+}
+ 
 }
 
 onRowCollapse(event: TableRowCollapseEvent) {
-  this.expandedRows[event.data.id] = false; // Collapse the current row
-  this.messageService.add({ severity: 'success', summary: 'Close Upload Collapsed', detail: event.data.batch_code, life: 3000 });
-}
 
+}
 
 
 convertToCSV(batches: any[]): string {

@@ -16,8 +16,9 @@ export class AuthService {
     const encryptedToken = CryptoJS.AES.encrypt(token, this.secretKey).toString();
     localStorage.setItem(this.tokenKey, encryptedToken);
   }
-
-  // Retrieve and decrypt the token
+  isLoggedIn(): boolean {
+    return !!this.getToken(); 
+  }
   getToken(): string | null {
     const storedToken = localStorage.getItem(this.tokenKey);
     if (storedToken) {
