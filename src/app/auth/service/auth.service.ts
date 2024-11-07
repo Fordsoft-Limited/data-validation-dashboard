@@ -77,5 +77,11 @@ export class AuthService {
     return !!token;
   }
 
+  logout(): void {
+    this.clearToken();
+    this.clearLoginData();
+    console.log('User has been logged out');
+  }
+
 
 }

@@ -1,6 +1,8 @@
 import { Component, ElementRef } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { LayoutService } from './service/app.layout.service';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth/service/auth.service';
 
 @Component({
     selector: 'app-menu-profile',
@@ -31,7 +33,7 @@ import { LayoutService } from './service/app.layout.service';
     ],
 })
 export class AppMenuProfileComponent {
-    constructor(public layoutService: LayoutService, public el: ElementRef) {}
+    constructor(public layoutService: LayoutService, public el: ElementRef, private router: Router,private authService: AuthService) {}
 
     toggleMenu() {
         this.layoutService.onMenuProfileToggle();
@@ -54,4 +56,9 @@ export class AppMenuProfileComponent {
     get isTooltipDisabled(): boolean {
         return !this.layoutService.isSlim();
     }
+
+    logout(): void {
+        this.authService.logout();
+        this.router.navigate(['/']); // Redirect to login page
+      }
 }

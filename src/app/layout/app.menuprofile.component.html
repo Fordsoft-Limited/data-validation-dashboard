@@ -27,7 +27,7 @@
                 <span>Support</span>
             </button>
         </li>
-        <li pTooltip="Logout" [tooltipDisabled]="isTooltipDisabled">
+        <li pTooltip="Logout"  (click)="logout()">
             <button class="p-link">
                 <i class="pi pi-power-off pi-fw"></i>
                 <span>Logout</span>
