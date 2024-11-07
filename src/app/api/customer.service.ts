@@ -2,7 +2,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { customerApproveOrReject, customerValidateBulk, validateCustomer } from '../model/customer';
-import { catchError, Observable, Subject, throwError } from 'rxjs';
+import { catchError, Observable, of, Subject, throwError } from 'rxjs';
 import * as XLSX from 'xlsx';
 
 @Injectable({
@@ -76,17 +76,40 @@ export class CustomerService {
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
-  getCustomerValidateBatchesByPages(page: number, pageSize: number): Observable<any> {
+  getCustomerValidateBatchesByPages(page: number, pageSize: number, url?: string): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('page_size', pageSize.toString());
-
-    return this.http.get<any>(`${this.baseUrl}/validate/batches-pages`, { headers, params })
-      .pipe(catchError(err => this.base.errorHandler(err)));
+  
+    let params = new HttpParams();
+    if (!url) {  // If no URL is passed, use page and pageSize
+      params = params.set('page', page.toString())
+                     .set('page_size', pageSize.toString());
+    }
+  
+    // Use URL if provided (for next/previous pagination)
+    const requestUrl = url ? url : `${this.baseUrl}/validate/batches-pages`;
+  
+    return this.http.get<any>(requestUrl, { headers, params })
+      .pipe(
+        catchError(err => {
+          // Log the error to console
+          console.error('Error in service:', err);
+  
+          // Handle the error gracefully by returning a fallback object
+          // You can customize this fallback object as needed
+          return of({ 
+            data: { 
+              results: [], 
+              count: 0, 
+              next: null, 
+              previous: null 
+            } 
+          });
+        })
+      );
   }
+  
 
 
   

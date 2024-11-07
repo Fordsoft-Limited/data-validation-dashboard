@@ -72,19 +72,19 @@ if (!token) {
         this.totalRecords = response.data.count; 
       } else {
         this.users = []; 
-        this.messageService.add({ severity: 'info', summary: 'No Data', detail: 'No batches found.' });
+        this.messageService.add({ severity: 'info', summary: 'No Data', detail: 'No users found.' });
       }
     },
     (error) => {
       this.loading = false;
-      console.error('Error fetching batches:', error); // Log the error
       this.users = []; // Clear batches on error
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load batches.' });
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load users.' });
     }
   );
 }
 onPageChange(event:any){
   this.currentPage = event.page + 1;
+  this.pageSize = event.rows;
   this.loadUsers(this.currentPage,this.pageSize);
 }
   onGlobalFilter(table: Table, event: Event) {
@@ -117,12 +117,10 @@ onPageChange(event:any){
 
 getSeverityStatus(status: string) {
   switch (status) {
-      case 'ACTIVE':
-          return 'success';
-      case 'INACTIVE': // Assuming this is what you meant for the empty case
-          return 'info'; 
-      case 'NOT_ACTIVE':
-          return 'warning';
+      case 'Active':
+          return 'info'; //
+      case 'Inactive': // Assuming this is what you meant for the empty case
+          return 'warning'; 
       default:
           return 'danger'; // Default for any unexpected statuses
       

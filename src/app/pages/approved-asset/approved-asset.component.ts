@@ -10,6 +10,8 @@ import { LoadingService } from '../../shared/services/loading.service';
 import { Location } from '@angular/common';
 import { AuthService } from '../../auth/service/auth.service';
 import { CUSTOMER_REGION } from '../../shared/constants';
+import { MessageService } from 'primeng/api';
+
 export interface ServiceCentre {
   name: string;
 }
@@ -31,7 +33,9 @@ export interface DropdownOption {
 @Component({ 
   selector: 'app-approved-asset',
   templateUrl: './approved-asset.component.html',
-  styleUrl: './approved-asset.component.scss'
+  styleUrl: './approved-asset.component.scss',
+  providers: [MessageService ]
+
 })
 
 
@@ -48,16 +52,20 @@ export class ApprovedAssetComponent implements OnInit{
   currentPage: number = 1;
   pageSize : number = 20;
   isShowDetails:boolean = false;
-
+  uploadedFiles: any[] = [];
   searchValue: string = '';
-
+  errorLogs: string[] = [];
+  uploading: boolean = false;
+  hasErrors: boolean = false;
   showDetailsDialog: boolean = false;
-
+  exportLoading = false;
   selectedApprovedRecord: any | null = null
 
   filterForm!: FormGroup;
   
-    constructor(private authService: AuthService ,private fb: FormBuilder, private customerService:CustomerService,private router: Router,  private loadingService: LoadingService){
+    constructor(private authService: AuthService ,private fb: FormBuilder, private customerService:CustomerService,private router: Router,  private loadingService: LoadingService,
+      private messageService: MessageService
+    ){
       this.filterForm = this.fb.group({
         dateRange: [],
         feeder: [],
@@ -230,5 +238,50 @@ export class ApprovedAssetComponent implements OnInit{
   }
 
 
+  convertToCSV(filteredRecords: any[]): string {
+    const header = 'Customer No,Customer Name,Feeder,Status,Date Captured,Date Modified\n';
+  
+    const rows = filteredRecords.map(record => {
+      // Format dates if needed (e.g., MM/dd/yyyy)
+      const dateCaptured = record.date_created ? new Date(record.date_created).toLocaleDateString('en-US') : '';
+      const dateModified = record.last_modified ? new Date(record.last_modified).toLocaleDateString('en-US') : '';
+      
+      // Return a CSV row as a string
+      return `${record.customer_no},${record.customer_full_name},${record.feeder},${record.approval_status},${dateCaptured},${dateModified}`;
+    }).join('\n');
+    
+    return header + rows;
+  }
+  
+  
+  
+
+  exportData() {
+    this.exportLoading = true;
+  
+    // Simulate loading delay (if needed) and then proceed to export
+    setTimeout(() => {
+      this.exportLoading = false;
+      
+      // Convert filtered records to CSV string
+      const csvContent = this.convertToCSV(this.filteredRecords);
+      
+      // Create a Blob for the CSV content
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      
+      // Create a link element to download the CSV file
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'approved_assets.csv'); // Set file name for the download
+      link.style.visibility = 'hidden';
+      
+      // Append the link to the document, click it to start the download, and then remove it
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }, 2000); // Simulate a loading delay (if needed)
+  }
   
 }

@@ -9,8 +9,7 @@
   
   <p-table *ngIf="users && users.length" [value]="users" dataKey="id" editMode="row" [tableStyle]="{'min-width': '100rem'}"
       #dt1
-      [(selection)]="selectedUsers"
-      dataKey="id"
+      [(selection)]="selectedUsers" 
       [rowHover]="true"
       [rows]="pageSize"
       (onPage)="onPageChange($event)"
