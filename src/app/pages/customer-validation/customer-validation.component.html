@@ -1,9 +1,16 @@
 <div class="card">
   <p-toast />
   <p-table [value]="batches" dataKey="batch_code" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)"
-  [paginator]="true" [rows]="50">
+  [paginator]="true" (onPage)="onPageChange($event)" [rows]="10" 
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+    >
       <ng-template pTemplate="caption">
         <p-toolbar styleClass="mb-4">
+          <ng-template pTemplate="left">
+            
+          </ng-template>
+        
           <ng-template pTemplate="left">
             <div class="card flex justify-content-center gap-3">
               <a routerLink="/app/bulk-customer-validation" class="p-button font-bold">
@@ -11,37 +18,34 @@
               </a>
             </div>
             
-            <p-chip styleClass="pl-0 pr-3 ml-4" >
-                <span class="bg-primary border-circle w-2rem h-2rem flex align-items-center justify-content-center">
-                    <div *ngIf="totalRecords > 0" class="total-count">
-                        {{ totalRecords }}
-                      </div>
-                </span>
-                <span class="ml-2 font-medium">
-                    Total Batches
-                </span>
+            <p-chip styleClass="pl-0 pr-3 ml-4">
+              <span class="bg-primary border-circle w-2rem h-2rem flex align-items-center justify-content-center">
+                <div *ngIf="totalRecords > 0" class="total-count">
+                  {{ totalRecords }}
+                </div>
+              </span>
+              <span class="ml-2 font-medium">
+                Total Batches
+              </span>
             </p-chip>
           </ng-template>
-          
+        
           <ng-container pTemplate="center" *ngIf="hasErrors">
-            <button
-              pButton
-              label="Download Error Logs"
-              (click)="downloadErrorLogs()"
-            ></button>
+            <button pButton label="Download Error Logs" (click)="downloadErrorLogs()"></button>
           </ng-container>
+        
           <ng-template pTemplate="right">
-            <button
-              [loading]="loading"
-              pButton
-              pRipple
-              label="Export"
-              icon="pi pi-download"
-              class="p-button-help"
-              (click)="exportData()"
-            ></button>
+            <button [loading]="loading"
+                    pButton
+                    pRipple
+                    label="Export"
+                    icon="pi pi-download"
+                    class="p-button-help"
+                    (click)="exportData()">
+            </button>
           </ng-template>
         </p-toolbar>
+        
           
       </ng-template>
       <ng-template pTemplate="header">

@@ -34,7 +34,13 @@ export class CustomerValidationComponent {
   totalRecords: number = 0; 
   pageSize: number = 10;
 
+  nextPageUrl: string | null = null;  // URL for the next page
+  previousPageUrl: string | null = null;  // URL for the previous page
   
+  get totalPages(): number {
+    return Math.ceil(this.totalRecords / this.pageSize);
+  }
+
   @ViewChild('filter') filter!: ElementRef;
 
   constructor(private productService: ProductService, private messageService: MessageService,
@@ -84,16 +90,20 @@ loadBatches(page: number, pageSize: number) {
       this.loading = false;
       if (response && response.data && response.data.results) {
         this.batches = response.data.results;
-        this.totalRecords = response.data.count; 
+        this.totalRecords = response.data.count;
+
+        // Handle pagination: store next and previous URLs for future navigation
+        this.nextPageUrl = response.data.next;
+        this.previousPageUrl = response.data.previous;
       } else {
-        this.batches = []; 
+        this.batches = [];
         this.messageService.add({ severity: 'info', summary: 'No Data', detail: 'No batches found.' });
       }
     },
     (error) => {
       this.loading = false;
-      console.error('Error fetching batches:', error); // Log the error
-      this.batches = []; // Clear batches on error
+      console.error('Error fetching batches:', error);
+      this.batches = [];
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load batches.' });
     }
   );
@@ -127,6 +137,61 @@ onRowExpand(event: TableRowExpandEvent) {
 onRowCollapse(event: TableRowCollapseEvent) {
 
 }
+
+// onPageChange(event:any){
+//   this.currentPage = event.page + 1;
+//   this.pageSize = event.rows;
+//   this.loadBatches(this.currentPage,this.pageSize);
+// }
+
+onPageChange(event: any) {
+  this.loading = true;
+
+  const page = event.page + 1;  // API expects 1-based pagination
+  const pageSize = event.rows;  // The number of rows per page
+
+  // Check if there's a next page and use the nextPageUrl
+  if (this.nextPageUrl) {
+    this.loadBatchesFromUrl(this.nextPageUrl);
+  } 
+  // Check if there's a previous page and use the previousPageUrl
+  else if (this.previousPageUrl) {
+    this.loadBatchesFromUrl(this.previousPageUrl);
+  } else {
+    // Default to loading with page and page size if no URL exists
+    this.loadBatches(page, pageSize);
+  }
+}
+
+
+loadBatchesFromUrl(url: string) {
+  this.loading = true;
+
+  // Use the URL directly for pagination
+  this.customerService.getCustomerValidateBatchesByPages(0, 0, url).subscribe(  // We don't need page and pageSize here
+    (response) => {
+      this.loading = false;
+      if (response && response.data && response.data.results) {
+        this.batches = response.data.results;
+        this.totalRecords = response.data.count;
+
+        // Store the next and previous URLs for navigation
+        this.nextPageUrl = response.data.next;
+        this.previousPageUrl = response.data.previous;
+      } else {
+        this.batches = [];
+        this.messageService.add({ severity: 'info', summary: 'No Data', detail: 'No batches found.' });
+      }
+    },
+    (error) => {
+      this.loading = false;
+      console.error('Error fetching batches from URL:', error);
+      this.batches = [];
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load batches.' });
+    }
+  );
+}
+
 
 
 convertToCSV(batches: any[]): string {
