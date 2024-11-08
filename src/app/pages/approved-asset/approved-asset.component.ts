@@ -59,6 +59,7 @@ export class ApprovedAssetComponent implements OnInit{
   hasErrors: boolean = false;
   showDetailsDialog: boolean = false;
   exportLoading = false;
+  errorMessage:string =""
   selectedApprovedRecord: any | null = null
 
   filterForm!: FormGroup;
@@ -78,7 +79,9 @@ export class ApprovedAssetComponent implements OnInit{
    this.filterForm = this.fb.group({
     region: [null],
     businessUnit: [null],
-    feeder: [null]
+    feeder: [null],
+    dateCreatedFrom: [null],  // Start date control
+    dateCreatedTo: [null] 
   });
 
   this.regions = CUSTOMER_REGION.map(region => ({
@@ -118,25 +121,47 @@ export class ApprovedAssetComponent implements OnInit{
 
 
   filterData() {
-    this.loading=true;
-    const { dateRange, feeder, businessHub,region } = this.filterForm.value;
+    this.loading = true;
+    const { dateCreatedFrom, dateCreatedTo, feeder, businessUnit, region } = this.filterForm.value;
 
-    setTimeout(() => {
-      this.loading=false;
-    this.filteredRecords = this.approvedRecords.filter(record => {
-      const matchesFeeder = feeder ? record.feeder === feeder : true;
-      const matchesBusinessUnit = businessHub ? record.businessHub === businessHub : true;
-      const matchesRegion = region ? record.region === region : true;
-      
-      // Assuming dateRange is an array with [startDate, endDate]
-      const matchesDateRange = dateRange ? this.isWithinDateRange(record.dateApproved, dateRange) : true;
-
-      return matchesFeeder && matchesBusinessUnit && matchesDateRange && matchesRegion;
-    });
-    },2000)
-
+    const selectedRegion = region ? region.name : null;  // Get the region name
+  
+    const selectedBusinessHub = businessUnit ? businessUnit.name : null;
+    const selectedFeeder = feeder ? feeder.name : null;
+  
+    const token = this.authService.getToken();
+  
+    if (!token) {
+      this.loading = false;
+      this.errorMessage = 'No authentication token found. Please log in again.';
+      return;
+    }
+  
+    // Now, call the service to get filtered customers
+    this.customerService
+      .getNewCustomerFilterApproveRegion(
+        token,
+        selectedRegion,  // Only pass region name here
+        selectedBusinessHub,
+        selectedFeeder,
+        dateCreatedFrom,
+        dateCreatedTo
+      )
+      .subscribe(
+        (response) => {
+          console.log('Filtered customers:', response);
+          this.approvedRecords = response.data?.results || [];
+          this.filteredRecords = [...this.approvedRecords];
+          this.loading = false;
+        },
+        (error) => {
+          console.error('Error loading customers:', error);
+          this.errorMessage = 'Failed to load customers. Please try again later.';
+          this.loading = false;
+        }
+      );
   }
-
+  
   onRegionChange(event: any): void {
     const selectedRegion = event.value;
     this.updateBusinessUnits(selectedRegion);

@@ -128,6 +128,58 @@ export class CustomerService {
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
+  getNewCustomerFilter(
+    token: string, 
+    region: string, 
+    businessHub: string, 
+    serviceCenter: string, 
+    dateCreatedFrom: string, 
+    dateCreatedTo: string
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    // Prepare the query parameters for filtering
+    const params = new HttpParams()
+      .set('region', region)
+      .set('business_hub', businessHub)
+      .set('service_center', serviceCenter)
+      .set('date_created_from', dateCreatedFrom)
+      .set('date_created_to', dateCreatedTo)
+    // Make the GET request with headers and query parameters
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
+      .pipe(catchError(err => this.base.errorHandler(err)));
+  }
+
+
+  getNewCustomerFilterApproveRegion(
+    token: string, 
+    region: string, 
+    businessHub: string, 
+    serviceCenter: string, 
+    dateCreatedFrom: string, 
+    dateCreatedTo: string
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    // Prepare the query parameters for filtering
+    const params = new HttpParams()
+      .set('region', region)
+      .set('business_hub', businessHub)
+      .set('service_center', serviceCenter)
+      .set('date_created_from', dateCreatedFrom)
+      .set('date_created_to', dateCreatedTo)
+      .set('approval_status', 'Approved,Rejected');
+    // Make the GET request with headers and query parameters
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
+      .pipe(catchError(err => this.base.errorHandler(err)));
+  }
+
   getCustomersWithAwaitingReview(page: number, pageSize: number, token: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,

@@ -75,16 +75,19 @@ export class DataValidationComponent implements OnInit {
     this.filterForm = this.fb.group({
       region: [null],
       businessUnit: [null],
-      feeder: [null]
+      feeder: [null],
+      dateCreatedFrom: [null],  // Start date control
+      dateCreatedTo: [null]     // End date control
     });
+
 
     this.regions = CUSTOMER_REGION.map(region => ({
       label: region.name,  // Display the region name
       value: region        // Store the entire region object as value
     }));
 
-
   }
+  
 
   onRegionChange(event: any): void {
     const selectedRegion = event.value;
@@ -168,26 +171,52 @@ export class DataValidationComponent implements OnInit {
       customer => customer.aproval_status === 'Awaiting Review'
     );
   }
+  
   filterData() {
     this.loading = true;
-    const { dateRange, feeder, businessUnit } = this.filterForm.value;
+    const { dateCreatedFrom, dateCreatedTo, feeder, businessUnit, region } = this.filterForm.value;
 
-    setTimeout(() => {
+    const selectedRegion = region ? region.name : null;  // Get the region name
+  
+    const selectedBusinessHub = businessUnit ? businessUnit.name : null;
+    const selectedFeeder = feeder ? feeder.name : null;
+  
+    const token = this.authService.getToken();
+  
+    if (!token) {
       this.loading = false;
-      this.filteredCustomers = this.customers.filter((item) => {
-        const withinDateRange =
-          dateRange && dateRange.length === 2
-            ? item.date_created
-              ? new Date(item.date_created) >= dateRange[0] && new Date(item.date_created) <= dateRange[1]
-              : false
-            : true;
-        const matchesFeeder = feeder ? item.feeder === feeder : true;
-        const matchesBusinessUnit = businessUnit ? item.business_hub === businessUnit : true;
-
-        return withinDateRange && matchesFeeder && matchesBusinessUnit;
-      });
-    }, 2000);
+      this.errorMessage = 'No authentication token found. Please log in again.';
+      return;
+    }
+  
+    // Now, call the service to get filtered customers
+    this.customerService
+      .getNewCustomerFilter(
+        token,
+        selectedRegion,  // Only pass region name here
+        selectedBusinessHub,
+        selectedFeeder,
+        dateCreatedFrom,
+        dateCreatedTo
+      )
+      .subscribe(
+        (response) => {
+          console.log('Filtered customers:', response);
+          this.customers = response.data?.results || [];
+          this.filteredCustomers = [...this.customers];
+          this.loading = false;
+        },
+        (error) => {
+          console.error('Error loading customers:', error);
+          this.errorMessage = 'Failed to load customers. Please try again later.';
+          this.loading = false;
+        }
+      );
   }
+  
+  // Helper function to format the date into YYYY-MM-DD format
+
+ 
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');

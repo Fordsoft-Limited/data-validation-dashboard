@@ -2,7 +2,7 @@ import { Region } from "./model/customer";
 
 export const CUSTOMER_REGION: Region[] = [
     {
-      name: 'OGUN REGION',
+      name: 'Ogun',
       businessHubs: [
         {
           name: 'Sagamu',
@@ -44,7 +44,7 @@ export const CUSTOMER_REGION: Region[] = [
       ]
     },
     {
-      name: 'IBADAN REGION',
+      name: 'Ibadan',
       businessHubs: [
         {
           name: 'Molete',
@@ -94,7 +94,7 @@ export const CUSTOMER_REGION: Region[] = [
       ]
     },
     {
-      name: 'OYO REGION',
+      name: 'Oyo',
       businessHubs: [
         {
           name: 'Akanran',
@@ -175,7 +175,7 @@ export const CUSTOMER_REGION: Region[] = [
       ]
     },
     {
-      name: 'OSUN REGION',
+      name: 'Osun',
       businessHubs: [
         {
           name: 'Ilesa',
@@ -205,7 +205,7 @@ export const CUSTOMER_REGION: Region[] = [
     ] 
     },
     {
-        name: 'KWARA REGION',
+        name: 'Kwara',
         businessHubs: [
           {
             name: 'Challenge',

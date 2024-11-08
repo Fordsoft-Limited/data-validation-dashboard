@@ -70,7 +70,9 @@ export class NewCustomerComponent implements OnInit {
     this.filterForm = this.fb.group({
       region: [null],
       businessUnit: [null],
-      feeder: [null]
+      feeder: [null],
+      dateCreatedFrom: [null],  // Start date control
+      dateCreatedTo: [null] 
     });
 
     this.regions = CUSTOMER_REGION.map(region => ({
@@ -150,24 +152,48 @@ private updateFeeders(businessHub: BusinessHub): void {
   }
 }
 
-  filterData() {
-    this.loading = true;
-    const { dateRange, feeder, businessHub, region } = this.filterForm.value;
-  
-    setTimeout(() => {
-      this.loading = false;
-      this.filteredNewCustomers = this.newCustomers.filter(record => {
-        const matchesFeeder = feeder ? record.feeder === feeder : true;
-        const matchesBusinessUnit = businessHub ? record.businessHub === businessHub : true;
-        const matchesRegion = region ? record.region === region : true; // Add region filtering
-  
-        // Assuming dateRange is an array with [startDate, endDate]
-        const matchesDateRange = dateRange ? this.isWithinDateRange(record.dateApproved, dateRange) : true;
-  
-        return matchesFeeder && matchesBusinessUnit && matchesRegion && matchesDateRange;
-      });
-    }, 2000);
+filterData() {
+  this.loading = true;
+  const { dateCreatedFrom, dateCreatedTo, feeder, businessUnit, region } = this.filterForm.value;
+
+  const selectedRegion = region ? region.name : null;  // Get the region name
+
+  const selectedBusinessHub = businessUnit ? businessUnit.name : null;
+  const selectedFeeder = feeder ? feeder.name : null;
+
+  const token = this.authService.getToken();
+
+  if (!token) {
+    this.loading = false;
+    this.errorMessage = 'No authentication token found. Please log in again.';
+    return;
   }
+
+  // Now, call the service to get filtered customers
+  this.customerService
+    .getNewCustomerFilter(
+      token,
+      selectedRegion,  // Only pass region name here
+      selectedBusinessHub,
+      selectedFeeder,
+      dateCreatedFrom,
+      dateCreatedTo
+    )
+    .subscribe(
+      (response) => {
+        console.log('Filtered customers:', response);
+        this. newCustomers = response.data?.results || [];
+        this.filteredNewCustomers = [...this.newCustomers];
+        this.loading = false;
+      },
+      (error) => {
+        console.error('Error loading customers:', error);
+        this.errorMessage = 'Failed to load customers. Please try again later.';
+        this.loading = false;
+      }
+    );
+}
+
   
 
   resetFilter() {
