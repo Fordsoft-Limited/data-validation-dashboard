@@ -1,7 +1,7 @@
 import { HttpClient,HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
-import { catchError, Observable } from 'rxjs';
+import { catchError, map, Observable } from 'rxjs';
 import { addUser, changePassword, logout, refreshToken } from '../model/user';
 
 @Injectable({
@@ -42,13 +42,20 @@ export class UserService {
     .set('page', page.toString())
     .set('page_size', pageSize.toString());
     return this.http.get<any>(this.baseUrl +
-      `/list`,{params})
+      `/list`,{headers,params})
       .pipe(
         catchError(err => this.base.errorHandler(err))
       )
   }
 
 
+  getTotalUser(): Observable<number> {
+    
+    return this.http.get<any>(`${this.baseUrl}/list`).pipe(
+      map(response => response.data.count),  // Access the 'count' from the response data
+      catchError(err => this.base.errorHandler(err))
+    );
+  }
 
 
   logOutUser(payload: logout): Observable<any> {

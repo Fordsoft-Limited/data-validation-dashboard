@@ -2,7 +2,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { customerApproveOrReject, customerValidateBulk, validateCustomer } from '../model/customer';
-import { catchError, Observable, of, Subject, throwError } from 'rxjs';
+import { catchError, map, Observable, of, Subject, tap, throwError } from 'rxjs';
 import * as XLSX from 'xlsx';
 
 @Injectable({
@@ -45,9 +45,17 @@ export class CustomerService {
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
-  getCustomerList(): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/list`)
-      .pipe(catchError(err => this.base.errorHandler(err)));
+ 
+
+
+  getCustomerList(): Observable<number> {
+    return this.http.get<any>(`${this.baseUrl}/list`).pipe(
+      map(response => response.data?.count || 0),  // Safely access 'count' and return 0 if not available
+      catchError(err => {
+        this.base.errorHandler(err);
+        return of(0);  // Return 0 in case of error
+      })
+    );
   }
 
   getCustomersWithApprovedOrRejectedStatus(page: number, pageSize: number, token: string): Observable<any> {
@@ -180,5 +188,53 @@ export class CustomerService {
     this.cancelSubject.complete(); // Close the subject
     this.cancelSubject = new Subject<void>(); // Reset for future use
     console.log('Upload cancelled');
+  }
+
+
+
+  getCustomerAwaitingReviewStatus(status: string, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    const params = new HttpParams().set('approval_status', status);
+
+    return this.http.get<any>(`${this.baseUrl}/status/`, { headers, params }).pipe(
+      catchError((err) => {
+        console.error('Error occurred:', err);
+        throw err; // Handle the error accordingly
+      })
+    );
+  }
+
+  getCustomerRejectStatus(status: string, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    const params = new HttpParams().set('approval_status', status);
+
+    return this.http.get<any>(`${this.baseUrl}/status/`, {headers, params }).pipe(
+      catchError((err) => {
+        console.error('Error occurred:', err);
+        throw err; // Handle the error accordingly
+      })
+    );
+  }
+
+
+  getCustomerApprovalStatus(status: string, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    const params = new HttpParams().set('approval_status', status);
+
+    return this.http.get<any>(`${this.baseUrl}/status/`, { headers, params }).pipe(
+      catchError((err) => {
+        console.error('Error occurred:', err);
+        throw err; // Handle the error accordingly
+      })
+    );
   }
 }
