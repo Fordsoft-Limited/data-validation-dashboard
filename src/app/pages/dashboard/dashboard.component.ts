@@ -7,6 +7,9 @@ import { MenuItem } from 'primeng/api';
 import { UserService } from '../../api/user.service';
 import { CustomerService } from '../../api/customer.service';
 import { AuthService } from '../../auth/service/auth.service';
+import { TooltipItem, ChartTypeRegistry } from 'chart.js';
+
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -38,6 +41,8 @@ export class DashboardComponent implements OnInit {
   hasErrors: boolean = false;
   userAddedError: boolean = false;
   errorMessage: string = '';
+  recentActivities: any[] = []; // Holds the list of recent activities
+
 
   constructor(
     public bulkService: BulkService,
@@ -57,13 +62,16 @@ export class DashboardComponent implements OnInit {
       { header: 'Success Rate', field: 'successRate' },
       { header: 'Errors', field: 'errors' },
     ];
-    this.chartInit();
+    // this.chartInit();
 
     this.loadUserCount();
     this.loadCustomerCount();
     this.fetchCustomersByStatus('Awaiting review');
     this.fetchCustomersRejectStatus('Rejected');
     this.fetchApprovalStatus('Approved');
+    this.loadPieChartData();
+    this.loadRecentActivities();
+
   }
 
   loadUserCount(): void {
@@ -171,132 +179,177 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  chartInit() {
-    const textColor =
-      getComputedStyle(document.body).getPropertyValue('--text-color') ||
-      'rgba(0, 0, 0, 0.87)';
-    const surface300 = getComputedStyle(document.body).getPropertyValue(
-      '--surface-300'
-    );
-    const documentStyle = getComputedStyle(document.documentElement);
+  // chartInit() {
+  //   const textColor =
+  //     getComputedStyle(document.body).getPropertyValue('--text-color') ||
+  //     'rgba(0, 0, 0, 0.87)';
+  //   const surface300 = getComputedStyle(document.body).getPropertyValue(
+  //     '--surface-300'
+  //   );
+  //   const documentStyle = getComputedStyle(document.documentElement);
 
-    this.items = [
-      {
-        label: 'Options',
-        items: [
-          { label: 'Add New', icon: 'pi pi-fw pi-plus' },
-          { label: 'Search', icon: 'pi pi-fw pi-search' },
-        ],
-      },
-    ];
+  //   this.items = [
+  //     {
+  //       label: 'Options',
+  //       items: [
+  //         { label: 'Add New', icon: 'pi pi-fw pi-plus' },
+  //         { label: 'Search', icon: 'pi pi-fw pi-search' },
+  //       ],
+  //     },
+  //   ];
 
-    this.chartData = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-      datasets: [
-        {
-          label: 'New',
-          data: [11, 17, 30, 60, 88, 92],
-          backgroundColor: 'rgba(13, 202, 240, .2)',
-          borderColor: '#0dcaf0',
-          pointBackgroundColor: '#0dcaf0',
-          pointBorderColor: '#0dcaf0',
-          pointBorderWidth: 0,
-          pointStyle: 'line',
-          fill: false,
-          tension: 0.4,
-        },
-        {
-          label: 'Completed',
-          data: [11, 19, 39, 59, 69, 71],
-          backgroundColor: 'rgba(253, 126, 20, .2)',
-          borderColor: '#fd7e14',
-          pointBackgroundColor: '#fd7e14',
-          pointBorderColor: '#fd7e14',
-          pointBorderWidth: 0,
-          pointStyle: 'line',
-          fill: false,
-          tension: 0.4,
-        },
-        {
-          label: 'Canceled',
-          data: [11, 17, 21, 30, 47, 83],
-          backgroundColor: 'rgba(111, 66, 193, .2)',
-          borderColor: '#6f42c1',
-          pointBackgroundColor: '#6f42c1',
-          pointBorderColor: '#6f42c1',
-          pointBorderWidth: 0,
-          pointStyle: 'line',
-          fill: true,
-          tension: 0.4,
-        },
-      ],
-    };
+  //   this.chartData = {
+  //     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+  //     datasets: [
+  //       {
+  //         label: 'New',
+  //         data: [11, 17, 30, 60, 88, 92],
+  //         backgroundColor: 'rgba(13, 202, 240, .2)',
+  //         borderColor: '#0dcaf0',
+  //         pointBackgroundColor: '#0dcaf0',
+  //         pointBorderColor: '#0dcaf0',
+  //         pointBorderWidth: 0,
+  //         pointStyle: 'line',
+  //         fill: false,
+  //         tension: 0.4,
+  //       },
+  //       {
+  //         label: 'Completed',
+  //         data: [11, 19, 39, 59, 69, 71],
+  //         backgroundColor: 'rgba(253, 126, 20, .2)',
+  //         borderColor: '#fd7e14',
+  //         pointBackgroundColor: '#fd7e14',
+  //         pointBorderColor: '#fd7e14',
+  //         pointBorderWidth: 0,
+  //         pointStyle: 'line',
+  //         fill: false,
+  //         tension: 0.4,
+  //       },
+  //       {
+  //         label: 'Canceled',
+  //         data: [11, 17, 21, 30, 47, 83],
+  //         backgroundColor: 'rgba(111, 66, 193, .2)',
+  //         borderColor: '#6f42c1',
+  //         pointBackgroundColor: '#6f42c1',
+  //         pointBorderColor: '#6f42c1',
+  //         pointBorderWidth: 0,
+  //         pointStyle: 'line',
+  //         fill: true,
+  //         tension: 0.4,
+  //       },
+  //     ],
+  //   };
 
-    this.chartOptions = {
-      plugins: {
-        legend: {
-          fill: true,
-          labels: {
-            color: textColor,
-          },
-        },
-      },
-      scales: {
-        y: {
-          max: 100,
-          min: 0,
-          grid: {
-            color: surface300,
-          },
-          ticks: {
-            color: textColor,
-          },
-        },
-        x: {
-          grid: {
-            display: true,
-            color: surface300,
-          },
-          ticks: {
-            color: textColor,
-            beginAtZero: true,
-          },
-        },
-      },
-    };
+  //   this.chartOptions = {
+  //     plugins: {
+  //       legend: {
+  //         fill: true,
+  //         labels: {
+  //           color: textColor,
+  //         },
+  //       },
+  //     },
+  //     scales: {
+  //       y: {
+  //         max: 100,
+  //         min: 0,
+  //         grid: {
+  //           color: surface300,
+  //         },
+  //         ticks: {
+  //           color: textColor,
+  //         },
+  //       },
+  //       x: {
+  //         grid: {
+  //           display: true,
+  //           color: surface300,
+  //         },
+  //         ticks: {
+  //           color: textColor,
+  //           beginAtZero: true,
+  //         },
+  //       },
+  //     },
+  //   };
 
-    this.pieData = {
-      labels: ['Success ', 'Pending', 'Error'],
-      datasets: [
-        {
-          data: [740, 325, 502],
-          backgroundColor: [
-            documentStyle.getPropertyValue('--green-500'),
-            documentStyle.getPropertyValue('--yellow-500'),
-            documentStyle.getPropertyValue('--red-500'),
-          ],
-          hoverBackgroundColor: [
-            documentStyle.getPropertyValue('--green-400'),
-            documentStyle.getPropertyValue('--yellow-400'),
-            documentStyle.getPropertyValue('--red-400'),
-          ],
-        },
-      ],
-    };
+  //   this.pieData = {
+  //     labels: ['Success ', 'Pending', 'Error'],
+  //     datasets: [
+  //       {
+  //         data: [740, 325, 502],
+  //         backgroundColor: [
+  //           documentStyle.getPropertyValue('--green-500'),
+  //           documentStyle.getPropertyValue('--yellow-500'),
+  //           documentStyle.getPropertyValue('--red-500'),
+  //         ],
+  //         hoverBackgroundColor: [
+  //           documentStyle.getPropertyValue('--green-400'),
+  //           documentStyle.getPropertyValue('--yellow-400'),
+  //           documentStyle.getPropertyValue('--red-400'),
+  //         ],
+  //       },
+  //     ],
+  //   };
 
-    this.pieOptions = {
-      plugins: {
-        legend: {
-          labels: {
-            usePointStyle: true,
-            color: textColor,
-          },
-        },
-      },
-    };
-  }
+  //   this.pieOptions = {
+  //     plugins: {
+  //       legend: {
+  //         labels: {
+  //           usePointStyle: true,
+  //           color: textColor,
+  //         },
+  //       },
+  //     },
+  //   };
+  // }
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
+
+
+  loadPieChartData() {
+    this.customerService.getPieChartData().subscribe(
+      data => {
+        this.pieData = data;  // Bind the pie chart data
+        this.pieOptions = {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: {
+              callbacks: {
+                // Update tooltip callback to use the correct type from ChartTypeRegistry
+                label: (tooltipItem: TooltipItem<'pie'>) => {  // 'pie' corresponds to pie chart type
+                  return `${tooltipItem.label}: ${tooltipItem.raw}`;
+                }
+              }
+            }
+          }
+        };
+      },
+      error => {
+        console.error('Error loading pie chart data:', error);
+      }
+    );
+  }
+
+
+  // Fetch the recent activities when the component initializes
+  loadRecentActivities(): void {
+    this.customerService.getRecentActivities().subscribe(
+      (data) => {
+        this.recentActivities = data; // Store the fetched activities
+      },
+      (error) => {
+        console.error('Error loading recent activities:', error);
+      }
+    );
+  }
+  
+
+
+  
 }

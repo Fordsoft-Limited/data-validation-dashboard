@@ -237,4 +237,49 @@ export class CustomerService {
       })
     );
   }
+
+  getPieChartData(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/dashboard/`).pipe(
+      map(response => {
+        // Extract pie chart data from the response
+        const pieChartData = response.data.pie_chart_data;
+
+        // Format the data for the pie chart
+        return {
+          labels: Object.keys(pieChartData), // ['Approved', 'Rejected', 'Awaiting Review']
+          datasets: [
+            {
+              data: Object.values(pieChartData), // [8, 2, 715]
+              backgroundColor: ['#28a745', '#dc3545', '#ffc107'], // Custom colors for each slice
+            }
+          ]
+        };
+      }),
+      catchError((err) => {
+        console.error('Error occurred:', err);
+        throw err; // Handle the error accordingly
+      })
+    );
+  }
+
+
+  getRecentActivities(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/dashboard/`).pipe(
+      map((response) => {
+        // Extract recent_event_logs
+        return response.data.recent_event_logs.map((log: { description: any; posted_by: { username: any; }; }) => ({
+          description: log.description,
+          postedBy: log.posted_by.username, // Pick the username only
+          createdDate: new Date().toLocaleDateString() // Assuming you get a created date, use it here
+        }));
+      }),
+      catchError((err) => {
+        console.error('Error occurred:', err);
+        throw err; // Handle the error accordingly
+      })
+    );
+  }
+
+
+
 }
