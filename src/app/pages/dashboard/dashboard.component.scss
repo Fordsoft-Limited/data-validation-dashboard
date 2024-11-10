@@ -1,0 +1,22 @@
+/* Optional: Adjust label styles for a cleaner look */
+.category-label, .status-label, .description-text {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .description-text {
+    white-space: pre-wrap; /* Ensures long descriptions wrap properly */
+    word-wrap: break-word;
+    color: #555;
+  }
+  
+  .card {
+    padding: 20px; /* Add some padding to the card for better readability */
+  }
+
+
+  .scrollable-content {
+    max-height: 400px;  /* Set the maximum height */
+    overflow-y: auto;   /* Enables vertical scrolling when content exceeds max height */
+  }
+  

@@ -1,0 +1,39 @@
+.custom-button {
+    border-color: #007ad9; /* Change border color */
+    color: #007ad9; /* Change text color */
+  }
+  
+  .custom-button:hover {
+    background-color: #f1f1f1; /* Add a hover effect */
+  }
+
+
+
+  .custom-button {
+    width: 100px;  /* Set custom width */
+    display: inline-flex;  /* Align the icon properly */
+    justify-content: center;
+    align-items: center;
+  }
+
+
+  .custom-chip {
+    font-size: 1.2rem;  /* Adjust text size */
+    padding: 0.5rem 1rem;  /* Adjust padding inside the chip */
+  }
+  
+  .custom-circle {
+    width: 2.5rem;  /* Increase the width of the circle */
+    height: 2.5rem;  /* Increase the height of the circle */
+    font-size: 1.2rem;  /* Adjust font size inside the circle */
+  }
+  
+  .total-count {
+    font-size: 1.2rem;  /* Adjust the font size of the number */
+  }
+  
+  .custom-text {
+    font-size: 1.1rem;  /* Adjust font size of the text */
+  }
+  
+  

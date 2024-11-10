@@ -13,6 +13,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TabViewModule } from 'primeng/tabview';
 //import { SharedModules } from '../../shared/shared.module';  
 //import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 
 
 export const dashboardRoutes: Routes = [
@@ -25,6 +26,7 @@ export const dashboardRoutes: Routes = [
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
+    ScrollPanelModule,
     CommonModule,
     SharedModule,
     ButtonModule,

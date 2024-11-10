@@ -1,7 +1,8 @@
 <div class="card">
   <p-toast />
   <p-table [value]="batches" dataKey="batch_code" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)"
-  [paginator]="true" (onPage)="onPageChange($event)" [rows]="10" 
+  [paginator]="true" (onPage)="onPageChange($event)" [rows]="100"  [scrollable]="true" 
+  scrollHeight="400px" 
   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [showCurrentPageReport]="true"
     >
@@ -12,19 +13,25 @@
           </ng-template>
         
           <ng-template pTemplate="left">
-            <div class="card flex justify-content-center gap-3">
-              <a routerLink="/app/bulk-customer-validation" class="p-button font-bold">
+            <div class="flex justify-content-center gap-3">
+              <a 
+                routerLink="/app/bulk-customer-validation" 
+                class="p-button p-button-outlined font-bold p-button-help custom-button"
+                pTooltip="Uploaded"
+                tooltipPosition="bottom"
+                style="width: 100px; background-color: transparent; display: inline-flex; align-items: center; justify-content: center;" 
+              >
                 <i class="pi pi-upload"></i>
               </a>
             </div>
             
-            <p-chip styleClass="pl-0 pr-3 ml-4">
-              <span class="bg-primary border-circle w-2rem h-2rem flex align-items-center justify-content-center">
+            <p-chip styleClass="pl-0 pr-3 ml-4 custom-chip">
+              <span class="bg-primary border-circle custom-circle flex align-items-center justify-content-center">
                 <div *ngIf="totalRecords > 0" class="total-count">
                   {{ totalRecords }}
                 </div>
               </span>
-              <span class="ml-2 font-medium">
+              <span class="ml-2 font-medium custom-text">
                 Total Batches
               </span>
             </p-chip>
@@ -35,14 +42,19 @@
           </ng-container>
         
           <ng-template pTemplate="right">
-            <button [loading]="loading"
-                    pButton
-                    pRipple
-                    label="Export"
-                    icon="pi pi-download"
-                    class="p-button-help"
-                    (click)="exportData()">
-            </button>
+            <button 
+  [loading]="loading"
+  pButton
+  pRipple
+  class="p-button p-button-outlined font-bold p-button-help custom-button"
+  icon="pi pi-download"
+  (click)="exportData()"
+  pTooltip="Export Excel"
+  tooltipPosition="bottom"
+  style="width: 100px;"
+>
+</button>
+            
           </ng-template>
         </p-toolbar>
         
