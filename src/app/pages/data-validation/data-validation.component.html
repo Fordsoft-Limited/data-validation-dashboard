@@ -36,7 +36,8 @@
   
     <p-table #dt1 [value]="filteredCustomers" dataKey="uid" [(selection)]="selectedCustomers" [rows]="100" 
              [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
-             [globalFilterFields]="['feeder', 'meterNo', 'date', 'status']" (onRowSelect)="showDetails($event.data)">
+             [globalFilterFields]="['feeder', 'meterNo', 'date', 'status']" (onRowSelect)="showDetails($event.data)"  [scrollable]="true" 
+             scrollHeight="400px">
         <ng-template pTemplate="caption">
             <div class="flex">
                 <!-- <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" /> -->
