@@ -221,6 +221,10 @@ export class ApprovedAssetComponent implements OnInit{
     console.log('Record details:', record);
 
   }
+
+  viewDetails(record: any): void {
+    this.router.navigate(['/app/customer-details', record.uid]); // Pass the record ID or unique identifier as a route parameter
+  }
   openDialog() {
     this.isShowDetails=true;
     setTimeout(() => {

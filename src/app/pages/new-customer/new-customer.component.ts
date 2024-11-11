@@ -228,9 +228,14 @@ filterData() {
      this.router.navigate(['/app/customer-details', this.selectedNewCustomer.uid]);
     }
     },2000)
+
+
   
   }
 
+  viewDetails(record: any): void {
+    this.router.navigate(['/app/customer-details', record.uid]); // Pass the record ID or unique identifier as a route parameter
+  }
   clear(table:Table) {
     table.clear();
   }
@@ -239,5 +244,17 @@ filterData() {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
+  getSeverity(approval_status?: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
+    switch (approval_status) {
+      case 'Approved':
+        return 'success';
+      case 'Awaiting review':
+        return 'warning';
+      case 'Rejected':
+        return 'danger';
+      default:
+        return 'info';
+    }
+  }
 
 }
