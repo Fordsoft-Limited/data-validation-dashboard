@@ -27,7 +27,7 @@
         <div class="p-3 text-white h-8rem border-round-2xl m-0 bg-center bg-cover bg-no-repeat bg-purple-400 shadow-1"
             style="background-image: url('assets/layout/images/dashboard/effect-3.svg')">
             <div class="font-bold w-full mb-2 ">
-                <span>Pending Customer</span>
+                <span>Awaiting Review Customer</span>
                 
             </div>
             <div class="text-white text-2xl font-bold w-full flex align-items-center py-1 gap-2"><i
@@ -74,57 +74,47 @@
 
 
     <div class="col-12 lg:col-6">
-        <div class="card h-full flex flex-column p-3 border-round-2xl">
+      <div class="card h-full flex flex-column p-3 border-round-2xl">
           <h5 class="text-left w-full mb-5">Recent Activities</h5>
           <div>
-            <div class="hover:shadow-1 border-round mb-3" *ngFor="let activity of recentActivities">
-              <div class="flex flex-column gap-4 w-full p-3 cursor-pointer">
-      
-                <!-- Activity details section -->
-                <div class="flex flex-column gap-4 w-full">
-                  
-                  <!-- Posted By and Created Date on the same line, "Created Date" floats right -->
-                  <div class="flex flex-row gap-4 w-full">
-                    <div class="flex flex-column w-full sm:w-6 md:w-6 lg:w-6">
-                      <!-- Label for 'Posted By' field -->
-                      <label for="postedBy-{{ activity.id }}" class="mr-2">Posted By:</label>
-                      <h5 style="margin-top: -1px;" id="postedBy-{{ activity.id }}">{{ activity.postedBy }}</h5>
-                    </div>
-                    <div class="flex flex-column w-full sm:w-6 md:w-6 lg:w-6 ml-auto">
-                      <!-- Label for 'Created Date' field -->
-                      <label for="createdDate-{{ activity.id }}" style="float: inline-end;" class="mr-2">Created Date:</label>
-                      <p id="createdDate-{{ activity.id }}">{{ activity.createdDate }}</p>
-                    </div>
+              <div class="hover:shadow-1 border-round mb-3" *ngFor="let activity of recentActivities">
+                  <div class="flex flex-column gap-4 w-full p-3 cursor-pointer">
+                      <!-- Activity details section -->
+                      <div class="flex flex-column gap-4 w-full">
+                          <div class="flex flex-row gap-4 w-full">
+                              <div class="flex flex-column w-full sm:w-6 md:w-6 lg:w-6">
+                                  <label for="postedBy-{{ activity.id }}" class="mr-2">Posted By:</label>
+                                  <h5 style="margin-top: -1px;" id="postedBy-{{ activity.id }}">{{ activity.postedBy }}</h5>
+                              </div>
+                              <div class="flex flex-column w-full sm:w-6 md:w-6 lg:w-6 ml-auto">
+                                  <label for="createdDate-{{ activity.id }}" style="float: inline-end;" class="mr-2">Created Date:</label>
+                                  <h5 style="margin-top: -1px;" id="createdDate-{{ activity.id }}">{{ activity.createdDate }}</h5>
+                              </div>
+                          </div>
+                          
+                          <div class="flex flex-row gap-4 w-full">
+                              <div class="flex flex-column w-full sm:w-6 md:w-6 lg:w-6">
+                                  <label for="category-{{ activity.id }}" class="category-label">Category:</label>
+                                  <h5 style="margin-top: -1px;" id="category-{{ activity.id }}" class="category-text">{{ activity.category }}</h5>
+                              </div>
+  
+                              <div class="flex flex-column w-full sm:w-6 md:w-6 lg:w-6 ml-auto">
+                                  <label for="status-{{ activity.id }}" class="status-label">Status:</label>
+                                  <h5 style="margin-top: -1px;" id="status-{{ activity.id }}" class="status-text">{{ activity.status }}</h5>
+                              </div>
+                          </div>
+  
+                          <div class="flex flex-column w-full">
+                              <label for="description-{{ activity.id }}" class="mr-2">Description:</label>
+                              <h5 style="margin-top: -1px;" id="description-{{ activity.id }}" class="w-full">{{ activity.description }}</h5>
+                          </div>
+                      </div>
                   </div>
-      
-                  
-      
-                  <!-- Category and Status on the same line, "Status" floats right -->
-                  <div class="flex flex-row gap-4 w-full">
-                    <div class="flex flex-column w-full sm:w-6 md:w-6 lg:w-6">
-                      <label for="category-{{ activity.id }}" class="category-label">Category:</label>
-                      <p id="category-{{ activity.id }}" class="category-text">{{ activity.category }}</p>
-                    </div>
-            
-                    <div class="flex flex-column w-full sm:w-6 md:w-6 lg:w-6 ml-auto">
-                      <label for="status-{{ activity.id }}" class="status-label">Status:</label>
-                      <p id="status-{{ activity.id }}" class="status-text">{{ activity.status }}</p>
-                    </div>
-                  </div>
-
-                  <!-- Description taking the full width of the card -->
-                  <div class="flex flex-column w-full">
-                    <label for="description-{{ activity.id }}" class="mr-2 description-text">Description:</label>
-                    <small id="description-{{ activity.id }}" class=" w-full">{{ activity.description }}</small>
-                  </div>
-      
-                </div>
-      
               </div>
-            </div>
           </div>
-        </div>
       </div>
+  </div>
+  
       
       
       

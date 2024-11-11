@@ -15,8 +15,19 @@
   }
 
 
-  .scrollable-content {
-    max-height: 400px;  /* Set the maximum height */
-    overflow-y: auto;   /* Enables vertical scrolling when content exceeds max height */
+  .card {
+    max-height: 400px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
   }
+
+
+  @media (max-width: 768px) {
+    .card {
+      max-height: 300px; /* Set a different height for smaller screens */
+      overflow-y: auto;
+    }
+  }
+
+
   
