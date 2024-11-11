@@ -28,13 +28,13 @@
     
     
           <div class="flex gap-2 mt-5">
-            <p-button type="submit" [loading]="loading" label="Filter"></p-button>
-            <p-button type="button" [loading]="isResetLoading" label="Reset Filter" [outlined]="true" (click)="resetFilter()" severity="danger"></p-button>
+            <p-button type="submit" label="Filter"></p-button>
+            <!-- <p-button type="button" [loading]="isResetLoading" label="Reset Filter" [outlined]="true" (click)="resetFilter()" severity="danger"></p-button> -->
           </div>
         </div>
       </form>
   
-    <p-table #dt1 [value]="filteredCustomers" dataKey="uid" [(selection)]="selectedCustomers" [rows]="10" 
+    <p-table #dt1 [value]="filteredCustomers" dataKey="uid" [(selection)]="selectedCustomers" [rows]="100" 
              [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
              [globalFilterFields]="['feeder', 'meterNo', 'date', 'status']" (onRowSelect)="showDetails($event.data)">
         <ng-template pTemplate="caption">
@@ -68,7 +68,7 @@
                 <th style="min-width:15rem">
                     <div class="flex align-items-center">
                         Meter No
-                        <p-columnFilter type="text" field="district" display="menu" />
+                        
                     </div>
                 </th>
   
@@ -101,9 +101,9 @@
   
                     {{filteredCustomer.feeder}}
                 </td>
-                <td>
+                <!-- <td>
                     {{filteredCustomer.account_no}}
-                </td>
+                </td> -->
                 <td>
                     {{filteredCustomer.meter_no}}
                 </td>

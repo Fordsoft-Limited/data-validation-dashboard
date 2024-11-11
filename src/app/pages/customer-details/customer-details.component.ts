@@ -14,7 +14,8 @@ export class CustomerDetailsComponent implements OnInit {
   customer: any | null = null;
   newData: any | null = null;
   existingData: any | null = null;
-  event: any | null = null;
+  events: any | null = null;
+  dataEntryHistory : any [] =[];
 
   constructor(
     private customerService: CustomerService,
@@ -50,10 +51,21 @@ export class CustomerDetailsComponent implements OnInit {
               const { new: newCustomer, old: existingCustomer } = response.data;
               this.newData = newCustomer;
               this.existingData = existingCustomer;
-              this.event =this.newData.events;
+              this.events = newCustomer.events;  // Assign the events array directly
+
+              // Convert events data to include date, icon, color
+              this.dataEntryHistory = this.events.map((event: any) => ({
+                description: event.description,
+                color:event.status === 'Rejected' ? '#ff0000' : '#00ff00',
+                category: event.category,
+                status: event.status,
+                date: event.date_created,  // Format date as needed
+                icon: 'pi pi-info-circle', // Customize icon if needed
+                 // Example color based on status
+              }));
               console.log('New Data:', this.newData);
             console.log('Existing Data:', this.existingData);
-            console.log('Event:', this.event);
+            console.log('Event:', this.events);
             }
           },
           (error) => {
@@ -83,19 +95,19 @@ export class CustomerDetailsComponent implements OnInit {
   }
 
   // Data Entry History for Events
-  dataEntryHistory = [
-    { content: "Description", date_created: this.newData?.events?.description, icon: 'pi pi-cloud-upload', color: '#10e01a' },
-    { content: 'Category', date_created: this.newData?.events?.category, icon: 'pi pi-eraser', color: '#f5d902' },
-    { content: 'Status', date_created: this.newData?.events?.status, icon: 'pi pi-cloud-upload', color: '#dd02f5' },
-    { content: 'Posted By', date_created: this.newData?.events?.posted_by?.name, icon: 'pi pi-pencil', color: '#f57c02' }
-  ];
+  // dataEntryHistory = [
+  //   { content: "Description", date_created: this.newData?.events?.description, icon: 'pi pi-cloud-upload', color: '#10e01a' },
+  //   { content: 'Category', date_created: this.newData?.events?.category, icon: 'pi pi-eraser', color: '#f5d902' },
+  //   { content: 'Status', date_created: this.newData?.events?.status, icon: 'pi pi-cloud-upload', color: '#dd02f5' },
+  //   { content: 'Posted By', date_created: this.newData?.events?.posted_by?.name, icon: 'pi pi-pencil', color: '#f57c02' }
+  // ];
 
-  events = this.dataEntryHistory.map(entry => ({
-    status: entry.content,
-    date: entry.date_created,
-    icon: entry.icon,
-    color: entry.color
-  }));
+  // events = this.dataEntryHistory.map(entry => ({
+  //   status: entry.content,
+  //   date: entry.date_created,
+  //   icon: entry.icon,
+  //   color: entry.color
+  // }));
 
 
    customerFields: { name: string; key: keyof any }[] = [

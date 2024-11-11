@@ -28,12 +28,12 @@
   
         <div class="flex gap-2 mt-5">
           <p-button type="submit" [loading]="loading" label="Filter"></p-button>
-          <p-button type="button" [loading]="isResetLoading" label="Reset Filter" [outlined]="true" (click)="resetFilter()" severity="danger"></p-button>
+          <!-- <p-button type="button" [loading]="isResetLoading" label="Reset Filter" [outlined]="true" (click)="resetFilter()" severity="danger"></p-button> -->
         </div>
       </div>
     </form>
   
-    <p-table [value]="filteredNewCustomers" [loading]="loading" [paginator]="true" [rows]="10"  (onRowSelect)="showDetails($event.data)">
+    <p-table [value]="filteredNewCustomers" [loading]="loading" [paginator]="true" [rows]="100"  (onRowSelect)="showDetails($event.data)">
   
       <ng-template pTemplate="caption">
           <div class="flex">
@@ -48,8 +48,10 @@
           <th style="min-width:15rem">Customer No</th>
           <th style="min-width:15rem">Customer Name</th>
           <th style="min-width:15rem">Feeder</th>
-          <th style="min-width:10rem">Date Captured</th>
+          <th style="min-width:15rem">Status</th>
+          <!-- <th style="min-width:10rem">Date Captured</th> -->
           <th style="min-width:10rem">Date Modified</th>
+          <th style="min-width:10rem">Action</th>
         </tr>
       </ng-template>
   
@@ -59,8 +61,14 @@
           <td>{{ record.customer_no }}</td>
           <td>{{ record.customer_full_name }}</td>
           <td>{{ record.feeder }}</td>
-          <td>{{ record.date_created | date: 'MM/dd/yyyy' }}</td>
+          <td>
+            <p-tag [value]="record.approval_status" [severity]="getSeverity(record.approval_status)" />
+        </td>
+          <!-- <td>{{ record.date_created | date: 'MM/dd/yyyy' }}</td> -->
           <td>{{ record.last_modified | date: 'MM/dd/yyyy' }}</td>
+          <td>
+            <button pButton icon="pi pi-eye" class="p-button-text" (click)="viewDetails(record)"></button>
+          </td>
         </tr>
       </ng-template>
   

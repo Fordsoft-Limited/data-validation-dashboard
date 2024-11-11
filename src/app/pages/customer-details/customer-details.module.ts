@@ -30,7 +30,7 @@ import { CardModule } from 'primeng/card';
 
 export const customerDetailsRoutes: Routes = [
   {
-    path: ':id',
+    path: ':uid',
     component: CustomerDetailsComponent,
   },
   // {

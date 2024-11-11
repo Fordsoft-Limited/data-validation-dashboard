@@ -28,8 +28,8 @@
         <ng-template pTemplate="marker" let-event>
           <span
             class="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1"
-            [style]="{ 'background-color': event.color }">
-            <i [class]="event.icon"></i>
+            [style]="{ 'background-color': event.status === 'Rejected' ? '#ff0000' : '#00ff00'}">
+            <i class="pi pi-inbox"></i>
           </span>
         </ng-template>
 
@@ -42,8 +42,12 @@
           </p-card> -->
           <div class="card w-100%">
          
-            <h4 class="text-base">{{ event.status }}</h4>
-            <p class="text-xs">{{ event.date | date:'short' }}</p>
+            <!-- <div class="card w-100%"> -->
+              <p class="text-xs">  <b>Category: </b>{{ event.category  }}</p>
+              <p class="text-xs"> <b>Status: </b>{{ event.status }}</p>
+              <p class="text-xs"> <b>Description: </b>{{ event.description }}</p>
+              <p class="text-xs">  <b>Posted by: </b>{{ event.posted_by.name }}</p>
+            <!-- </div> -->
        
           </div>
 
