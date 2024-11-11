@@ -193,8 +193,8 @@ export class DataVerificationComponent implements OnInit {
             (response) => {
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Record Approved',
-                    detail: 'Customer record has been approved.',
+                    summary: 'Record Rejected',
+                    detail: 'Customer record has been rejected.',
                 });
               //   this.nextRecord(); 
               //   this.selectedRecords = this.selectedRecords.filter(

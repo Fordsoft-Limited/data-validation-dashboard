@@ -36,13 +36,6 @@
     <p-table [value]="filteredNewCustomers" [loading]="loading" [paginator]="true" [rows]="100"  (onRowSelect)="showDetails($event.data)"  [scrollable]="true" 
     scrollHeight="400px">
   
-      <ng-template pTemplate="caption">
-          <div class="flex">
-              <!-- <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="resetFilter()"/> -->
-              <p-button label="Show Details"(click)="navigateToCustomerDetails()" class="ml-3" [loading]="isShowDetails" [disabled]="!selectedNewCustomer"></p-button>
-              
-          </div>
-      </ng-template>
       <ng-template pTemplate="header">
         <tr>
           <th style="width: 4rem"><p-tableRadioButton /></th>
