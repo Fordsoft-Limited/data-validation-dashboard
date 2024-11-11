@@ -32,7 +32,7 @@ export class CustomerValidationComponent {
   errorLogs: string[] = [];
   currentPage: number = 1;
   totalRecords: number = 0; 
-  pageSize: number = 10;
+  pageSize: number = 100;
 
   nextPageUrl: string | null = null;  // URL for the next page
   previousPageUrl: string | null = null;  // URL for the previous page

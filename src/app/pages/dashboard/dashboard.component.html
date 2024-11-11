@@ -27,7 +27,7 @@
         <div class="p-3 text-white h-8rem border-round-2xl m-0 bg-center bg-cover bg-no-repeat bg-purple-400 shadow-1"
             style="background-image: url('assets/layout/images/dashboard/effect-3.svg')">
             <div class="font-bold w-full mb-2 ">
-                <span>Pending Customer</span>
+                <span>Awaiting Review Customer</span>
                 
             </div>
             <div class="text-white text-2xl font-bold w-full flex align-items-center py-1 gap-2"><i
@@ -73,193 +73,51 @@
     </div>
 
 
-    <div class="col-12  lg:col-6 ">
-        <div class="card h-full flex flex-column p-3 border-round-2xl">
-            <h5 class="text-left w-full mb-5">Recent Activities</h5>
-            <div class="">
-                
-                <div class="hover:shadow-1 border-round mb-3" *ngFor="let activity of recentActivities">
-                    <div class="flex flex-row gap-4 w-full justify-content-between p-3 cursor-pointer">
-                      <div class="flex flex-row gap-4">
-                        <i class="pi pi-user ml-2 p-3 border-circle" 
-                           style="background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);"></i>
-                        <div class="flex flex-column gap-0">
-                          <h5>{{ activity.postedBy }}</h5> <!-- Display username -->
-                          <small class="-mt-3">{{ activity.description }}</small> <!-- Display description -->
-                        </div>
-                      </div>
-                      <div class="vertical-align-super">
-                        <p>{{ activity.createdDate }}</p> <!-- Display created date -->
-                      </div>
-                    </div>
-                  </div>  
-            </div>
-        </div>
-    </div>
-
-    
-
-
-
-
-    <!-- <div class="col-12 md:col-6">
-        <div class="card border-round-2xl">
-            <div class="flex flex-column md:flex-row md:align-items-start md:justify-content-between mb-3">
-                <div class="text-900 text-xl font-semibold mb-3 md:mb-0">Customer Validation Details</div>
-           
-            </div>
-            <p-table #dt [value]="bulk" [columns]="cols" [paginator]="true" [rows]="4" responsiveLayout="scroll"
-                [globalFilterFields]="['requestId','submissionDate','status','recordsProcessed','successRate']">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th pSortableColumn="requestId" style="min-width:10rem" class="white-space-nowrap">Customer ID
-                            <p-sortIcon field="requestId"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="submissionDate" style="min-width:10rem" class="white-space-nowrap">Customer Name
-                            <p-sortIcon field="submissionDate"></p-sortIcon>
-                        </th>
-                       
-                        <th pSortableColumn="status" style="min-width:10rem" class="white-space-nowrap">
-                            Validation Status
-                            <p-sortIcon field="status"></p-sortIcon>
-                        </th>
-
-                        <th pSortableColumn="recordsProcessed" style="min-width:10rem" class="white-space-nowrap">
-                            Records Processed
-                            <p-sortIcon field="recordsProcessed"></p-sortIcon>
-                        </th>
-                       
-                        <th pSortableColumn="errors" style="min-width:14rem" class="white-space-nowrap">
-                            Reason for Failure
-                            <p-sortIcon field="errors"></p-sortIcon>
-                        </th>
-                        <th></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-bulk>
-                    <tr>
-                        <td class="text-center">{{bulk.requestId}}</td>
-                        <td class="text-center">
-                            <span class="p-column-title">Submission Date</span>
-                            {{bulk.submissionDate}}
-                        </td>
-                      
-                        <td>
-                            <span class="p-column-title">Status</span>
-                            <span
-                                [class]="'bulk-badge status-' + bulk.status.toLowerCase()">{{bulk.status}}</span>
-                        </td>
-                        <td>
-                            <span class="p-column-title"> Records Processed</span>
-                            {{bulk.recordsProcessed}}
-                        </td>
-
-                        
-
-                        <td>
-                            <span class="p-column-title">Errors</span>
-                            {{bulk.errors}}
-                        </td>
-                  
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-    </div>
-
-
     <div class="col-12 lg:col-6">
-        <div class="card h-full border-round-2xl">
-            <h5>Validation Trend</h5>
-            <p-chart type="line" [data]="chartData" [options]="chartOptions" id="nasdaq-chart"
-                [responsive]="true"></p-chart>
-        </div>
-    </div>
-
-
-
-
-
-    <div class="col-12 ">
-        <div class="card border-round-2xl">
-            <div class="flex flex-column md:flex-row md:align-items-start md:justify-content-between mb-3">
-                <div class="text-900 text-xl font-semibold mb-3 md:mb-0">Bulk Validation Summary</div>
-                <div class="inline-flex align-items-center">
-                    <span class="p-input-icon-left flex-auto">
-                        <i class="pi pi-search "></i>
-                        <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search"
-                            class="w-full" style="border-radius: 2rem" />
-                    </span>
-                    <button pButton pRipple icon="pi pi-upload" class="p-button-rounded mx-3"
-                        (click)="dt.exportCSV()"></button>
-                </div>
-            </div>
-            <p-table #dt [value]="bulk" [columns]="cols" [paginator]="true" [rows]="4" responsiveLayout="scroll"
-                [globalFilterFields]="['requestId','submissionDate','status','recordsProcessed','successRate']">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th pSortableColumn="requestId" style="min-width:10rem" class="white-space-nowrap">Request Id
-                            <p-sortIcon field="requestId"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="submissionDate" style="min-width:10rem" class="white-space-nowrap">Submission Date
-                            <p-sortIcon field="submissionDate"></p-sortIcon>
-                        </th>
-                       
-                        <th pSortableColumn="status" style="min-width:10rem" class="white-space-nowrap">
-                            Status
-                            <p-sortIcon field="status"></p-sortIcon>
-                        </th>
-
-                        <th pSortableColumn="recordsProcessed" style="min-width:10rem" class="white-space-nowrap">
-                            Records Processed
-                            <p-sortIcon field="recordsProcessed"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="successRate" style="min-width:10rem" class="white-space-nowrap">
-                            Success Rate
-                            <p-sortIcon field="successRate"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="errors" style="min-width:10rem" class="white-space-nowrap">
-                            Errors
-                            <p-sortIcon field="errors"></p-sortIcon>
-                        </th>
-                        <th></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-bulk>
-                    <tr>
-                        <td class="text-center">{{bulk.requestId}}</td>
-                        <td class="text-center">
-                            <span class="p-column-title">Submission Date</span>
-                            {{bulk.submissionDate}}
-                        </td>
-                       
-                        <td>
-                            <span class="p-column-title">Status</span>
-                            <span
-                                [class]="'bulk-badge status-' + bulk.status.toLowerCase()">{{bulk.status}}</span>
-                        </td>
-                        <td>
-                            <span class="p-column-title"> Records Processed</span>
-                            {{bulk.recordsProcessed}}
-                        </td>
-
-                        <td>
-                            <span class="p-column-title"> Success Rate</span>
-                            {{bulk.successRate}}
-                        </td>
-
-                        <td>
-                            <span class="p-column-title">Errors</span>
-                            {{bulk.errors}}
-                        </td>
-                       
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-
-
-
-    </div> -->
-
+      <div class="card h-full flex flex-column p-3 border-round-2xl">
+          <h5 class="text-left w-full mb-5">Recent Activities</h5>
+          <div>
+              <div class="hover:shadow-1 border-round mb-3" *ngFor="let activity of recentActivities">
+                  <div class="flex flex-column gap-4 w-full p-3 cursor-pointer">
+                      <!-- Activity details section -->
+                      <div class="flex flex-column gap-4 w-full">
+                          <div class="flex flex-row gap-4 w-full">
+                              <div class="flex flex-column w-full sm:w-6 md:w-6 lg:w-6">
+                                  <label for="postedBy-{{ activity.id }}" class="mr-2">Posted By:</label>
+                                  <h5 style="margin-top: -1px;" id="postedBy-{{ activity.id }}">{{ activity.postedBy }}</h5>
+                              </div>
+                              <div class="flex flex-column w-full sm:w-6 md:w-6 lg:w-6 ml-auto">
+                                  <label for="createdDate-{{ activity.id }}" style="float: inline-end;" class="mr-2">Created Date:</label>
+                                  <h5 style="margin-top: -1px;" id="createdDate-{{ activity.id }}">{{ activity.createdDate }}</h5>
+                              </div>
+                          </div>
+                          
+                          <div class="flex flex-row gap-4 w-full">
+                              <div class="flex flex-column w-full sm:w-6 md:w-6 lg:w-6">
+                                  <label for="category-{{ activity.id }}" class="category-label">Category:</label>
+                                  <h5 style="margin-top: -1px;" id="category-{{ activity.id }}" class="category-text">{{ activity.category }}</h5>
+                              </div>
+  
+                              <div class="flex flex-column w-full sm:w-6 md:w-6 lg:w-6 ml-auto">
+                                  <label for="status-{{ activity.id }}" class="status-label">Status:</label>
+                                  <h5 style="margin-top: -1px;" id="status-{{ activity.id }}" class="status-text">{{ activity.status }}</h5>
+                              </div>
+                          </div>
+  
+                          <div class="flex flex-column w-full">
+                              <label for="description-{{ activity.id }}" class="mr-2">Description:</label>
+                              <h5 style="margin-top: -1px;" id="description-{{ activity.id }}" class="w-full">{{ activity.description }}</h5>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+      
+      
+      
+      
+      
   </div>

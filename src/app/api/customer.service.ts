@@ -319,10 +319,12 @@ export class CustomerService {
     return this.http.get<any>(`${this.baseUrl}/dashboard/`).pipe(
       map((response) => {
         // Extract recent_event_logs
-        return response.data.recent_event_logs.map((log: { description: any; posted_by: { username: any; }; }) => ({
+        return response.data.recent_event_logs.map((log: { description: any; category:any; status:any;  posted_by: { name: any; }; }) => ({
           description: log.description,
-          postedBy: log.posted_by.username, // Pick the username only
-          createdDate: new Date().toLocaleDateString() // Assuming you get a created date, use it here
+          postedBy: log.posted_by.name, 
+          category: log.category, 
+          status: log.status, 
+          createdDate: new Date().toLocaleDateString() 
         }));
       }),
       catchError((err) => {
