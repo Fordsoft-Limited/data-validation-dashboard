@@ -14,6 +14,7 @@ import { TabViewModule } from 'primeng/tabview';
 //import { SharedModules } from '../../shared/shared.module';  
 //import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
+
 export const dashboardRoutes: Routes = [
   {
     path: '',

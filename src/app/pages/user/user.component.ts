@@ -35,6 +35,7 @@ export class UserComponent implements OnInit {
   visible: boolean = false;
   userAddedSuccess: boolean = false;
 
+  totalUserCount: number = 0;
   @ViewChild('filter') filter!: ElementRef;
 
   constructor(
@@ -47,9 +48,14 @@ export class UserComponent implements OnInit {
       // Load users data
       this.loadUsers(this.currentPage,this.pageSize);
       // this.fetchUsers();
+
+      
+     
   }
 
 
+
+  
 
 loadUsers(page:number,pageSize:number) {
   const token = this.authService.getToken();
@@ -158,4 +164,8 @@ onRowEditCancel(user: any) {
     }
     user.editing = false; // Reset editing state on cancel
 }
+
+
+
+
 }
