@@ -6,7 +6,7 @@ import { Table } from 'primeng/table';
 import { UserService } from '../../api/user.service';
 import { addUser } from '../../model/user';
 import { AuthService } from '../../auth/service/auth.service';
-
+import { Logout } from '../../model/user';
 @Component({
   selector: 'app-user',
   providers: [MessageService, ConfirmationService],
@@ -29,7 +29,7 @@ export class UserComponent implements OnInit {
   pageSize : number = 10;
   totalRecords : number = 0
   user: addUser = new addUser(); 
-
+  checked: boolean = true;
   fetchError: string = ''; // For error messages
 
   visible: boolean = false;
@@ -53,41 +53,43 @@ export class UserComponent implements OnInit {
      
   }
 
-
+  loadUsers(page: number, pageSize: number) {
+    const token = this.authService.getToken();
+    if (!token) {
+      this.loading = false;
+      this.hasErrors = true;
+      this.errorMessage = 'No authentication token found. Please log in again.';
+      return;
+    }
+  
+    this.loading = true;
+  
+    this.userService.getUserList(page, pageSize, token).subscribe(
+      (response) => {
+        this.loading = false;
+        if (response && response.data && response.data.results) {
+          // Set is_active property for each user based on the API response
+          this.users = response.data.results.map((user: any) => ({
+            ...user,
+            is_active: user.status === 'Active',
+          }));
+          this.totalRecords = response.data.count;
+        } else {
+          this.users = [];
+          this.messageService.add({ severity: 'info', summary: 'No Data', detail: 'No users found.' });
+        }
+      },
+      (error) => {
+        this.loading = false;
+        this.users = [];
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load users.' });
+      }
+    );
+  }
 
   
-
-loadUsers(page:number,pageSize:number) {
-  const token = this.authService.getToken();
-  console.log(token);
-if (!token) {
-  this.loading = false;
-  this.hasErrors = true;
-  this.errorMessage = 'No authentication token found. Please log in again.';
-  setTimeout(() => {
-    this.userAddedError = false;
-  }, 3000);
-  return; // Exit the function early
-}
-  this.loading = true;
-  this.userService.getUserList(page,pageSize,token).subscribe(
-    (response) => {
-      this.loading = false;
-      if (response && response.data && response.data.results) {
-        this.users = response.data.results;
-        this.totalRecords = response.data.count; 
-      } else {
-        this.users = []; 
-        this.messageService.add({ severity: 'info', summary: 'No Data', detail: 'No users found.' });
-      }
-    },
-    (error) => {
-      this.loading = false;
-      this.users = []; // Clear batches on error
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load users.' });
-    }
-  );
-}
+  
+  
 onPageChange(event:any){
   this.currentPage = event.page + 1;
   this.pageSize = event.rows;
@@ -114,6 +116,8 @@ onPageChange(event:any){
             return 'info'; // Use info for User
         case 'APPROVAL':
             return 'warning'; // Use warning for Approval
+       case 'REVIEWER':
+            return 'contrast'; // Use warning for Approval
         default:
             return 'danger'; // Default for any unexpected roles
     }
@@ -133,39 +137,56 @@ getSeverityStatus(status: string) {
   }
 }
 
-
-onRowEditInit(user: any) {
-  // Set all users' editing state to false
-  for (const key in this.users) {
-      if (this.users[key]) {
-          this.users[key].editing = false;
-      }
+// Inside your component class
+toggleUserStatus(user: any) {
+  const token = this.authService.getToken();
+  if (!token) {
+    this.loading = false;
+    this.hasErrors = true;
+    this.errorMessage = 'No authentication token found. Please log in again.';
+    return;
   }
-  
-  this.clonedUsers[user.id as string] = { ...user };
-  user.editing = true; // Set editing state for this specific user
-}
 
-onRowEditSave(user: any) {
-    // Allow updating any of the fields optionally
-    if (user.name || user.username || user.role) {
-        delete this.clonedUsers[user.id as string];
-        user.editing = false; // Reset editing state on save
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User updated successfully.' });
-    } else {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'At least one field must be filled out.' });
+  this.loading = true;
+
+  // Ensure 'uid' is available before making the request
+  if (!user.uid) {
+    console.error('User UID is missing');
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'User UID is missing.' });
+    return;
+  }
+
+  const newStatus = !user.is_active; // Toggle the current 'is_active' value
+
+  // Call the service to update the user status
+  this.userService.updateUserStatus(user.uid, newStatus, token).subscribe(
+    (response) => {
+      this.loading = false;
+      if (response.code === 200 && response.status === 'Success') {
+       user.is_active = newStatus; // Update the status on success
+        const statusMessage = newStatus ? 'enabled' : 'disabled';
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: `User successfully ${statusMessage}.` });
+      } else {
+        // Revert to the previous status in case of an error
+        user.is_active = !newStatus;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update user status.' });
+      }
+    },
+    (error) => {
+      this.loading = false;
+      user.is_active = !newStatus; // Revert status in case of error
+      console.error('Error updating user status:', error);
+      const errorMessage = error.error ? error.error.message : 'Failed to update user status. Please try again.';
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: errorMessage });
     }
-}
-
-onRowEditCancel(user: any) {
-    if (this.clonedUsers[user.id as string]) {
-        Object.assign(user, this.clonedUsers[user.id as string]); // Restore original values
-        delete this.clonedUsers[user.id as string];
-    }
-    user.editing = false; // Reset editing state on cancel
+  );
 }
 
 
 
 
+
+
 }
+
+

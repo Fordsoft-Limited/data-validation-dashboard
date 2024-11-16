@@ -1,11 +1,17 @@
 import { Component, ViewEncapsulation,ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { UserService } from '../../api/user.service';
+import { changePassword } from '../../model/user';
+import { SnackbarService } from '../../shared/services/snackbar.service';
+import { MessageService } from 'primeng/api';
+import { AuthService } from '../../auth/service/auth.service';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
-  styleUrl: './settings.component.scss'
+  styleUrl: './settings.component.scss',
+  providers: [MessageService, ],
+
 })
 export class SettingsComponent {
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -13,13 +19,25 @@ export class SettingsComponent {
   imageUrl: string | ArrayBuffer | null = null; 
   selectedFile: File | null = null; 
   passwordForm: FormGroup;
+  backendErrorMessage: string | null = null;  
+  backendsuccessMessage: string | null = null;  
 
- 
-  constructor(private fb: FormBuilder) {
+  passwordChanged: boolean = false;  
+  hasErrors: boolean = false;
+  errorMessage: string = '';
+  loading: boolean = false;
+  userAddedError: boolean = false;
+
+  constructor(private fb: FormBuilder, 
+    private userService: UserService, 
+    private snackbarService: SnackbarService,
+    private authService: AuthService
+   
+  ) {
     this.profileForm = this.fb.group({
-      name: ['Asiyanbola Ahmad', Validators.required],  
-      email: ['dolapo@fordsoft.tech', [Validators.required, Validators.email]], 
-      phone: ['09001010202', Validators.required], 
+      name: ['', Validators.required],  
+      email: ['', [Validators.required, Validators.email]], 
+      phone: ['', Validators.required], 
     });
 
     this.passwordForm = this.fb.group({
@@ -37,13 +55,81 @@ export class SettingsComponent {
   }
 
   handlePasswordChange() {
+    const token = this.authService.getToken();
+    console.log(token);
+  
+    if (!token) {
+      this.loading = false;
+      this.hasErrors = true;
+      this.errorMessage = 'No authentication token found. Please log in again.';
+      setTimeout(() => {
+        this.userAddedError = false;
+      }, 3000);
+      return; // Exit the function early
+    }
+  
+    this.loading = true;
+  
     if (this.passwordForm.valid) {
-      console.log('Form Submitted', this.passwordForm.value);
-      // Handle password change logic here
+      // Map the form values to match the backend expected fields
+      const passwordData: changePassword = {
+        old_password: this.passwordForm.get('currentPassword')?.value, // currentPassword from the form
+        new_password: this.passwordForm.get('newPassword')?.value,   // newPassword from the form
+      };
+  
+      // Call the service to change the password, passing the token as a header
+      this.userService.changePassword(passwordData, token).subscribe({
+        next: (response) => {
+          console.log('Password change response', response);
+  
+          // Check if the response is successful (status === 'Success')
+          if (response.status === 'Success') {
+            // Show success notification to the user
+            this.backendsuccessMessage = 'Password changed successfully!';  // Set the success message
+  
+            // Clear any previous error message
+            this.backendErrorMessage = null;
+            this.passwordChanged = true;  // Display success message
+  
+            // Reset the form fields after success
+            this.passwordForm.reset();
+  
+            // Hide the success message after 4 seconds
+            setTimeout(() => {
+              this.passwordChanged = false;  // Hide success message after 4 seconds
+            }, 4000);
+  
+          } else {
+            // Handle the case if the backend response is unexpected
+            this.backendErrorMessage = 'Failed to change password. Please try again.';
+          }
+        },
+        error: (err) => {
+          console.error('Error changing password', err);
+  
+          // Check if the backend returned a specific error message
+          if (err.error && err.error.errorMessage) {
+            this.backendErrorMessage = err.error.errorMessage;  // Show backend error message
+          } else {
+            this.backendErrorMessage = 'Failed to change password. Please try again.';  // Generic error message
+          }
+  
+          // Hide the success message if there's an error and show the error message
+          this.passwordChanged = false;
+  
+          // Hide the error message after 4 seconds
+          setTimeout(() => {
+            this.backendErrorMessage = null;  // Hide the error message after 4 seconds
+          }, 4000);
+        }
+      });
     } else {
+      // Mark all form controls as touched to trigger validation messages
       this.passwordForm.markAllAsTouched();
     }
   }
+  
+  
     
 
  

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserComponent } from './user.component';
+import {AuditLogComponent } from './audit-log.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -26,13 +26,13 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 export const userRoutes: Routes = [
   {
     path: '',
-    component: UserComponent
+    component: AuditLogComponent
   },
 ];
 
 @NgModule({
   declarations: [
-    UserComponent
+    AuditLogComponent
   ],
   imports: [
     InputSwitchModule,
@@ -59,4 +59,4 @@ export const userRoutes: Routes = [
   ],
   providers: [UserService]  // Register the service here
 })
-export class UserModule { }
+export class AuditLogModule { }

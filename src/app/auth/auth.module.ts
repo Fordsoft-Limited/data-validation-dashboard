@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { RippleModule } from 'primeng/ripple';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner'; // Import ProgressSpinnerModule
+
 export const securityRoutes: Routes = [
   {
     path: '',
@@ -36,7 +38,8 @@ export const securityRoutes: Routes = [
     ButtonModule,
     CheckboxModule,
     RippleModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ProgressSpinnerModule
 
   ]
 })

@@ -1,6 +1,11 @@
 import { Component, ElementRef } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { LayoutService } from './service/app.layout.service';
+import { Router } from '@angular/router'; // Import the Router to navigate after logout
+import { UserService } from '../api/user.service';
+export interface LogoutPayload {
+    username: string;
+}
 
 @Component({
     selector: 'app-menu-profile',
@@ -31,7 +36,11 @@ import { LayoutService } from './service/app.layout.service';
     ],
 })
 export class AppMenuProfileComponent {
-    constructor(public layoutService: LayoutService, public el: ElementRef) {}
+    
+    constructor(public layoutService: LayoutService, public el: ElementRef,
+        private userService: UserService,  
+        private router: Router           
+    ) {}
 
     toggleMenu() {
         this.layoutService.onMenuProfileToggle();
@@ -54,4 +63,38 @@ export class AppMenuProfileComponent {
     get isTooltipDisabled(): boolean {
         return !this.layoutService.isSlim();
     }
+
+
+    // logOut() {
+    //     console.log('Logout clicked');
+        
+    //     const token = localStorage.getItem('auth_token');
+    //     const username = localStorage.getItem('username');
+    //     console.log(token, username);
+    
+    //     if (token && username) {
+    //         const payload: LogoutPayload = {
+    //             username: username
+    //         };
+    
+    //         // Call the logOutUser service method to invalidate the session
+    //         this.userService.logOutUser(payload, token).subscribe(
+    //             response => {
+    //                 console.log('Logout successful:', response);
+    //                 localStorage.removeItem('auth_token');
+    //                 localStorage.removeItem('username');
+    //                 this.router.navigate(['/login']);
+    //             },
+    //             error => {
+    //                 console.error('Logout failed:', error);
+    //             }
+    //         );
+    //     } else {
+    //         console.error('No token or username found, unable to log out.');
+    //     }
+    // }
+    
+    
+
+
 }

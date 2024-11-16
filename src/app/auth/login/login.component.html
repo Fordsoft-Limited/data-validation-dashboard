@@ -5,12 +5,6 @@
       <div style="flex-shrink: 0;">
         <img src="assets/layout/images/login/ibedc-logo.png" width="100px" height="70px" alt="avalon-ng" />
       </div>
-
-      <!-- Account Options Section -->
-      <!-- <div style="text-align: right;">
-              <a href="#" style="text-decoration: none; color: #333; margin-left: 20px;">Don't have an account?</a>
-              <a href="#" style="text-decoration: none; background-color: #007bff; color: white; padding: 10px 20px; border-radius: 5px; margin-left: 20px;">Sign Up</a>
-          </div> -->
     </div>
   </header>
 
@@ -83,10 +77,16 @@
 
       <!-- Login Button -->
       <div>
-        <button pButton type="submit" [label]="isLoading ? 'Logging in...' : 'Login'" [disabled]="loginForm.invalid"
-          label="Login"
-          style="width: 100%; padding: 10px; display: block; border: none; border-radius: 5px; cursor: pointer; height: 40px; margin-top: 40px;">
-
+        <button pButton type="submit" [disabled]="loginForm.invalid" style="width: 100%; padding: 10px; display: block; border: none; border-radius: 5px; cursor: pointer; height: 40px; margin-top: 40px;">
+          <!-- Conditionally render the spinner if isLoading is true -->
+          <ng-container *ngIf="isLoading; else buttonText">
+            <p-progressSpinner [style]="{ 'width': '20px', 'height': '20px' }"></p-progressSpinner>
+          </ng-container>
+          
+          <!-- Text to display when not loading -->
+          <ng-template #buttonText>
+            {{ isLoading ? '' : 'Login' }}
+          </ng-template>
         </button>
       </div>
 
