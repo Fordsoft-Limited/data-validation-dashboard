@@ -26,6 +26,7 @@ export interface DropdownOption {
   label: string;
   value: any; // Can be BusinessHub or ServiceCentre, depending on the context
 }
+
 @Component({
   selector: 'app-data-validation',
   templateUrl: './data-validation.component.html',

@@ -59,14 +59,16 @@ export const layoutRoutes: Routes = [
                 (m) => m.CustomerInformationModule
               ),
           },
-          {
-            path: 'checkers',
-            data:{breadcrumb: 'Checkers'},
-            loadChildren: () =>
-              import('../pages/checker/checker.module').then(
-                (m) => m.CheckerModule
-              ),
-          },
+
+          // {
+          //   path: 'checkers',
+          //   data:{breadcrumb: 'Checkers'},
+          //   loadChildren: () =>
+          //     import('../pages/filter/filter.module').then(
+          //       (m) => m.CheckerModule
+          //     ),
+          // },
+
           {
             path: 'user-management',
             data:{breadcrumb: 'User Management'},
@@ -152,6 +154,29 @@ export const layoutRoutes: Routes = [
                 (m) => m.NewCustomerModule
               ),
           },
+
+
+          {
+            path:'customerFilter',
+            data:{breadcrumb: 'customerFilter'},
+
+            loadChildren: () =>
+              import('../pages/customer-filter/customer-filter.module').then(
+                (m) => m.CustomerFilterModule
+              ),
+          },
+
+          {
+            path:'filter',
+            data:{breadcrumb: 'filter'},
+
+            loadChildren: () =>
+              import('../pages/filter/filter.module').then(
+                (m) => m.FilterModule
+              ),
+          },
+
+
     ]
     },
 
@@ -175,7 +200,7 @@ export const layoutRoutes: Routes = [
         FormsModule,
         HttpClientModule,
         StyleClassModule,
-       SharedModule,
+        SharedModule,
         SidebarModule,
         ProgressSpinnerModule,
         AppConfigModule,

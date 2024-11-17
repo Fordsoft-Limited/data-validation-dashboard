@@ -161,6 +161,27 @@ export class CustomerService {
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
+  getNewCustomerFilter2(payload: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${payload.token}`,
+      'Content-Type': 'application/json',
+    });
+  
+    // Prepare query parameters from the payload
+    let params = new HttpParams()
+      .set('region', payload.region || '')
+      .set('business_hub', payload.businessHub || '')
+      .set('service_center', payload.serviceCenter || '')
+      .set('date_created_from', payload.dateCreatedFrom || '')
+      .set('date_created_to', payload.dateCreatedTo || '');
+  
+    // Make the GET request with headers and query parameters
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
+      .pipe(catchError(err => this.base.errorHandler(err)));
+  }
+  
+  
+
 
   getNewCustomerFilterApproveRegion(
     token: string, 
