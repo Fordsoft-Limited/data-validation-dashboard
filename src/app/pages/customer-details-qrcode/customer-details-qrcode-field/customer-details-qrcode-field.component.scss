@@ -1,0 +1,29 @@
+.field-container {
+    margin-bottom: 1rem;
+  }
+  
+  .label {
+    font-weight: bold;
+  }
+  
+  .data {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    margin-top: 0.5rem;
+  }
+  
+  .new-data, .no-data {
+    background-color: #e0ffe0; /* Light green background for new data */
+  }
+  
+  .existing-data , .no-data-exist{
+    background-color: #f0f0f0; /* Light grey background for existing data */
+  }
+  
+  .empty-data{
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    margin-top: 0.5rem;
+    background-color: #f0f0f0;
+  }
+  

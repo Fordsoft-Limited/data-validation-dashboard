@@ -2,8 +2,8 @@
     <button class="p-link border-noround" (click)="toggleMenu()" pTooltip="Profile" [tooltipDisabled]="isTooltipDisabled">
         <img src="assets/demo/images/avatar/amyelsner.png" alt="avatar" style="width: 32px; height: 32px;">
         <span>
-            <strong>Ahmad</strong>
-            <small>Admin</small>
+            <strong>{{name}}</strong>
+            <small>{{role}}</small>
         </span>
         <i class="layout-menu-profile-toggler pi pi-fw" [ngClass]="{'pi-angle-down': menuProfilePosition === 'start' || isHorizontal, 'pi-angle-up': menuProfilePosition === 'end' && !isHorizontal}"></i>
     </button>

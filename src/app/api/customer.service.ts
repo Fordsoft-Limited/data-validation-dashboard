@@ -130,7 +130,41 @@ export class CustomerService {
     const params = new HttpParams()
       .set('category', 'New Customer') // Ensure the category matches the intended filter
       .set('page', page.toString())
-      .set('page_size', pageSize.toString());
+      .set('page_size', pageSize.toString())
+      .set('approval_status', 'Approved,Rejected');
+  
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
+      .pipe(catchError(err => this.base.errorHandler(err)));
+  }
+
+  getCustomerFilterByPages(page: number, pageSize: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    
+    const params = new HttpParams()
+      .set('category', 'New Customer') // Ensure the category matches the intended filter
+      .set('page', page.toString())
+      .set('page_size', pageSize.toString())
+      .set('approval_status', 'Awaiting review');
+  
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
+      .pipe(catchError(err => this.base.errorHandler(err)));
+  }
+
+  
+  getCustomerStatusByReViewed(page: number, pageSize: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    
+    const params = new HttpParams()
+      //.set('category', 'New Customer') // Ensure the category matches the intended filter
+      .set('page', page.toString())
+      .set('page_size', pageSize.toString())
+      .set('approval_status', 'Reviewed');
   
     return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
       .pipe(catchError(err => this.base.errorHandler(err)));
@@ -187,7 +221,13 @@ export class CustomerService {
     return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
-
+  getCustomerQrCode(customerNo: string,token: string): Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.get<any>(`${this.baseUrl}/qrcode/${customerNo}/`, { headers })
+  }
   getCustomersWithAwaitingReview(page: number, pageSize: number, token: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,

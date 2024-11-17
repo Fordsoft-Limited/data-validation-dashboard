@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component ,OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { Table } from 'primeng/table';
+import { MessageService } from 'primeng/api';
+import { ProductService } from '../../api/product.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import {  Customer } from '../../shared/model/customer';
+import { Customer } from '../../shared/model/customer';
 import { CustomerService } from '../../api/customer.service';
 import { AuthService } from '../../auth/service/auth.service';
 import { CUSTOMER_REGION } from '../../shared/constants';
@@ -27,15 +28,15 @@ export interface DropdownOption {
   value: any; // Can be BusinessHub or ServiceCentre, depending on the context
 }
 @Component({
-  selector: 'app-data-validation',
-  templateUrl: './data-validation.component.html',
-  styleUrl: './data-validation.component.scss',
-  providers: [MessageService, ConfirmationService]
+  selector: 'app-validate-customer',
+  templateUrl: './validate-customer.component.html',
+  styleUrl: './validate-customer.component.scss',
+  providers: [MessageService,ProductService ]
 })
-export class DataValidationComponent implements OnInit {
+export class ValidateCustomerComponent implements OnInit{
   customers!: any[];
-  filteredCustomers: any[] = [];
-  selectedCustomers: any[] = [];
+  filteredNewCustomers: any[] = [];
+  selectedNewCustomer: any[] = [];
   regions: DropdownOption[] = [];
   businessUnits: DropdownOption[] = [];
   feeders: DropdownOption[] = [];  
@@ -52,9 +53,9 @@ export class DataValidationComponent implements OnInit {
   pageSize : number = 20;
   newCustomers !: Customer[];
   isResetLoading: boolean = false;
-  filteredNewCustomers  : Customer[]=[];
+//  filteredNewCustomers  : Customer[]=[];
 
-  @ViewChild('filter') filter!: ElementRef;
+ 
 
   constructor(
     private customerService: CustomerService,
@@ -144,13 +145,13 @@ export class DataValidationComponent implements OnInit {
       return; // Exit the function early
     }
   
-    this.loading = true; // Start loading before the request  
+    this.loading = true; // Start loading before the request
   
-    this.customerService.getCustomerStatusByReViewed(page, pageSize, token).subscribe(
+    this.customerService.getCustomerFilterByPages(page, pageSize, token).subscribe(
       (response) => {
         console.log('Data loaded:', response); // Debugging check
         this.customers = response.data?.results || []; // Handle cases where results might be undefined
-        this.filteredCustomers = [...this.customers]; // Keep a copy for filtering
+        this.filteredNewCustomers = [...this.customers]; // Keep a copy for filtering
         this.loading = false; // Stop loading
       },
       (error) => {
@@ -167,7 +168,7 @@ export class DataValidationComponent implements OnInit {
   
   applyStatusFilter() {
     // Filter customers based on status
-    this.filteredCustomers = this.customers.filter(
+    this.filteredNewCustomers = this.customers.filter(
       customer => customer.aproval_status === 'Awaiting Review'
     );
   }
@@ -203,7 +204,7 @@ export class DataValidationComponent implements OnInit {
         (response) => {
           console.log('Filtered customers:', response);
           this.customers = response.data?.results || [];
-          this.filteredCustomers = [...this.customers];
+          this.filteredNewCustomers = [...this.customers];
           this.loading = false;
         },
         (error) => {
@@ -231,10 +232,13 @@ export class DataValidationComponent implements OnInit {
     this.loading = true;
     setTimeout(() => {
       this.loading = false;
-      this.router.navigate(['app/data-validation/data-verification'], {
-        state: { selectedCustomers: this.selectedCustomers }
+      this.router.navigate(['app/validate/review'], {
+        state: { selectedNewCustomer: this.selectedNewCustomer }
       });
     }, 2000);
+  }
+  viewDetails(record: any): void {
+    this.router.navigate(['/app/customer-details', record.uid]); // Pass the record ID or unique identifier as a route parameter
   }
 
   openDialog() {
@@ -279,11 +283,11 @@ export class DataValidationComponent implements OnInit {
     this.showDetailsDialog = false;
   }
 
-  clear(table: Table) {
-    table.clear();
-    this.filter.nativeElement.value = '';
-    this.searchValue = '';
-  }
+  // clear(table: Table) {
+  //   table.clear();
+  //   this.filter.nativeElement.value = '';
+  //   this.searchValue = '';
+  // }
 
   // isPreviousDisabled(): boolean {
   //   return !this.selectedCustomer || 
@@ -307,4 +311,5 @@ export class DataValidationComponent implements OnInit {
         return 'info';
     }
   }
+
 }

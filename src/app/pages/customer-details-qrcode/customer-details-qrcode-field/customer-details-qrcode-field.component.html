@@ -1,0 +1,31 @@
+<!-- <div class="field-container ">
+   
+        <label>{{ fieldName }}</label>
+        <div *ngIf="newData" class="data new-data">
+          
+            <span>{{ newData }}</span>
+        </div>
+        <div *ngIf="existingData" class="data existing-data">
+           
+            <span>{{ existingData }}</span>
+        </div>
+
+</div> -->
+
+
+<div class="field-container">
+    <label>{{ fieldName }}</label>
+    <div *ngIf="newData && newData !== ''" class="data new-data">
+      <span>{{ newData }}</span>
+    </div>
+    <div *ngIf="existingData && existingData !== ''" class="data existing-data">
+      <span>{{ existingData }}</span>
+    </div>
+    <div *ngIf="(!newData || newData === '') " class="data no-data">
+      <span>N/A</span>
+    </div>
+
+    <div *ngIf="(!existingData || existingData === '')" class="data no-data-exist">
+        <span>N/A</span>
+      </div>
+  </div>

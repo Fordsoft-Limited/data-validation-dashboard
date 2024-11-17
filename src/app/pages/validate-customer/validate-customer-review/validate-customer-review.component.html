@@ -3,7 +3,7 @@
     <div class="flex justify-content-between  pb-3 mb-2 border-300  border-bottom-1">
   
       <div class="flex flex-column p-0 m-0">
-        <h5 class="-mt-1">Checker</h5>
+        <h5 class="-mt-1">Review</h5>
         <h6 class="-mt-1">Total item: {{totalSelectedRecords}}</h6>
       </div>
   
@@ -11,16 +11,15 @@
       <div class="flex flex-wrap gap-3">
         <p-toast />
         <p-confirmPopup />
-        <button pButton label="Reject Selection" class="p-button-danger" [outlined]="true"
+        <button pButton label="Review Selection" class="p-button-primary" [outlined]="true"
           (click)="confirm2($event)"></button>
-        <button pButton label="Approve Selection" class="p-button-success" (click)="confirm1($event)"
-          [outlined]="true"></button>
-        <button pButton label="Review All" class="p-button-primary" (click)="approveRecord()" [outlined]="true" disabled></button>
+        
+        <!-- <button pButton label="Review All" class="p-button-primary" (click)="approveRecord()" [outlined]="true" disabled></button> -->
       </div>
   
     </div>
     <div class="grid max-h-33rem">
-  
+   
       <div class="col-12 md:col-4 h-auto">
         <div class="selected-records-list">
           <p-table #dt [value]="selectedRecords" (onRowSelect)="onSelectedRecordChange($event.data)"  [globalFilterFields]="['customer_no']" 
@@ -87,7 +86,7 @@
   
   
   
-  <p-dialog header="Review Record" [(visible)]="reviewDialog" [style]="{ width: '50rem' }">
+  <!-- <p-dialog header="Review Record" [(visible)]="reviewDialog" [style]="{ width: '50rem' }">
     <div class="p-field">
   
     </div>
@@ -99,32 +98,18 @@
       <button pButton label="Approve" class="p-button-success" (click)="confirmReview()"></button>
       <button pButton label="Cancel" class="p-button-secondary" (click)="cancelReview()"></button>
     </div>
-  </p-dialog>
+  </p-dialog> -->
 
 
   <!-- Rejection Reason Dialog -->
-<p-dialog header="Rejection Reason" [(visible)]="rejectDialog" [style]="{ width: '30rem' }">
+<p-dialog header="Reviewing" [(visible)]="reviewDialog" [style]="{ width: '30rem' }">
   <div class="field flex flex-column gap-3">
-    <label for="rejectionReason">Reason for Rejection</label>
-    <textarea id="rejectionReason" pInputTextarea [(ngModel)]="rejectReason" rows="4" required></textarea>
-    <small *ngIf="!rejectReason && rejectDialog" class="p-error">Rejection reason is required.</small>
+    <label for="rejectionReason">Reviewed Reason</label>
+    <textarea id="rejectionReason" pInputTextarea [(ngModel)]="reviewReason" rows="4" required></textarea>
+    <small *ngIf="!reviewReason && reviewDialog" class="p-error">Reviewed reason is required.</small>
   </div>
   <div class="p-mt-2 flex gap-4 justify-content-end">
-    <button pButton label="Submit" class="p-button-danger" (click)="confirmReject()" [disabled]="!rejectReason"></button>
-    <button pButton label="Cancel" class="p-button-secondary" (click)="cancelReject()"></button>
-  </div>
-</p-dialog>
-
-
- <!-- Approve Reason Dialog -->
- <p-dialog header="Approval Reason" [(visible)]="approveDialog" [style]="{ width: '30rem' }">
-  <div class="field flex flex-column gap-3">
-    <label for="rejectionReason">Reason for Approval</label>
-    <textarea id="rejectionReason" pInputTextarea [(ngModel)]="approveReason" rows="4" required></textarea>
-    <small *ngIf="!approveReason && approveDialog" class="p-error">Approval reason is required.</small>
-  </div>
-  <div class="p-mt-2 flex gap-4 justify-content-end">
-    <button pButton label="Submit" class="p-button-success" (click)="confirmApprove()" [disabled]="!approveReason"></button>
+    <button pButton label="Submit" class="p-button-primary" (click)="confirmReView()" [disabled]="!reviewReason"></button>
     <button pButton label="Cancel" class="p-button-secondary" (click)="cancelReject()"></button>
   </div>
 </p-dialog>

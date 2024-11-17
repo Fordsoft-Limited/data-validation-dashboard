@@ -12,6 +12,14 @@ const routes: Routes = [
     path: 'app',
     loadChildren: () => import('./layout/app.layout.module').then(m => m.AppLayoutModule),canActivate:[authGuard]
   },
+  {
+    path: 'customer-details',
+    data:{breadcrumb: 'Customer Details'},
+    loadChildren: () =>
+      import('../app/pages/customer-details-qrcode/customer-details-qrcode.module').then(
+        (m) => m.CustomerDetailsQrcodeModule
+      ),
+  },
 
 
 

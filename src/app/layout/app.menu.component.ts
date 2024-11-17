@@ -12,14 +12,14 @@ export class AppMenuComponent implements OnInit {
     ngOnInit() {
         this.model = [
           {
-            // label: 'Favorites',
+            // label: 'Favorites',Approval/Rejection
              icon: 'pi pi-home',
              items: [
                  { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/app'] },
                  {label: 'User Management', icon: 'pi pi-fw pi-users', routerLink: ['/app/user-management'] },
-                 {label: 'Checker', icon: 'pi pi-fw pi-check-square', routerLink: ['/app/data-validation'] },
+                 {label: 'Approval/Rejection', icon: 'pi pi-fw pi-check-square', routerLink: ['/app/data-validation'] },
+                 {label: 'Validate Customer', icon: 'pi pi-fw pi-users', routerLink: ['/app/validate'] },
                  {label: 'Bulk Upload', icon: 'pi pi-fw pi-sitemap', routerLink: ['/app/customer-validation'] },
-                //  {label: 'Customer Information', icon: 'pi pi-fw pi-users', routerLink: ['/app/customer-information'] },
                 {label: 'New Customer', icon: 'pi pi-fw pi-users', routerLink: ['/app/new-customer'] },
                  {label: 'Reports', icon: 'pi pi-fw pi-file', routerLink: ['/app/reports'] },
                  {label: 'Settings', icon: 'pi pi-fw pi-cog', routerLink: ['/app/settings'] },

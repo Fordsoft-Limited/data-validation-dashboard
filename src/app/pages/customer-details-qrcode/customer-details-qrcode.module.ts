@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CustomerDetailsComponent } from './customer-details.component';
-import { CustomerDetailFieldComponent } from './customer-detail-field/customer-detail-field.component';
+import { CustomerDetailsQrcodeComponent } from './customer-details-qrcode.component';
+import { CustomerDetailsQrcodeFieldComponent } from './customer-details-qrcode-field/customer-details-qrcode-field.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -28,11 +28,10 @@ import { TimelineModule } from 'primeng/timeline';
 //import { QRCodeModule } from 'qrcode';
 import { CardModule } from 'primeng/card';
 
-
-export const customerDetailsRoutes: Routes = [
+export const customerDetailsQrcodeRoutes: Routes = [
   {
     path: ':uid',
-    component: CustomerDetailsComponent,
+    component: CustomerDetailsQrcodeComponent,
   },
   // {
   //   path: 'data-verification',
@@ -42,13 +41,10 @@ export const customerDetailsRoutes: Routes = [
 
 
 ];
-
 @NgModule({
   declarations: [
-    CustomerDetailsComponent,
-    CustomerDetailFieldComponent,
- 
-
+    CustomerDetailsQrcodeComponent,
+    CustomerDetailsQrcodeFieldComponent
   ],
   imports: [
     CommonModule,
@@ -76,10 +72,10 @@ export const customerDetailsRoutes: Routes = [
     FormsModule,
     TagModule,
     BadgeModule,
-    RouterModule.forChild(customerDetailsRoutes),
+    RouterModule.forChild(customerDetailsQrcodeRoutes),
 
    ReactiveFormsModule,
    FormsModule,
   ]
 })
-export class CustomerDetailsModule { }
+export class CustomerDetailsQrcodeModule { }

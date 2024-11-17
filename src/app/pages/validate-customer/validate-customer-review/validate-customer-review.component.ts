@@ -1,38 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DataValidationService } from '../service/data-validation.service';
+
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CustomerService } from '../../../api/customer.service';
 import { AuthService } from '../../../auth/service/auth.service';
 import { Token } from '@angular/compiler';
 import { customerApproveOrReject } from '../../../model/customer';
 
-interface RecordData {
-  newData: any;
-  oldData: any;
-}
 @Component({
-  selector: 'app-data-verification',
-  templateUrl: './data-verification.component.html',
-  styleUrls: ['./data-verification.component.scss'],
+  selector: 'app-validate-customer-review',
+  templateUrl: './validate-customer-review.component.html',
+  styleUrl: './validate-customer-review.component.scss',
   providers: [ConfirmationService, MessageService],
 })
-export class DataVerificationComponent implements OnInit {
-
+export class ValidateCustomerReviewComponent implements OnInit{
   selectedRecords: any[] = [];
   currentRecord!: {
     newData: any;
     oldData: any;
   };
-  qrCode: string | null = null;
   currentIndex: number = 0;
-
+  qrCode: string | null = null;
   comments: string = ' Well done ';
   rejectDialog: boolean = false;
   reviewDialog: boolean = false;
-  approveDialog: boolean = false;
-  approveReason: string ='';
   rejectReason: string = '';
+  reviewReason: string = '';
   currentNewData: any;
   statusCodes: any[] = []; // Array for status codes
   accountTypes: any[] = []; // Array for account types
@@ -53,7 +46,7 @@ export class DataVerificationComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private dataValidationService: DataValidationService,
+  
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private customerService: CustomerService,
@@ -61,9 +54,9 @@ export class DataVerificationComponent implements OnInit {
   ) {
     const navigation = this.router.getCurrentNavigation();
     this.selectedRecords =
-      navigation?.extras.state?.['selectedCustomers'] || [];
+      navigation?.extras.state?.['selectedNewCustomer'] || [];
    
-    this.setCurrentRecord();
+    //this.setCurrentRecord();
   }
 
   get totalSelectedRecords(): number {
@@ -73,67 +66,7 @@ export class DataVerificationComponent implements OnInit {
 
 
 
-  confirm1(event: Event) {
-    this.confirmationService.confirm({
-        target: event.target as EventTarget,
-        message: 'Are you sure you want to approve the selected record?',
-        header: 'Confirmation',
-        icon: 'pi pi-exclamation-triangle',
-        acceptIcon: 'none',
-        rejectIcon: 'none',
-        rejectButtonStyleClass: 'p-button-text',
-        accept: () => {
-            // const token = this.authService.getToken();
-
-            // if (!token) {
-            //     this.messageService.add({
-            //         severity: 'error',
-            //         summary: 'Authorization Error',
-            //         detail: 'Authentication token is missing. Please log in again.',
-            //     });
-            //     return;
-            // }
-
-          
-            // const updatePayload: customerApproveOrReject = {
-            //     uid: this.currentRecord.newData.uid,  // Double-check this field name
-            //     approval_status: 'Approved',
-            //     approval_comments: this.comments,
-            // };
-
-            // console.log("Payload being sent:", updatePayload); // Debugging line
-
-            // this.customerService.customerApproveOrReject(updatePayload, token).subscribe(
-            //     (response) => {
-            //         this.messageService.add({
-            //             severity: 'success',
-            //             summary: 'Record Approved',
-            //             detail: 'Customer record has been approved.',
-            //         });
-            //         this.nextRecord(); 
-
-            //       //   this.selectedRecords = this.selectedRecords.filter(
-            //       //     record => record.uid !== this.currentRecord.newData.uid
-            //       // );
-            //       this.removeCurrentRecordAndRedirectIfEmpty();
-            //     },
-            //     (error) => {
-            //         console.error('Error response:', error); // Log detailed error response
-            //         this.messageService.add({
-            //             severity: 'error',
-            //             summary: 'Error',
-            //             detail: error.error.errorMessage ? JSON.stringify(error.error.errorMessage) : 'There was an error updating the customer approval.',
-            //         });
-            //     }
-            // );
-            this.approveDialog=true;
-        },
-        reject: () => {
-           
-           
-        },
-    });
-}
+ 
 
   
   nextRecord() {
@@ -153,55 +86,17 @@ export class DataVerificationComponent implements OnInit {
   confirm2(event: Event) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: 'Are you sure you want to reject the selected record??',
-      header: 'Reject Confirmation',
+      message: 'Are you sure you want to review the selected record??',
+      header: 'Review Confirmation',
       icon: 'pi pi-info-circle',
-      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      acceptButtonStyleClass: 'p-button-primary p-button-text',
       rejectButtonStyleClass: 'p-button-text p-button-text',
       acceptIcon: 'none',
       rejectIcon: 'none',
 
       accept: () => {
-        // const token = this.authService.getToken();
-
-        // if (!token) {
-        //     this.messageService.add({
-        //         severity: 'error',
-        //         summary: 'Authorization Error',
-        //         detail: 'Authentication token is missing. Please log in again.',
-        //     });
-        //     return;
-        // }
-
-        // // Define payload based on the current record
-        // const updatePayload: customerApproveOrReject = {
-        //     uid: this.currentRecord.newData.uid,  // Double-check this field  name
-        //     approval_status: 'Rejected',
-        //     approval_comments: this.comments,
-        // };
-
-        // console.log("Payload being sent:", updatePayload); // Debugging line
-
-        // this.customerService.customerApproveOrReject(updatePayload, token).subscribe(
-        //     (response) => {
-        //         this.messageService.add({
-        //             severity: 'success',
-        //             summary: 'Record Approved',
-        //             detail: 'Customer record has been approved.',
-        //         });
-            
-        //       this.removeCurrentRecordAndRedirectIfEmpty();
-        //     },
-        //     (error) => {
-        //         console.error('Error response:', error); // Log detailed error response
-        //         this.messageService.add({
-        //             severity: 'error',
-        //             summary: 'Error',
-        //             detail: error.error.errorMessage ? JSON.stringify(error.error.errorMessage) : 'There was an error updating the customer approval.',
-        //         });
-        //     }
-        // );
-        this.rejectDialog = true;
+       
+        this.reviewDialog = true;
     },
       reject: () => {
        
@@ -209,7 +104,7 @@ export class DataVerificationComponent implements OnInit {
     });
   }
 
-  confirmReject() {
+  confirmReView() {
     const token = this.authService.getToken();
     if (!token) {
       this.messageService.add({
@@ -222,58 +117,19 @@ export class DataVerificationComponent implements OnInit {
   
     const updatePayload: customerApproveOrReject = {
       uid: this.currentRecord.newData.uid,
-      approval_status: 'Rejected',
-      approval_comments: this.rejectReason,
+      approval_status: 'Reviewed',
+      approval_comments: this.reviewReason,
     };
   
     this.customerService.customerApproveOrReject(updatePayload, token).subscribe(
       (response) => {
         this.messageService.add({
           severity: 'success',
-          summary: 'Record Rejected',
-          detail: 'Customer record has been rejected.',
+          summary: 'Record Reviewed',
+          detail: 'Customer record has been reviwed.',
         });
-        this.rejectDialog = false; // Close the rejection dialog
-        this.rejectReason = ''; // Clear rejection reason after use
-        this.removeCurrentRecordAndRedirectIfEmpty();
-      },
-      (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.error.errorMessage || 'Error updating the customer approval status.',
-        });
-      }
-    );
-  }
-
-
-  confirmApprove() {
-    const token = this.authService.getToken();
-    if (!token) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Authorization Error',
-        detail: 'Authentication token is missing. Please log in again.',
-      });
-      return;
-    }
-  
-    const updatePayload: customerApproveOrReject = {
-      uid: this.currentRecord.newData.uid,
-      approval_status: 'Approved',
-      approval_comments: this.approveReason,
-    };
-  
-    this.customerService.customerApproveOrReject(updatePayload, token).subscribe(
-      (response) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Record Approved',
-          detail: 'Customer record has been approved.',
-        });
-        this.approveDialog = false; // Close the rejection dialog
-        this.approveReason = ''; // Clear rejection reason after use
+        this.reviewDialog = false; // Close the rejection dialog
+        this.reviewReason = ''; // Clear rejection reason after use
         this.removeCurrentRecordAndRedirectIfEmpty();
       },
       (error) => {
@@ -331,7 +187,6 @@ export class DataVerificationComponent implements OnInit {
       }
     );
   }
-
   loadQrCode(customerId: string): void {
     const token = this.authService.getToken();
   
@@ -357,6 +212,7 @@ export class DataVerificationComponent implements OnInit {
     });
   }
   
+
   
   onSelectedRecordChange(selectedRecord: any) {
     this.currentIndex = this.selectedRecords.indexOf(selectedRecord); // Find the index of the selected record
@@ -423,7 +279,7 @@ export class DataVerificationComponent implements OnInit {
       summary: 'No more records to process',
       detail: 'Redirecting to data validation page.',
     });
-    this.router.navigate(['/app/data-validation']);
+    this.router.navigate(['/app/validate']);
   } 
   // Check if the current record is the last one
   isLastRecord(): boolean {
@@ -483,6 +339,5 @@ export class DataVerificationComponent implements OnInit {
     { name: 'Tenant Name', key: 'tenant_name' },
     { name: 'Tenant Phone', key: 'tenant_phone' },
     { name: 'Meter CT Ratio', key: 'meter_ct_ratio' },
-
   ];
 }

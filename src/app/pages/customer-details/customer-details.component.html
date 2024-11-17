@@ -55,6 +55,11 @@
         </ng-template>
       </p-timeline>
     </div>
+    <div class="col-12 flex justify-content-center">
+      <div class="qr-code" *ngIf="qrCode">
+        <img [src]="qrCode" alt="Customer QR Code" class="qr-code-image" width="300px" />
+      </div>
+    </div>
 
 
   </div>
