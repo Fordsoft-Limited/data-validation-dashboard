@@ -2,14 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../auth/service/auth.service';
 import { CustomerService } from '../../api/customer.service';
-import { Customer } from '../../shared/model/customer';
 
 @Component({
-  selector: 'app-customer-details',
-  templateUrl: './customer-details.component.html',
-  styleUrls: ['./customer-details.component.scss']
+  selector: 'app-customer-details-qrcode',
+  templateUrl: './customer-details-qrcode.component.html',
+  styleUrl: './customer-details-qrcode.component.scss'
 })
-export class CustomerDetailsComponent implements OnInit {
+export class CustomerDetailsQrcodeComponent {
   customerId: string = '';
   customerNo: string = '';
   customer: any | null = null;
@@ -201,5 +200,4 @@ export class CustomerDetailsComponent implements OnInit {
     { name: 'Tenant Phone', key: 'tenant_phone' },
     { name: 'Meter CT Ratio', key: 'meter_ct_ratio' },
   ];
-  
 }

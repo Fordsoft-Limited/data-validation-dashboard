@@ -53,8 +53,8 @@ export class NewCustomerComponent implements OnInit {
   currentPage: number = 1;
   pageSize: number = 20;
   showDetailsDialog: boolean = false;
-
-  selectedNewCustomer: Customer | null = null
+  selectedCustomer: any  | null = null;
+  selectedNewCustomer: any[] = [];
 
   filterForm!: FormGroup;
   
@@ -98,7 +98,7 @@ if (!token) {
   return; // Exit the function early
 }
   this.loading = true;
-  this.customerService.getNewCustomerFilterByPages(page,pageSize,token).subscribe(
+  this.customerService.getCustomerFilterByPages(page,pageSize,token).subscribe(
     (response) => {
       this.loading = false;
       if (response && response.data && response.data.results) {
@@ -214,24 +214,36 @@ filterData() {
     return recordTime >= startTime && recordTime <= endTime;
   }
 
-  showDetails(record: Customer) {
-    const uid = record.uid; // Access uid directly from record
-    this.selectedNewCustomer = { ...record }; // Set the selected customer
+  showDetails(customer: any ) {
+    this.selectedCustomer = { ...customer }; 
+   // this.comments = this.selectedCustomer.comments ?? '';
   }
 
-  navigateToCustomerDetails(){
-    this.isShowDetails=true;
-    setTimeout(() => {
-      this.isShowDetails=false;
-       if (this.selectedNewCustomer) {
-     //  this.showDetailsDialog = true; // Open the dialog
-     this.router.navigate(['/app/customer-details', this.selectedNewCustomer.uid]);
-    }
-    },2000)
+  // navigateToCustomerDetails(){
+  //   this.isShowDetails=true;
+  //   setTimeout(() => {
+  //     this.isShowDetails=false;
+  //      if (this.selectedNewCustomer) {
+  //    //  this.showDetailsDialog = true; // Open the dialog
+  //    this.router.navigate(['/app/customer-details', this.selectedNewCustomer.uid]);
+  //   }
+  //   },2000)
 
 
   
+  // }
+
+
+  navigateToDetails() {
+    this.loading = true;
+    setTimeout(() => {
+      this.loading = false;
+      this.router.navigate(['app/validate/review'], {
+        state: { selectedNewCustomer: this.selectedNewCustomer }
+      });
+    }, 2000);
   }
+
 
   viewDetails(record: any): void {
     this.router.navigate(['/app/customer-details', record.uid]); // Pass the record ID or unique identifier as a route parameter

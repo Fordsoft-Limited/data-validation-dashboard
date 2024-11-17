@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component ,EventEmitter,Output} from '@angular/core';
 import { LayoutService } from '../../layout/service/app.layout.service';
 import { Router } from '@angular/router';
 import { SnackbarService } from '../../shared/services/snackbar.service';
@@ -7,8 +7,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EntranceService } from '../../api/entrance.service';
 import { entranceLogin } from '../../model/user';
 import { AuthService } from '../service/auth.service';
+import { SharedDataService } from '../../api/shared-data.service';
 
-@Component({
+@Component({ 
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -23,13 +24,15 @@ export class LoginComponent {
   errorMessage: string = '';
   // rememberMe: boolean = false;
   isLoading: boolean = false;  // Loading state
+ 
 
   constructor(
     private layoutService: LayoutService,
     private router: Router,
     private snackbarService: SnackbarService,
     private entranceService:EntranceService,
-    private authService: AuthService
+    private authService: AuthService,
+    private sharedDataService: SharedDataService 
   ) {}
 
   get dark(): boolean {
@@ -67,11 +70,15 @@ onSubmit() {
       next: (response) => {
         this.isLoading = false;
         const token = response.data?.access_token;
+        const role = response.data?.role;
+        const name = response.data?.name;
         console.log('Received token:', token);
+
   
         if (token) {
           this.authService.setToken(token); 
           this.authService.setLoginData(username, password); 
+          this.sharedDataService.setUserData({ name, role });
           this.autoDismissSuccess();
           this.router.navigate(['/app']);          
         } else {

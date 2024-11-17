@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CustomerDetailsComponent } from './customer-details.component';
-import { CustomerDetailFieldComponent } from './customer-detail-field/customer-detail-field.component';
+import { ValidateCustomerComponent } from './validate-customer.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -23,63 +22,52 @@ import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';
 import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
+import { ValidateCustomerReviewComponent } from './validate-customer-review/validate-customer-review.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { TimelineModule } from 'primeng/timeline';
-//import { QRCodeModule } from 'qrcode';
-import { CardModule } from 'primeng/card';
 
-
-export const customerDetailsRoutes: Routes = [
+export const validateRoutes: Routes = [
   {
-    path: ':uid',
-    component: CustomerDetailsComponent,
+    path: '',
+    component: ValidateCustomerComponent
   },
-  // {
-  //   path: 'data-verification',
-  //   data:{breadcrum: 'Data Verification'},
-  //   component: DataVerificationComponent, 
-  // }
+  {
+    path: 'review',
+    data:{breadcrum: 'Checker Review'},
+    component: ValidateCustomerReviewComponent, 
+  }
 
+]; 
 
-];
 
 @NgModule({
   declarations: [
-    CustomerDetailsComponent,
-    CustomerDetailFieldComponent,
- 
-
+    ValidateCustomerComponent,
+    ValidateCustomerReviewComponent
   ],
   imports: [
     CommonModule,
+    RouterModule.forChild(validateRoutes),
+    ReactiveFormsModule,
+    FormsModule,
     TableModule,
     ConfirmDialogModule,
     ButtonModule,
-    CardModule,
-    ConfirmPopupModule,
     InputTextModule,
-    SharedModule,
-    TimelineModule,
+    SelectButtonModule,
     ToggleButtonModule,
     RippleModule,
     MultiSelectModule,
+    BadgeModule,
     InputTextareaModule,
     DropdownModule,
+    TagModule,
     DividerModule,
     ProgressBarModule,
     ToastModule,
     SliderModule,
     RatingModule,
     DialogModule,
-    SelectButtonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    TagModule,
-    BadgeModule,
-    RouterModule.forChild(customerDetailsRoutes),
-
-   ReactiveFormsModule,
-   FormsModule,
+    ConfirmPopupModule
   ]
 })
-export class CustomerDetailsModule { }
+export class ValidateCustomerModule { }
