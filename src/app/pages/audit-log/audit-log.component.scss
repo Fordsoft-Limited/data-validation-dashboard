@@ -81,3 +81,32 @@
   max-width: 100%;
   overflow: hidden;
 }
+
+
+
+/* Make the form container a flexbox */
+form {
+  display: flex;
+  justify-content: flex-end;  /* Align items to the right */
+  width: 100%;
+}
+
+/* Ensures the flex container inside the form wraps the elements, and places them correctly */
+.flex {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap; /* Allow the items to wrap if the screen size is small */
+  justify-content: flex-end; /* Align child items to the end (right) */
+}
+
+/* Ensure individual input blocks are correctly spaced */
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}
+

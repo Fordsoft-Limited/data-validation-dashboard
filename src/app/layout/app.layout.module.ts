@@ -152,15 +152,6 @@ export const layoutRoutes: Routes = [
                 (m) => m.NewCustomerModule
               ),
           },
-          {
-            path:'validate',
-            data:{breadcrumb: 'Validate Customer'},
-
-            loadChildren: () =>
-              import('../pages/validate-customer/validate-customer.module').then(
-                (m) => m.ValidateCustomerModule
-              ),
-          },
     ]
     },
 

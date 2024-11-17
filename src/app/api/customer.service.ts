@@ -374,6 +374,20 @@ export class CustomerService {
     );
   }
 
+  // Define the return type as AuditLogResponse
+  getAuditLog(page: number, pageSize: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
 
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('page_size', pageSize.toString());
+
+    return this.http.get<any>(`${this.baseUrl}/events/`, { headers, params }).pipe(
+      catchError(err => this.base.errorHandler(err)) // Assuming you have a base error handler
+    );
+  }
 
 }

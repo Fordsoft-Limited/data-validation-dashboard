@@ -35,7 +35,9 @@ export class ManageUserComponent implements OnInit {
     this.role = [
       { name: 'Admin', code: 'ADMIN' },
       { name: 'User', code: 'USER' },
-      { name: 'APPROVAl', code: 'APPROVAl' },
+      { name: 'Approval', code: 'APPROVAl' },
+      { name: 'Reviewer', code: 'REVIEWER' },
+
     ];
   }
 

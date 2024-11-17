@@ -1,13 +1,11 @@
-export class addUser{
-    
-    username!: string
-    name!: string
-    role!: string
+export class addUser {
+    username!: string;
+    name!: string;
+    role!: string;
     password!: string;
-    editing?: boolean;
 }
 
-export class logout{
+export class Logout{
     username!: string
     name!: string
     role!: string
