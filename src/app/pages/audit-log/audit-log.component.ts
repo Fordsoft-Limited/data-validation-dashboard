@@ -12,14 +12,16 @@ export interface PostedBy {
   username: string;
   uid: string;
   name: string;
+  
 }
 
 export interface AuditLog {
-  event_uid: string;      
-  description: string;    
+  event_uid: string;
+  description: string;
   category: string;
-  status: string,       
-  posted_by: PostedBy;    
+  status: string;
+  posted_by: PostedBy;
+  event_date: string; 
 }
 
 @Component({
@@ -33,7 +35,7 @@ export class AuditLogComponent implements OnInit {
   
   users: AuditLog[] = []; // Now typing 'users' as AuditLog[]
   selectedUsers: AuditLog[] = [];
-  pageSize: number = 10; // Default number of rows per page
+  pageSize: number = 100; // Default number of rows per page
   totalRecords: number = 0; // Total records for pagination
   currentPage: number = 1;
   loading: boolean = false;
@@ -81,6 +83,7 @@ export class AuditLogComponent implements OnInit {
             description: log.description || 'No description available', // Using description
             category: log.category || 'No category available', // Using category
             status: log.status || 'Unknown', // Using posted_by.name
+            event_date: log.event_date ? new Date(log.event_date) : null,
 
           }));
           this.totalRecords = response.data.count; // Total records for pagination

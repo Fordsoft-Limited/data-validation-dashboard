@@ -158,16 +158,36 @@ toggleUserStatus(user: any) {
 
   const newStatus = !user.is_active; // Toggle the current 'is_active' value
 
+  // Log the status that will be sent to the backend (debugging)
+  console.log(`Toggling user status: ${user.is_active} -> ${newStatus}`);
+
+  // Disable the switch UI temporarily until we get the response from the backend
+  user.is_active = newStatus; // Optimistic UI update
+  this.messageService.add({
+    severity: 'info',
+    summary: 'Updating status',
+    detail: 'Please wait while we update the user status.'
+  });
+
   // Call the service to update the user status
   this.userService.updateUserStatus(user.uid, newStatus, token).subscribe(
     (response) => {
       this.loading = false;
       if (response.code === 200 && response.status === 'Success') {
-       user.is_active = newStatus; // Update the status on success
-        const statusMessage = newStatus ? 'enabled' : 'disabled';
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: `User successfully ${statusMessage}.` });
+        // Log the response from the backend (debugging)
+        console.log('Backend response:', response);
+
+        // Use the message from the backend response directly
+        const statusMessage = response.data; // "User 'james' has been enabled." or "User 'james' has been disabled."
+        
+        // Show the success message from the backend response
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: statusMessage // Display the backend message like "User 'james' has been enabled."
+        });
       } else {
-        // Revert to the previous status in case of an error
+        // Revert status if something went wrong
         user.is_active = !newStatus;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update user status.' });
       }
@@ -181,6 +201,9 @@ toggleUserStatus(user: any) {
     }
   );
 }
+
+
+
 
 
 
