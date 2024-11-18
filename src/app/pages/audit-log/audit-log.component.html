@@ -27,15 +27,18 @@
 <p-table *ngIf="users && users.length" [value]="users" dataKey="event_uid" editMode="row"
     #dt1 [(selection)]="selectedUsers" [rowHover]="true" [rows]="pageSize" [paginator]="true"
     [totalRecords]="totalRecords" (onPage)="onPageChange($event)"
+    [scrollable]="true" scrollHeight="400px" 
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [filterDelay]="0" [globalFilterFields]="['name', 'category', 'description']">
 
     <ng-template pTemplate="header">
         <tr>
-            <th>Name</th>
             <th>Description</th>
-            <th>Status</th>
             <th>Category</th>
+            <th>Event Sources</th>
+           
+            <th>Status</th>
+            <th>Date</th>
             
             <th></th> <!-- Save button column -->
         </tr>
@@ -43,16 +46,6 @@
 
     <ng-template pTemplate="body" let-user let-ri="rowIndex">
         <tr [pEditableRow]="user">
-            <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input pInputText type="text" [(ngModel)]="user.name" required />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{ user.name }}
-                    </ng-template>
-                </p-cellEditor>
-            </td>
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
@@ -64,16 +57,6 @@
                 </p-cellEditor>
             </td>
             <td>
-              <p-cellEditor>
-                  <ng-template pTemplate="input">
-                      <input pInputText type="text" [(ngModel)]="user.status" required />
-                  </ng-template>
-                  <ng-template pTemplate="output">
-                      {{ user.status|| 'No status available' }}
-                  </ng-template>
-              </p-cellEditor>
-          </td>
-            <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input pInputText type="text" [(ngModel)]="user.category" required />
@@ -83,6 +66,31 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="user.name" required />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{ user.name }}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+           
+            <td>
+              <p-cellEditor>
+                  <ng-template pTemplate="input">
+                      <input pInputText type="text" [(ngModel)]="user.status" required />
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                      {{ user.status|| 'No status available' }}
+                  </ng-template>
+              </p-cellEditor>
+          </td>
+          <td>
+            <!-- Display the event date, format it if needed -->
+            {{ user.event_date | date: 'short' || 'No date available' }}
+        </td>
         </tr>
     </ng-template>
 </p-table>
