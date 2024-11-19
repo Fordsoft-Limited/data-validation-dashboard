@@ -152,6 +152,26 @@ export const layoutRoutes: Routes = [
                 (m) => m.NewCustomerModule
               ),
           },
+
+          {
+            path:'audit-log',
+            data:{breadcrumb: 'Audit  Log'},
+
+            loadChildren: () =>
+              import('../pages/audit-log/audit-log.module').then(
+                (m) => m.AuditLogModule
+              ),
+          },
+
+          {
+            path:'validate',
+            data:{breadcrumb: 'Validate Customer'},
+
+            loadChildren: () =>
+              import('../pages/validate-customer/validate-customer.module').then(
+                (m) => m.ValidateCustomerModule
+              ),
+          },
     ]
     },
 
