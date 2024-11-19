@@ -130,7 +130,7 @@ export class CustomerService {
     const params = new HttpParams()
       .set('category', 'New Customer') // Ensure the category matches the intended filter
       .set('page', page.toString())
-<<<<<<< HEAD
+
       .set('page_size', pageSize.toString())
       .set('approval_status', 'Approved,Rejected');
   
@@ -167,10 +167,9 @@ export class CustomerService {
       .set('page_size', pageSize.toString())
       .set('approval_status', 'Reviewed');
   
-=======
-      .set('page_size', pageSize.toString());
+    
 
->>>>>>> origin/abbey
+
     return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
       .pipe(catchError(err => this.base.errorHandler(err)));
   }

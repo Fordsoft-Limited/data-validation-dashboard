@@ -92,12 +92,21 @@
                     <!-- <button (click)="toggleUserStatus(user)">
                         {{ user.is_active ? 'disabled' : 'enabled' }}
                       </button> -->
-                    <p-inputSwitch [(ngModel)]="user.is_active" 
+                    <!-- <p-inputSwitch [(ngModel)]="user.is_active" 
                                    (onChange)="toggleUserStatus(user)"
                                    [styleClass]="user.is_active ? 'enabled' : 'disabled'">
-                    </p-inputSwitch>
+                    </p-inputSwitch> -->
+                    <!-- <p-inputSwitch [(ngModel)]="user.is_active" 
+               (onChange)="toggleUserStatus(user)">
+</p-inputSwitch> -->
+<p-inputSwitch 
+  [(ngModel)]="user.is_active"
+  (onChange)="toggleUserStatus(user, $event)"
+  [styleClass]="user.is_active ? 'enabled' : 'disabled'">
+</p-inputSwitch>
                   </div>
                 </td>
+                
             </tr>
         </ng-template>
     </p-table>
