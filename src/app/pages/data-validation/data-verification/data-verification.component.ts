@@ -210,23 +210,14 @@ export class DataVerificationComponent implements OnInit {
   }
 
   confirmReject() {
-    const token = this.authService.getToken();
-    if (!token) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Authorization Error',
-        detail: 'Authentication token is missing. Please log in again.',
-      });
-      return;
-    }
-  
+   
     const updatePayload: customerApproveOrReject = {
       uid: this.currentRecord.newData.uid,
       approval_status: 'Rejected',
       approval_comments: this.rejectReason,
     };
   
-    this.customerService.customerApproveOrReject(updatePayload, token).subscribe(
+    this.customerService.customerApproveOrReject(updatePayload).subscribe(
       (response) => {
         this.messageService.add({
           severity: 'success',
@@ -249,23 +240,14 @@ export class DataVerificationComponent implements OnInit {
 
 
   confirmApprove() {
-    const token = this.authService.getToken();
-    if (!token) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Authorization Error',
-        detail: 'Authentication token is missing. Please log in again.',
-      });
-      return;
-    }
-  
+
     const updatePayload: customerApproveOrReject = {
       uid: this.currentRecord.newData.uid,
       approval_status: 'Approved',
       approval_comments: this.approveReason,
     };
   
-    this.customerService.customerApproveOrReject(updatePayload, token).subscribe(
+    this.customerService.customerApproveOrReject(updatePayload).subscribe(
       (response) => {
         this.messageService.add({
           severity: 'success',
@@ -303,13 +285,8 @@ export class DataVerificationComponent implements OnInit {
     console.log(this.currentIndex);
   }
   loadCustomerByUid(uid: string) {
-    const token = this.authService.getToken();
-    if (!token) {
-      //  this.errorMessage = 'No authentication token found. Please log in again.';
-      return; // Exit the function early
-    }
 
-    this.customerService.getCustomerById(uid, token).subscribe(
+    this.customerService.getCustomerById(uid,).subscribe(
       (response: any) => {
         if (response.code === 200) {
           this.currentRecord = {
@@ -333,15 +310,8 @@ export class DataVerificationComponent implements OnInit {
   }
 
   loadQrCode(customerId: string): void {
-    const token = this.authService.getToken();
   
-    if (!token ) {
-      console.error('No valid authentication token found. Please log in again.');
-      alert('Session expired. Please log in again.');
-      return;
-    }
-  
-    this.customerService.getCustomerQrCode(customerId, token).subscribe({
+    this.customerService.getCustomerQrCode(customerId).subscribe({
       next: (response: any) => {
         if (response.code === 200) {
           this.qrCode = response.data?.qr_code; // Ensure safe access
@@ -357,13 +327,6 @@ export class DataVerificationComponent implements OnInit {
     });
   }
   
-  
-  // onSelectedRecordChange(selectedRecord: any) {
-  //   this.currentIndex = this.selectedRecords.indexOf(selectedRecord); // Find the index of the selected record
-  //   const uid = selectedRecord.uid; // Extract the UID from the selected record
-  //   this.loadCustomerByUid(uid); // Load the customer data by UID
-  //   console.log('Current index updated to:', this.currentIndex);
-  // }
 
   onSelectedRecordChange(selectedRecord: any) {
     this.currentIndex = this.selectedRecords.indexOf(selectedRecord); // Find the index of the selected record

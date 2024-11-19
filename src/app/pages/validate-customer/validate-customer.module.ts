@@ -31,7 +31,7 @@ export const validateRoutes: Routes = [
     component: ValidateCustomerComponent
   },
   {
-    path: 'review',
+    path: 'review/:uid',
     data:{breadcrum: 'Checker Review'},
     component: ValidateCustomerReviewComponent, 
   }

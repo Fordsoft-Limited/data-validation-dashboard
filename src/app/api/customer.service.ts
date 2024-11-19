@@ -25,9 +25,8 @@ export class CustomerService {
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
-  customerApproveOrReject(payload: customerApproveOrReject, token: string): Observable<any> {
+  customerApproveOrReject(payload: customerApproveOrReject): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
     return this.http.post<any>(`${this.baseUrl}/vet/approve-or-reject`, payload, { headers })
@@ -35,9 +34,8 @@ export class CustomerService {
   }
 
   // Get Request
-  getCustomerById(uid: string, token: string): Observable<any> {
+  getCustomerById(uid: string): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
 
@@ -138,9 +136,8 @@ export class CustomerService {
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
-  getCustomerFilterByPages(page: number, pageSize: number, token: string): Observable<any> {
+  getCustomerFilterByPages(page: number, pageSize: number): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
     
@@ -175,7 +172,6 @@ export class CustomerService {
   }
 
   getNewCustomerFilter(
-    token: string,
     region: string,
     businessHub: string,
     serviceCenter: string,
@@ -183,7 +179,6 @@ export class CustomerService {
     dateCreatedTo: string
   ): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
 
@@ -259,9 +254,8 @@ export class CustomerService {
     return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
-  getCustomerQrCode(customerNo: string,token: string): Observable<any>{
+  getCustomerQrCode(customerNo: string): Observable<any>{
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
     return this.http.get<any>(`${this.baseUrl}/qrcode/${customerNo}/`, { headers })

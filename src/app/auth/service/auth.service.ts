@@ -73,14 +73,12 @@ export class AuthService {
   // Check if the user is authenticated
   isAuthenticated(): boolean {
     const token = this.getToken();
-    console.log('Retrieved token:', token);
     return !!token;
   }
 
   logout(): void {
     this.clearToken();
     this.clearLoginData();
-    console.log('User has been logged out');
   }
 
 

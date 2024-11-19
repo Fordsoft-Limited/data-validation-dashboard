@@ -86,19 +86,8 @@ export class NewCustomerComponent implements OnInit {
 
   
 loadNewCustomer(page:number,pageSize:number) {
-  const token = this.authService.getToken();
-  console.log(token);
-if (!token) {
-  this.loading = false;
-  this.hasErrors = true;
-  this.errorMessage = 'No authentication token found. Please log in again.';
-  setTimeout(() => {
-    this.userAddedError = false;
-  }, 3000);
-  return; // Exit the function early
-}
   this.loading = true;
-  this.customerService.getCustomerFilterByPages(page,pageSize,token).subscribe(
+  this.customerService.getCustomerFilterByPages(page,pageSize).subscribe(
     (response) => {
       this.loading = false;
       if (response && response.data && response.data.results) {
@@ -161,18 +150,9 @@ filterData() {
   const selectedBusinessHub = businessUnit ? businessUnit.name : null;
   const selectedFeeder = feeder ? feeder.name : null;
 
-  const token = this.authService.getToken();
-
-  if (!token) {
-    this.loading = false;
-    this.errorMessage = 'No authentication token found. Please log in again.';
-    return;
-  }
-
   // Now, call the service to get filtered customers
   this.customerService
     .getNewCustomerFilter(
-      token,
       selectedRegion,  // Only pass region name here
       selectedBusinessHub,
       selectedFeeder,
@@ -218,21 +198,6 @@ filterData() {
     this.selectedCustomer = { ...customer }; 
    // this.comments = this.selectedCustomer.comments ?? '';
   }
-
-  // navigateToCustomerDetails(){
-  //   this.isShowDetails=true;
-  //   setTimeout(() => {
-  //     this.isShowDetails=false;
-  //      if (this.selectedNewCustomer) {
-  //    //  this.showDetailsDialog = true; // Open the dialog
-  //    this.router.navigate(['/app/customer-details', this.selectedNewCustomer.uid]);
-  //   }
-  //   },2000)
-
-
-  
-  // }
-
 
   navigateToDetails() {
     this.loading = true;

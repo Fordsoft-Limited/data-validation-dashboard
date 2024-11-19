@@ -36,15 +36,9 @@ export class CustomerDetailsComponent implements OnInit {
   }
 
   loadCustomerDetails(uid: string): void {
-    const token = this.authService.getToken();
-
-    if (!token) {
-      console.error('No authentication token found. Please log in again.');
-      return;
-    }
 
     if (this.customerId) {
-      this.customerService.getCustomerById(uid, token)
+      this.customerService.getCustomerById(uid)
         .subscribe(
 
           (response: any) => {
@@ -103,15 +97,8 @@ export class CustomerDetailsComponent implements OnInit {
   }
 
   loadQrCode(customerId: string): void {
-    const token = this.authService.getToken();
-  
-    if (!token ) {
-      console.error('No valid authentication token found. Please log in again.');
-      alert('Session expired. Please log in again.');
-      return;
-    }
-  
-    this.customerService.getCustomerQrCode(customerId, token).subscribe({
+   
+    this.customerService.getCustomerQrCode(customerId).subscribe({
       next: (response: any) => {
         if (response.code === 200) {
           this.qrCode = response.data?.qr_code; // Ensure safe access

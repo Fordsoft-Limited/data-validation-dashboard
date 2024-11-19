@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CustomerService } from '../../../api/customer.service';
 import { AuthService } from '../../../auth/service/auth.service';
 import { Token } from '@angular/compiler';
 import { customerApproveOrReject } from '../../../model/customer';
+import { UtilsService } from '../../../shared/services/utils.service';
 
 @Component({
   selector: 'app-validate-customer-review',
@@ -13,7 +14,7 @@ import { customerApproveOrReject } from '../../../model/customer';
   styleUrl: './validate-customer-review.component.scss',
   providers: [ConfirmationService, MessageService],
 })
-export class ValidateCustomerReviewComponent implements OnInit{
+export class ValidateCustomerReviewComponent implements OnInit {
   selectedRecords: any[] = [];
   currentRecord!: {
     newData: any;
@@ -46,29 +47,18 @@ export class ValidateCustomerReviewComponent implements OnInit{
 
   constructor(
     private router: Router,
-  
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private customerService: CustomerService,
-    private authService: AuthService
+    private utilService: UtilsService,
+    private activatedRoute: ActivatedRoute
   ) {
-    const navigation = this.router.getCurrentNavigation();
-    this.selectedRecords =
-      navigation?.extras.state?.['selectedNewCustomer'] || [];
-   
-    this.setCurrentRecord();
   }
 
   get totalSelectedRecords(): number {
     return this.selectedRecords.length;
   }
 
-
-
-
- 
-
-  
   nextRecord() {
     if (this.currentIndex < this.selectedRecords.length - 1) {
       this.currentIndex++;
@@ -82,7 +72,7 @@ export class ValidateCustomerReviewComponent implements OnInit{
       });
     }
   }
-  
+
   confirm2(event: Event) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
@@ -95,41 +85,31 @@ export class ValidateCustomerReviewComponent implements OnInit{
       rejectIcon: 'none',
 
       accept: () => {
-       
+
         this.reviewDialog = true;
-    },
+      },
       reject: () => {
-       
+
       },
     });
   }
 
   confirmReView() {
-    const token = this.authService.getToken();
-    if (!token) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Authorization Error',
-        detail: 'Authentication token is missing. Please log in again.',
-      });
-      return;
-    }
-  
     const updatePayload: customerApproveOrReject = {
       uid: this.currentRecord.newData.uid,
       approval_status: 'Reviewed',
       approval_comments: this.reviewReason,
     };
-  
-    this.customerService.customerApproveOrReject(updatePayload, token).subscribe(
+
+    this.customerService.customerApproveOrReject(updatePayload).subscribe(
       (response) => {
         this.messageService.add({
           severity: 'success',
           summary: 'Record Reviewed',
           detail: 'Customer record has been reviwed.',
         });
-        this.reviewDialog = false; // Close the rejection dialog
-        this.reviewReason = ''; // Clear rejection reason after use
+        this.reviewDialog = false; 
+        this.reviewReason = ''; 
         this.removeCurrentRecordAndRedirectIfEmpty();
       },
       (error) => {
@@ -141,31 +121,32 @@ export class ValidateCustomerReviewComponent implements OnInit{
       }
     );
   }
-  
+
   private removeCurrentRecordAndRedirectIfEmpty() {
-    this.selectedRecords.shift(); // Remove the first record
+    this.selectedRecords.shift();
     if (this.selectedRecords.length === 0) {
+      this.utilService.clearItems()
       this.redirectToDataValidation();
     } else {
-      this.setCurrentRecord(); // Load the next record if available
+     this.utilService.deleteItem(this.currentRecord.newData.uid)
+     this.onSelectedRecordChange(this.selectedRecords[0])
+     
     }
   }
   ngOnInit() {
-    console.log('Selected Customers:', this.selectedRecords);
-   
-    if (this.selectedRecords.length > 0) {
-      this.loadCustomerByUid(this.selectedRecords[this.currentIndex].uid);
-    }
-    console.log(this.currentIndex);
+    this.loadData()
+  }
+  loadData() {
+    this.selectedRecords = this.utilService.getItems()
+    this.activatedRoute.paramMap.subscribe(params => {
+      const uid = params.get('uid');
+      if (uid) {
+        this.loadCustomerByUid(uid)
+      }
+    });
   }
   loadCustomerByUid(uid: string) {
-    const token = this.authService.getToken();
-    if (!token) {
-      //  this.errorMessage = 'No authentication token found. Please log in again.';
-      return; // Exit the function early
-    }
-
-    this.customerService.getCustomerById(uid, token).subscribe(
+    this.customerService.getCustomerById(uid).subscribe(
       (response: any) => {
         if (response.code === 200) {
           this.currentRecord = {
@@ -173,14 +154,7 @@ export class ValidateCustomerReviewComponent implements OnInit{
             oldData: response.data.old,
           };
         }
-        const customerNo = this.currentRecord.newData.customer_no;
-        if (customerNo) {
-          this.loadQrCode(customerNo); // Fetch QR code using customerNo
-          console.log(customerNo);
-        } else {
-          console.error('Customer number is not available.');
-        }
-        console.log(this.currentRecord.newData.customer_full_name);
+       
       },
       (error) => {
         console.error('Error fetching customer data:', error);
@@ -188,15 +162,8 @@ export class ValidateCustomerReviewComponent implements OnInit{
     );
   }
   loadQrCode(customerId: string): void {
-    const token = this.authService.getToken();
-  
-    if (!token ) {
-      console.error('No valid authentication token found. Please log in again.');
-      alert('Session expired. Please log in again.');
-      return;
-    }
-  
-    this.customerService.getCustomerQrCode(customerId, token).subscribe({
+   
+    this.customerService.getCustomerQrCode(customerId).subscribe({
       next: (response: any) => {
         if (response.code === 200) {
           this.qrCode = response.data?.qr_code; // Ensure safe access
@@ -211,50 +178,29 @@ export class ValidateCustomerReviewComponent implements OnInit{
       }
     });
   }
-  
 
-  
+
+
   onSelectedRecordChange(selectedRecord: any) {
-    this.currentIndex = this.selectedRecords.indexOf(selectedRecord); // Find the index of the selected record
-    const uid = selectedRecord.uid; // Extract the UID from the selected record
-    this.router.navigate([], {
-      relativeTo: this.router.routerState.root,  // Maintain the current route
-      queryParams: { uid: uid },  // Add the uid as a query parameter
-      queryParamsHandling: 'merge'  // Preserve other query parameters if any
+    this.router.navigate(['../', selectedRecord.uid], {
+      relativeTo: this.activatedRoute
+    }).then(() => {
+      console.log('Navigation successful to:', selectedRecord.uid);
     });
-  
-    this.loadCustomerByUid(uid); // Load the customer data by UID
-    console.log('Current index updated to:', this.currentIndex);
   }
 
-  
-  previousRecord() {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
-      this.currentRecord = this.selectedRecords[this.currentIndex];
-    }
-  }
 
   approveRecord() {
     this.reviewDialog = true;
   }
 
   rejectRecord() {
-    // this.selectedRecords = this.currentRecord; // Set the current record to the one being rejected
     this.rejectDialog = true;
   }
-
-  // confirmReject() {
-  //   console.log('Rejected Reason:', this.rejectReason);
-  //   this.rejectDialog = false;
-  //   this.rejectReason = ''; // Clear the reject reason for the next time
-  //   this.nextRecord(); // Move to the next record after rejection
-  // }
 
   confirmReview() {
     console.log('Review Comments:', this.comments);
     this.reviewDialog = false;
-   // this.comments = ''; // Clear comments for the next review
     this.nextRecord(); // Move to the next record after review
   }
 
@@ -270,14 +216,6 @@ export class ValidateCustomerReviewComponent implements OnInit{
   isFirstRecord(): boolean {
     return this.currentIndex === 0;
   }
-  private setCurrentRecord() {
-    if (this.selectedRecords.length > 0) {
-      const uid = this.selectedRecords[0].uid;
-      this.loadCustomerByUid(uid);
-    } else {
-      this.redirectToDataValidation();
-    }
-  }
 
   private redirectToDataValidation() {
     this.messageService.add({
@@ -286,7 +224,7 @@ export class ValidateCustomerReviewComponent implements OnInit{
       detail: 'Redirecting to data validation page.',
     });
     this.router.navigate(['/app/validate']);
-  } 
+  }
   // Check if the current record is the last one
   isLastRecord(): boolean {
     return this.currentIndex === this.selectedRecords.length - 1;

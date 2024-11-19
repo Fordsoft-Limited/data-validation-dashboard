@@ -182,18 +182,12 @@ export class DataValidationComponent implements OnInit {
     const selectedBusinessHub = businessUnit ? businessUnit.name : null;
     const selectedFeeder = feeder ? feeder.name : null;
   
-    const token = this.authService.getToken();
-  
-    if (!token) {
-      this.loading = false;
-      this.errorMessage = 'No authentication token found. Please log in again.';
-      return;
-    }
+   
   
     // Now, call the service to get filtered customers
     this.customerService
       .getNewCustomerFilter(
-        token,
+        
         selectedRegion,  // Only pass region name here
         selectedBusinessHub,
         selectedFeeder,
