@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CheckerComponent } from './checker.component';
+import { CheckerComponent } from './filter.component';
 
 describe('CheckerComponent', () => {
   let component: CheckerComponent;

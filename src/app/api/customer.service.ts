@@ -40,12 +40,12 @@ export class CustomerService {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
-    
+
     return this.http.get<any>(`${this.baseUrl}/${uid}`, { headers })
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
- 
+
 
 
   getCustomerList(): Observable<number> {
@@ -63,12 +63,12 @@ export class CustomerService {
       'Authorization': `Bearer ${token}`,  // Include the token in the header
       'Content-Type': 'application/json'
     });
-  
+
     const params = new HttpParams()
       .set('page', page.toString())
       .set('page_size', pageSize.toString())
       .set('approval_status', 'Approved,Rejected'); // Set to only show Approved and Rejected
-  
+
     return this.http.get<any>(`${this.baseUrl}/status/`, { headers, params })
       .pipe(
         catchError(err => this.base.errorHandler(err))
@@ -79,7 +79,7 @@ export class CustomerService {
     return this.http.get<any>(`${this.baseUrl}/validate/batches`)
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
-  viewBatchDetails(uid:string): Observable<any> {
+  viewBatchDetails(uid: string): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/validate/batches/${uid}`)
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
@@ -88,48 +88,49 @@ export class CustomerService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-  
+
     let params = new HttpParams();
     if (!url) {  // If no URL is passed, use page and pageSize
       params = params.set('page', page.toString())
-                     .set('page_size', pageSize.toString());
+        .set('page_size', pageSize.toString());
     }
-  
+
     // Use URL if provided (for next/previous pagination)
     const requestUrl = url ? url : `${this.baseUrl}/validate/batches-pages`;
-  
+
     return this.http.get<any>(requestUrl, { headers, params })
       .pipe(
         catchError(err => {
           // Log the error to console
           console.error('Error in service:', err);
-  
+
           // Handle the error gracefully by returning a fallback object
           // You can customize this fallback object as needed
-          return of({ 
-            data: { 
-              results: [], 
-              count: 0, 
-              next: null, 
-              previous: null 
-            } 
+          return of({
+            data: {
+              results: [],
+              count: 0,
+              next: null,
+              previous: null
+            }
           });
         })
       );
   }
-  
 
 
-  
+
+
   getNewCustomerFilterByPages(page: number, pageSize: number, token: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
-    
+
     const params = new HttpParams()
       .set('category', 'New Customer') // Ensure the category matches the intended filter
       .set('page', page.toString())
+<<<<<<< HEAD
       .set('page_size', pageSize.toString())
       .set('approval_status', 'Approved,Rejected');
   
@@ -166,16 +167,20 @@ export class CustomerService {
       .set('page_size', pageSize.toString())
       .set('approval_status', 'Reviewed');
   
+=======
+      .set('page_size', pageSize.toString());
+
+>>>>>>> origin/abbey
     return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
   getNewCustomerFilter(
-    token: string, 
-    region: string, 
-    businessHub: string, 
-    serviceCenter: string, 
-    dateCreatedFrom: string, 
+    token: string,
+    region: string,
+    businessHub: string,
+    serviceCenter: string,
+    dateCreatedFrom: string,
     dateCreatedTo: string
   ): Observable<any> {
     const headers = new HttpHeaders({
@@ -195,13 +200,47 @@ export class CustomerService {
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
+  getNewCustomerFilter2(payload: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${payload.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    // Initialize query parameters
+    let params = new HttpParams();
+
+    // Add parameters only if they exist in the payload
+    if (payload.region) {
+      params = params.set('region', payload.region);
+    }
+    if (payload.businessHub) {
+      params = params.set('business_hub', payload.businessHub);
+    }
+    if (payload.serviceCenter) {
+      params = params.set('service_center', payload.serviceCenter);
+    }
+    if (payload.dateCreatedFrom) {
+      params = params.set('date_created_from', payload.dateCreatedFrom);
+    }
+    if (payload.dateCreatedTo) {
+      params = params.set('date_created_to', payload.dateCreatedTo);
+    }
+
+    // Make the GET request with headers and query parameters
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
+      .pipe(catchError(err => this.base.errorHandler(err)));
+  }
+
+
+
+
 
   getNewCustomerFilterApproveRegion(
-    token: string, 
-    region: string, 
-    businessHub: string, 
-    serviceCenter: string, 
-    dateCreatedFrom: string, 
+    token: string,
+    region: string,
+    businessHub: string,
+    serviceCenter: string,
+    dateCreatedFrom: string,
     dateCreatedTo: string
   ): Observable<any> {
     const headers = new HttpHeaders({
@@ -233,12 +272,12 @@ export class CustomerService {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
-  
+
     const params = new HttpParams()
       .set('page', page.toString())
       .set('page_size', pageSize.toString())
       .set('approval_status', 'Awaiting review');
-  
+
     return this.http.get<any>(`${this.baseUrl}/status/`, { headers, params })
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
@@ -253,20 +292,20 @@ export class CustomerService {
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet(customers);
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Customers');
-  
+
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const excelBlob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  
+
     // Prepare the FormData for the request
     const formData = new FormData();
     formData.append('file', excelBlob, 'customers.xlsx');
-  
+
     // Set up headers
     const headers = new HttpHeaders({
       'Authorization': token ? `Bearer ${token}` : '',
       'Accept': 'application/json'
     });
-  
+
     // Send the FormData with the file
     return this.http.post<any>(`${this.baseUrl}/validate/bulk`, formData, { headers })
       .pipe(catchError(error => {
@@ -306,7 +345,7 @@ export class CustomerService {
     });
     const params = new HttpParams().set('approval_status', status);
 
-    return this.http.get<any>(`${this.baseUrl}/status/`, {headers, params }).pipe(
+    return this.http.get<any>(`${this.baseUrl}/status/`, { headers, params }).pipe(
       catchError((err) => {
         console.error('Error occurred:', err);
         throw err; // Handle the error accordingly
