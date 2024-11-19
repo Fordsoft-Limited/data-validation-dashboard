@@ -1,0 +1,16 @@
+.table-header {
+    display: flex;
+    justify-content: space-between; /* Distribute content to opposite ends */
+    align-items: center; /* Align items vertically in the center */
+    padding: 1rem 0; /* Add some spacing */
+  }
+  
+  .customer-records {
+    font-weight: bold; /* Optional: Make the text bold */
+  }
+  
+  .group-right {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
