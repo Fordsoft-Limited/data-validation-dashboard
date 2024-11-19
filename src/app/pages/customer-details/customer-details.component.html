@@ -47,6 +47,7 @@
               <p class="text-xs"> <b>Status: </b>{{ event.status }}</p>
               <p class="text-xs"> <b>Description: </b>{{ event.description }}</p>
               <p class="text-xs">  <b>Posted by: </b>{{ event.posted_by.name }}</p>
+              <p class="text-xs"> <b>Date: </b>{{event.event_date | date: 'MM/dd/yyyy HH:mm'}}</p>
             <!-- </div> -->
        
           </div>

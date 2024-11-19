@@ -62,9 +62,10 @@ export class CustomerDetailsComponent implements OnInit {
                 color:event.status === 'Rejected' ? '#ff0000' : '#00ff00',
                 category: event.category,
                 status: event.status,
-                date: event.date_created,  // Format date as needed
+                date: event.event_date,  // Format date as needed
                 icon: 'pi pi-info-circle', // Customize icon if needed
                  // Example color based on status
+
               }));
 
               const customerNo = newCustomer.customer_no; // Extract customerNo

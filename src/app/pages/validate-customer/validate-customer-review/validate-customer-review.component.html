@@ -56,11 +56,14 @@
             <label>{{ field.name }}</label>
         
             <div *ngIf="currentRecord.newData" class="data new-data">
-                <span>{{ currentRecord.newData[field.key] }}</span>
+                <span>{{ currentRecord.newData[field.key] || '----'}}</span>
             </div>
             <div *ngIf="currentRecord?.oldData" class="data existing-data">
-                <span>{{ currentRecord.oldData[field.key] }}</span>
+                <span>{{ currentRecord.oldData[field.key] || '----' }} </span>
             </div>
+            <!-- <div *ngIf="(!currentRecord?.oldData || currentRecord.oldData == '') " class="data existing-data">
+              <span>----</span>
+          </div> -->
         </div>
 
         <div class="col-12 flex justify-content-center">

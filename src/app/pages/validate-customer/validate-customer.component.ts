@@ -50,7 +50,7 @@ export class ValidateCustomerComponent implements OnInit{
   errorMessage: string = "";
   filterForm!: FormGroup;
   currentPage: number = 1;
-  pageSize : number = 20;
+  pageSize : number = 200;
   newCustomers !: Customer[];
   isResetLoading: boolean = false;
 //  filteredNewCustomers  : Customer[]=[];
@@ -158,8 +158,7 @@ export class ValidateCustomerComponent implements OnInit{
         console.error('Error loading customers:', error);
         this.errorMessage = 'Failed to load customers. Please try again later.'; // Set error message
         this.loading = false; // Stop loading
-        // Optional: Notify the user of the error using MessageService
-        // this.messageService.add({ severity: 'error', summary: 'Error', detail: this.errorMessage });
+       
       }
     );
   }
