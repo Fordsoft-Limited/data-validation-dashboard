@@ -155,17 +155,6 @@ export const layoutRoutes: Routes = [
               ),
           },
 
-
-          {
-            path:'customerFilter',
-            data:{breadcrumb: 'customerFilter'},
-
-            loadChildren: () =>
-              import('../pages/customer-filter/customer-filter.module').then(
-                (m) => m.CustomerFilterModule
-              ),
-          },
-
           {
             path:'filter',
             data:{breadcrumb: 'filter'},
