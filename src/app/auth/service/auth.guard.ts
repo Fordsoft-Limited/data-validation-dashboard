@@ -10,7 +10,23 @@ export const authGuard: CanActivateFn = (route, state) => {
   // Check if the user is authenticated
   if (authService.isAuthenticated()) {
     console.log('User is authenticated, allowing access.');
-    return true;
+
+    // Check if the query parameter `uid` exists
+    const urlTree = router.parseUrl(state.url);
+    const uid = urlTree.queryParams['uid'];
+    if (uid) {
+      console.log('Redirecting to customer detail page for UID:', uid);
+
+      // Prevent redirection if already on the customer-details page
+      if (state.url.startsWith('/customer-details')) {
+        return true;
+      }
+
+      // Redirect to the customer-details page with the UID
+      router.navigate(['/customer-details'],   uid  );
+      return false; // Prevent navigation to the original route
+    }
+    return true; 
   } else {
     console.log('User is not authenticated, redirecting to login.');
     router.navigate(['/'], {

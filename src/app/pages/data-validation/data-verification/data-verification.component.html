@@ -50,17 +50,42 @@
         <p-divider layout="vertical" />
       </div>
   
-      <div class="col-12 md:col-7 ">
-        <div *ngIf="currentRecord"  class="p-formgrid grid h-30rem overflow-scroll overflow-x-hidden">
-         
+      <div class="col-12 md:col-7 " *ngIf="currentRecord">
+        <!-- <div class="p-formgrid grid ">
+          <div class="col-12 review">
+            <span><b>Reviewed By : </b>{{currentRecord.newData.approved_by.name}}</span>
+          </div>
+          <div class="col-12 review">
+            <span><b>Reviewed Date : </b>{{currentRecord.newData.reviewed_date | date: 'MM/dd/yyyy HH:mm' }}</span>
+          </div>
+          <div class="col-12 review">
+            <span><b>Reviewed Comment : </b>{{currentRecord.newData.approval_comments}}</span>
+          </div>
+        
+        </div> -->
+       
+        <div   class="p-formgrid grid h-30rem overflow-scroll overflow-x-hidden">
+
+          <div class="col-12 p-formgrid grid ">
+            <div class="col-12 review">
+              <span><b>Reviewed By : </b>{{currentRecord.newData.approved_by.name}}</span>
+            </div>
+            <div class="col-12 review">
+              <span><b>Reviewed Date : </b>{{currentRecord.newData.reviewed_date | date: 'MM/dd/yyyy HH:mm' }}</span>
+            </div>
+            <div class="col-12 review">
+              <span><b>Reviewed Comment : </b>{{currentRecord.newData.approval_comments}}</span>
+            </div>
+          
+          </div>
           <div *ngFor="let field of customerFields" class="field col-6 flex flex-column gap-2 field-container">
             <label>{{ field.name }}</label>
         
             <div *ngIf="currentRecord.newData" class="data new-data">
-                <span>{{ currentRecord.newData[field.key] }}</span>
+                <span>{{ currentRecord.newData[field.key] || '----' }}</span>
             </div>
             <div *ngIf="currentRecord?.oldData" class="data existing-data">
-                <span>{{ currentRecord.oldData[field.key] }}</span>
+                <span>{{ currentRecord.oldData[field.key] || '----'}}</span>
             </div>
         </div>
 

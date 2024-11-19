@@ -56,7 +56,7 @@ export class ValidateCustomerReviewComponent implements OnInit{
     this.selectedRecords =
       navigation?.extras.state?.['selectedNewCustomer'] || [];
    
-    //this.setCurrentRecord();
+    this.setCurrentRecord();
   }
 
   get totalSelectedRecords(): number {
@@ -217,6 +217,12 @@ export class ValidateCustomerReviewComponent implements OnInit{
   onSelectedRecordChange(selectedRecord: any) {
     this.currentIndex = this.selectedRecords.indexOf(selectedRecord); // Find the index of the selected record
     const uid = selectedRecord.uid; // Extract the UID from the selected record
+    this.router.navigate([], {
+      relativeTo: this.router.routerState.root,  // Maintain the current route
+      queryParams: { uid: uid },  // Add the uid as a query parameter
+      queryParamsHandling: 'merge'  // Preserve other query parameters if any
+    });
+  
     this.loadCustomerByUid(uid); // Load the customer data by UID
     console.log('Current index updated to:', this.currentIndex);
   }

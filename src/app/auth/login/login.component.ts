@@ -80,7 +80,16 @@ onSubmit() {
           this.authService.setLoginData(username, password); 
           this.sharedDataService.setUserData({ name, role });
           this.autoDismissSuccess();
-          this.router.navigate(['/app']);          
+          const returnUrl =
+            this.router.routerState.snapshot.root.queryParams['returnUrl'] ||
+            '/app';
+          const uid =
+            this.router.routerState.snapshot.root.queryParams['uid'];
+          if (uid) {
+            this.router.navigate(['/customer-details', uid]);
+          } else {
+            this.router.navigate([returnUrl]);
+          }          
         } else {
           this.errorMessage = 'Login failed. Please try again.';
           this.loginError = true;

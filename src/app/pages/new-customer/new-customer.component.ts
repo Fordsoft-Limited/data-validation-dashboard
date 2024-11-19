@@ -51,7 +51,7 @@ export class NewCustomerComponent implements OnInit {
 
   searchValue: string = '';
   currentPage: number = 1;
-  pageSize: number = 20;
+  pageSize: number = 300;
   showDetailsDialog: boolean = false;
   selectedCustomer: any  | null = null;
   selectedNewCustomer: any[] = [];

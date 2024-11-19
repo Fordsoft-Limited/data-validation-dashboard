@@ -18,7 +18,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('../app/pages/customer-details-qrcode/customer-details-qrcode.module').then(
         (m) => m.CustomerDetailsQrcodeModule
-      ),
+      ),canActivate:[authGuard]
   },
 
 
