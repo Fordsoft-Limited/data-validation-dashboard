@@ -1,12 +1,14 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit,ViewChild,ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Table } from 'primeng/table';
+import { MessageService ,ConfirmationService} from 'primeng/api';
+import { ProductService } from '../../api/product.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import {  Customer } from '../../shared/model/customer';
+import { Customer } from '../../shared/model/customer';
 import { CustomerService } from '../../api/customer.service';
 import { AuthService } from '../../auth/service/auth.service';
 import { CUSTOMER_REGION } from '../../shared/constants';
+import { UtilsService } from '../../shared/services/utils.service'; 
 
 export interface ServiceCentre {
   name: string;
@@ -61,7 +63,7 @@ export class DataValidationComponent implements OnInit {
     private customerService: CustomerService,
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private utilService: UtilsService
   ) {
     this.filterForm = this.fb.group({
       dateRange: [],
@@ -71,25 +73,29 @@ export class DataValidationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.initializeForm()
+    this.reload()
+
+  }
+  reload() {
     this.loadCustomers(this.currentPage, this.pageSize);
+  }
+  initializeForm() {
 
     this.filterForm = this.fb.group({
       region: [null],
       businessUnit: [null],
       feeder: [null],
-      dateCreatedFrom: [null],  // Start date control
-      dateCreatedTo: [null]     // End date control
+      dateCreatedFrom: [null],
+      dateCreatedTo: [null]
     });
-
 
     this.regions = CUSTOMER_REGION.map(region => ({
       label: region.name,  // Display the region name
       value: region        // Store the entire region object as value
     }));
-
   }
-  
-
   onRegionChange(event: any): void {
     const selectedRegion = event.value;
     this.updateBusinessUnits(selectedRegion);
@@ -126,28 +132,21 @@ export class DataValidationComponent implements OnInit {
 
 
   resetFilter() {
-    this.isResetLoading=true;
+    this.isResetLoading = true;
     setTimeout(() => {
-      this.isResetLoading=false;
+      this.isResetLoading = false;
       this.filterForm.reset();  // Reset the form fields
-      this.filteredNewCustomers = [...this.newCustomers];  // Restore the original list
-    },2000)
-    
+      this.filteredCustomers = [...this.customers];  // Restore the original list
+    }, 2000)
+
   }
-  
+
   loadCustomers(page: number, pageSize: number): void {
-    const token = this.authService.getToken();
-    console.log(token);
-    
-    if (!token) {
-      this.loading = false;
-      this.errorMessage = 'No authentication token found. Please log in again.';
-      return; // Exit the function early
-    }
-  
-    this.loading = true; // Start loading before the request  
-  
-    this.customerService.getCustomerStatusByReViewed(page, pageSize, token).subscribe(
+   
+
+    this.loading = true; // Start loading before the request
+
+    this.customerService.getCustomerStatusByReViewed(page, pageSize).subscribe( 
       (response) => {
         console.log('Data loaded:', response); // Debugging check
         this.customers = response.data?.results || []; // Handle cases where results might be undefined
@@ -158,36 +157,32 @@ export class DataValidationComponent implements OnInit {
         console.error('Error loading customers:', error);
         this.errorMessage = 'Failed to load customers. Please try again later.'; // Set error message
         this.loading = false; // Stop loading
-        // Optional: Notify the user of the error using MessageService
-        // this.messageService.add({ severity: 'error', summary: 'Error', detail: this.errorMessage });
+
       }
     );
   }
-  
-  
-  
+
+
+
   applyStatusFilter() {
     // Filter customers based on status
     this.filteredCustomers = this.customers.filter(
       customer => customer.aproval_status === 'Awaiting Review'
     );
   }
-  
+
   filterData() {
     this.loading = true;
     const { dateCreatedFrom, dateCreatedTo, feeder, businessUnit, region } = this.filterForm.value;
 
     const selectedRegion = region ? region.name : null;  // Get the region name
-  
+
     const selectedBusinessHub = businessUnit ? businessUnit.name : null;
     const selectedFeeder = feeder ? feeder.name : null;
-  
-   
-  
-    // Now, call the service to get filtered customers
+
     this.customerService
       .getNewCustomerFilter(
-        
+       
         selectedRegion,  // Only pass region name here
         selectedBusinessHub,
         selectedFeeder,
@@ -208,28 +203,24 @@ export class DataValidationComponent implements OnInit {
         }
       );
   }
-  
-  // Helper function to format the date into YYYY-MM-DD format
-
- 
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
-  showDetails(customer: any ) {
-    this.selectedCustomer = { ...customer }; 
-   // this.comments = this.selectedCustomer.comments ?? '';
+  showDetails(customer: any) {
+    this.selectedCustomer = { ...customer };
+    // this.comments = this.selectedCustomer.comments ?? '';
   }
 
   navigateToDetails() {
-    this.loading = true;
-    setTimeout(() => {
-      this.loading = false;
-      this.router.navigate(['app/data-validation/data-verification'], {
-        state: { selectedCustomers: this.selectedCustomers }
-      });
-    }, 2000);
+      const firstItemUid = this.selectedCustomers[0].uid
+      this.utilService.saveItems(this.selectedCustomers)
+      this.router.navigate(['app/data-validation/data-verification/'+firstItemUid]);
+
+  }
+  viewDetails(record: any): void {
+    this.router.navigate(['/app/customer-details', record.uid]); 
   }
 
   openDialog() {
@@ -238,12 +229,6 @@ export class DataValidationComponent implements OnInit {
     }
   }
 
-  // approveRecord() {
-  //   if (this.selectedCustomer) {
-  //     this.selectedCustomer.status = 'Approved';
-  //     this.selectedCustomer.comments = this.comments;
-  //   }
-  // }
 
   rejectRecord() {
     if (this.selectedCustomer) {
@@ -252,43 +237,9 @@ export class DataValidationComponent implements OnInit {
     }
   }
 
-  // nextRecord() {
-  //   const currentIndex = this.customers.findIndex(
-  //     (item) => item. customer_id === this.selectedCustomer?.id
-  //   );
-  //   if (currentIndex < this.customers.length - 1) {
-  //     this.selectedCustomer = this.customers[currentIndex + 1];
-  //   }
-  // }
-
-  // previousRecord() {
-  //   const currentIndex = this.customers.findIndex(
-  //     (item) => item.id === this.selectedCustomer?.id
-  //   );
-  //   if (currentIndex > 0) {
-  //     this.selectedCustomer = this.customers[currentIndex - 1];
-  //   }
-  // }
-
   closeDialog() {
     this.showDetailsDialog = false;
   }
-
-  clear(table: Table) {
-    table.clear();
-    this.filter.nativeElement.value = '';
-    this.searchValue = '';
-  }
-
-  // isPreviousDisabled(): boolean {
-  //   return !this.selectedCustomer || 
-  //          this.customers.findIndex(item => item.id === this.selectedCustomer?.id) === 0;
-  // }
-
-  // isNextDisabled(): boolean {
-  //   return !this.selectedCustomer || 
-  //          this.customers.findIndex(item => item.id === this.selectedCustomer?.id) === this.customers.length - 1;
-  // }
 
   getSeverity(approval_status?: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
     switch (approval_status) {
@@ -302,4 +253,5 @@ export class DataValidationComponent implements OnInit {
         return 'info';
     }
   }
+
 }

@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataValidationService } from '../service/data-validation.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CustomerService } from '../../../api/customer.service';
 import { AuthService } from '../../../auth/service/auth.service';
 import { Token } from '@angular/compiler';
 import { customerApproveOrReject } from '../../../model/customer';
+import { UtilsService } from '../../../shared/services/utils.service';
 
 interface RecordData {
   newData: any;
-  oldData: any;
+  oldData: any; 
 }
 @Component({
   selector: 'app-data-verification',
@@ -26,7 +27,7 @@ export class DataVerificationComponent implements OnInit {
   };
   qrCode: string | null = null;
   currentIndex: number = 0;
-
+  events: any | null = null;
   comments: string = ' Well done ';
   rejectDialog: boolean = false;
   reviewDialog: boolean = false;
@@ -57,13 +58,15 @@ export class DataVerificationComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private customerService: CustomerService,
-    private authService: AuthService
+    private authService: AuthService,
+    private utilService: UtilsService,
+    private activatedRoute: ActivatedRoute
   ) {
-    const navigation = this.router.getCurrentNavigation();
-    this.selectedRecords =
-      navigation?.extras.state?.['selectedCustomers'] || [];
+    // const navigation = this.router.getCurrentNavigation();
+    // this.selectedRecords =
+    //   navigation?.extras.state?.['selectedCustomers'] || [];
    
-    this.setCurrentRecord();
+    // this.setCurrentRecord();
   }
 
   get totalSelectedRecords(): number {
@@ -268,21 +271,44 @@ export class DataVerificationComponent implements OnInit {
     );
   }
   
+  // private removeCurrentRecordAndRedirectIfEmpty() {
+  //   this.selectedRecords.shift(); // Remove the first record
+  //   if (this.selectedRecords.length === 0) {
+  //     this.redirectToDataValidation();
+  //   } else {
+  //     this.setCurrentRecord(); // Load the next record if available
+  //   }
+  // }
+
   private removeCurrentRecordAndRedirectIfEmpty() {
-    this.selectedRecords.shift(); // Remove the first record
+    this.selectedRecords.shift();
     if (this.selectedRecords.length === 0) {
+      this.utilService.clearItems()
       this.redirectToDataValidation();
     } else {
-      this.setCurrentRecord(); // Load the next record if available
+     this.utilService.deleteItem(this.currentRecord.newData.uid)
+     this.onSelectedRecordChange(this.selectedRecords[0])
+     
     }
   }
   ngOnInit() {
-    console.log('Selected Customers:', this.selectedRecords);
+    // console.log('Selected Customers:', this.selectedRecords);
    
-    if (this.selectedRecords.length > 0) {
-      this.loadCustomerByUid(this.selectedRecords[this.currentIndex].uid);
-    }
-    console.log(this.currentIndex);
+    // if (this.selectedRecords.length > 0) {
+    //   this.loadCustomerByUid(this.selectedRecords[this.currentIndex].uid);
+    // }
+    // console.log(this.currentIndex);
+    this.loadData()
+  }
+
+  loadData() {
+    this.selectedRecords = this.utilService.getItems()
+    this.activatedRoute.paramMap.subscribe(params => {
+      const uid = params.get('uid');
+      if (uid) {
+        this.loadCustomerByUid(uid)
+      }
+    });
   }
   loadCustomerByUid(uid: string) {
 
@@ -293,6 +319,7 @@ export class DataVerificationComponent implements OnInit {
             newData: response.data.new,
             oldData: response.data.old,
           };
+          this.events=this.currentRecord.newData.events;
         }
         const customerNo = this.currentRecord.newData.customer_no;
         if (customerNo) {
@@ -328,20 +355,29 @@ export class DataVerificationComponent implements OnInit {
   }
   
 
+  // onSelectedRecordChange(selectedRecord: any) {
+  //   this.currentIndex = this.selectedRecords.indexOf(selectedRecord); // Find the index of the selected record
+  //   const uid = selectedRecord.uid; // Extract the UID from the selected record
+  
+  //   // Update the URL with the selected UID
+  //   this.router.navigate([], {
+  //     relativeTo: this.router.routerState.root,  // Maintain the current route
+  //     queryParams: { uid: uid },  // Add the uid as a query parameter
+  //     queryParamsHandling: 'merge'  // Preserve other query parameters if any
+  //   });
+  
+  //   // Load the customer data by UID
+  //   this.loadCustomerByUid(uid); 
+  //   console.log('Current index updated to:', this.currentIndex);
+  // }
+
   onSelectedRecordChange(selectedRecord: any) {
-    this.currentIndex = this.selectedRecords.indexOf(selectedRecord); // Find the index of the selected record
-    const uid = selectedRecord.uid; // Extract the UID from the selected record
-  
-    // Update the URL with the selected UID
-    this.router.navigate([], {
-      relativeTo: this.router.routerState.root,  // Maintain the current route
-      queryParams: { uid: uid },  // Add the uid as a query parameter
-      queryParamsHandling: 'merge'  // Preserve other query parameters if any
+    this.currentIndex = this.selectedRecords.indexOf(selectedRecord);
+    this.router.navigate(['../', selectedRecord.uid], {
+      relativeTo: this.activatedRoute
+    }).then(() => {
+      console.log('Navigation successful to:', selectedRecord.uid);
     });
-  
-    // Load the customer data by UID
-    this.loadCustomerByUid(uid); 
-    console.log('Current index updated to:', this.currentIndex);
   }
   
   

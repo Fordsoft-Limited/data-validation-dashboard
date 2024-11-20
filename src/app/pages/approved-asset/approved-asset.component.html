@@ -100,3 +100,87 @@
     </div>
   </p-dialog>
 </div>
+
+
+
+
+<!-- <p-dialog header="Select Category to Filter" [(visible)]="display" modal="modal" showEffect="fade"
+  [style]="{width: '550px'}" [contentStyle]="{height: '370px'}">
+
+  <div class="p-fluid">
+    <div class="p-grid" style="margin-bottom: 1rem">
+
+      <div class="p-col-12" style="display: flex; gap: 3rem; margin-bottom: 1rem; ">
+
+        <div>
+          <p-dropdown id="region" [options]="regions" [(ngModel)]="tempRegion" placeholder="Select Region"
+            optionValue="name" optionLabel="name" [style]="{width: '230px'}" (onChange)="onRegionChange()">
+          </p-dropdown>
+        </div>
+
+        <div *ngIf="businessHubs.length">
+          <p-dropdown id="businessHub" [options]="businessHubs" [(ngModel)]="tempBusinessHub"
+            placeholder="Select Business Hub" optionValue="name" optionLabel="name" [style]="{width: '230px'}"
+            (onChange)="onBusinessHubChange()">
+          </p-dropdown>
+        </div>
+
+      </div>
+
+      <div class="p-col-12" style="display: flex; gap: 3rem; margin-bottom: 1rem;">
+
+        <div *ngIf="serviceCenters.length">
+          <p-dropdown id="serviceCenter" [options]="serviceCenters" [(ngModel)]="tempServiceCenter"
+            placeholder="Select Service Center" optionValue="name" optionLabel="name" [style]="{width: '230px'}">
+          </p-dropdown>
+        </div>
+
+        <p-dropdown id="status" [options]="statuses" [(ngModel)]="tempStatus" placeholder="Select Status"
+          optionValue="name" optionLabel="name" [style]="{width: '230px'}">
+        </p-dropdown>
+       
+      </div>
+
+      <div class="p-col-12" style="display: flex; gap: 3rem; margin-bottom: 1rem; ">
+
+        <p-dropdown id="createdBy" [options]="createdBys" [(ngModel)]="tempCreatedBy" placeholder="Select CreatedBy"
+          optionValue="name" optionLabel="name" [style]="{width: '230px'}">
+        </p-dropdown>
+
+        <p-dropdown id="updatedBy" [options]="updatedBys" [(ngModel)]="tempUpdatedBy" placeholder="Select UpdatedBy"
+          optionValue="name" optionLabel="name" [style]="{width: '230px'}">
+        </p-dropdown>
+
+      </div>
+
+
+      <div class="p-col-12" style="display: flex; gap: 3rem; margin-bottom: 1rem;">
+        <p-calendar id="dateCreatedFrom" [(ngModel)]="tempDateCreatedFrom" placeholder="Start Date" appendTo="body"
+          [style]="{width: '230px'}">
+        </p-calendar>
+
+        <p-calendar id="dateCreatedTo" [(ngModel)]="tempDateCreatedTo" placeholder="End Date" appendTo="body"
+          [style]="{width: '230px'}">
+        </p-calendar>
+      </div>
+
+      <div class="p-col-12" style="display: flex; gap: 3rem; margin-bottom: 1rem;">
+        <p-calendar id="aplicationDate" [(ngModel)]="tempAplicationDates" placeholder="Application Date" appendTo="body"
+          [style]="{width: '230px'}">
+        </p-calendar>
+
+        <p-dropdown id="approvedBy" [options]="approvedBys" [(ngModel)]="tempApproveBy" placeholder="Select ApprovedBy"
+          optionValue="name" optionLabel="name" [style]="{width: '230px'}">
+        </p-dropdown>
+      </div>
+
+    </div><br>
+
+  
+    <div class="p-grid p-justify-center">
+      <button pButton type="button" label="Filter" (click)="onFilterButtonClick()">
+      </button>
+    </div>
+
+  </div>
+</p-dialog> -->

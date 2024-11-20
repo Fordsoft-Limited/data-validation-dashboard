@@ -8,11 +8,12 @@ import { Customer } from '../../shared/model/customer';
 import { CustomerService } from '../../api/customer.service';
 import { AuthService } from '../../auth/service/auth.service';
 import { CUSTOMER_REGION } from '../../shared/constants';
+import { UtilsService } from '../../shared/services/utils.service'; 
 export interface ServiceCentre {
   name: string;
 }
 
-export interface BusinessHub {
+export interface BusinessHub { 
   name: string;
   serviceCentres: ServiceCentre[];
 }
@@ -58,7 +59,7 @@ export class NewCustomerComponent implements OnInit {
 
   filterForm!: FormGroup;
   
-  constructor( private fb: FormBuilder, private customerService:CustomerService,private router: Router, private authService:AuthService,private messageService: MessageService  ){
+  constructor( private fb: FormBuilder, private customerService:CustomerService,private router: Router, private authService:AuthService,private messageService: MessageService ,  private utilService: UtilsService ){
     this.filterForm = this.fb.group({
       dateRange: [],
       feeder: [],
@@ -80,10 +81,11 @@ export class NewCustomerComponent implements OnInit {
       value: region        // Store the entire region object as value
     }));
 
-
+    this.reload()
+  }
+  reload() {
     this.loadNewCustomer(this.currentPage, this.pageSize);
   }
-
   
 loadNewCustomer(page:number,pageSize:number) {
   this.loading = true;
@@ -200,15 +202,11 @@ filterData() {
   }
 
   navigateToDetails() {
-    this.loading = true;
-    setTimeout(() => {
-      this.loading = false;
-      this.router.navigate(['app/validate/review'], {
-        state: { selectedNewCustomer: this.selectedNewCustomer }
-      });
-    }, 2000);
-  }
+    const firstItemUid = this.selectedNewCustomer[0].uid
+    this.utilService.saveItems(this.selectedNewCustomer)
+    this.router.navigate(['app/validate/review/'+firstItemUid]);
 
+}
 
   viewDetails(record: any): void {
     this.router.navigate(['/app/customer-details', record.uid]); // Pass the record ID or unique identifier as a route parameter

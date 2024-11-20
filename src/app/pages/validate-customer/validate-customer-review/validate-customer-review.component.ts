@@ -7,7 +7,7 @@ import { AuthService } from '../../../auth/service/auth.service';
 import { Token } from '@angular/compiler';
 import { customerApproveOrReject } from '../../../model/customer';
 import { UtilsService } from '../../../shared/services/utils.service';
-
+ 
 @Component({
   selector: 'app-validate-customer-review',
   templateUrl: './validate-customer-review.component.html',
@@ -22,6 +22,7 @@ export class ValidateCustomerReviewComponent implements OnInit {
   };
   currentIndex: number = 0;
   qrCode: string | null = null;
+  events: any | null = null;
   comments: string = ' Well done ';
   rejectDialog: boolean = false;
   reviewDialog: boolean = false;
@@ -38,7 +39,7 @@ export class ValidateCustomerReviewComponent implements OnInit {
   accountCategory: any[] = [];
   connectionType: any[] = [];
   customerMeterCategory: any[] = [];
-  meterLocation: any[] = [];
+  meterLocation: any[] = []; 
   customerMeterAccessible: any[] = [];
   customerMeterSealed: any[] = [];
   customerHasAccountNo: any[] = [];
@@ -153,7 +154,12 @@ export class ValidateCustomerReviewComponent implements OnInit {
             newData: response.data.new,
             oldData: response.data.old,
           };
+          this.events=this.currentRecord.newData.events;
+
         }
+       
+
+
        
       },
       (error) => {
@@ -182,6 +188,7 @@ export class ValidateCustomerReviewComponent implements OnInit {
 
 
   onSelectedRecordChange(selectedRecord: any) {
+    this.currentIndex = this.selectedRecords.indexOf(selectedRecord);
     this.router.navigate(['../', selectedRecord.uid], {
       relativeTo: this.activatedRoute
     }).then(() => {

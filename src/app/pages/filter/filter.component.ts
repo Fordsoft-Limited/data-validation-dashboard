@@ -128,15 +128,11 @@ export class FilterComponent {
 
 
   loadCustomers(page: number, pageSize: number): void {
-    const token = this.authService.getToken();
-    if (!token) {
-      this.errorMessage = 'No authentication token found. Please log in again.';
-      return;
-    }
+  
   
     this.loading = true;
   
-    this.service.getCustomersWithAwaitingReview(page, pageSize, token).subscribe(
+    this.service.getCustomersWithAwaitingReview(page, pageSize).subscribe(
       (response) => {
         console.log('Customer API Response:', response);
         this.customers = response.data?.results || [];
@@ -159,7 +155,7 @@ export class FilterComponent {
           new Set(this.customers.map((customer: any) => customer.approved_by))
         ).map((approvedBy) => ({ name: approvedBy, value: approvedBy }));
   
-        console.log('Dropdown Data:', {
+        console.log('Dropdown Data:', { 
           statuses: this.statuses,
           createdBys: this.createdBys,
           updatedBys: this.updatedBys,
