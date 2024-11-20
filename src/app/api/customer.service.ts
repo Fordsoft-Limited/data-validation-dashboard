@@ -362,6 +362,7 @@ export class CustomerService {
     );
   }
 
+
   getPieChartData(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/dashboard/`).pipe(
       map(response => {
@@ -374,7 +375,7 @@ export class CustomerService {
           datasets: [
             {
               data: Object.values(pieChartData), // [8, 2, 715]
-              backgroundColor: ['#28a745', '#dc3545', '#ffc107'], // Custom colors for each slice
+              backgroundColor: ['blue', '#28a745', '#dc3545', '#ffc107'], // Custom colors for each slice
             }
           ]
         };

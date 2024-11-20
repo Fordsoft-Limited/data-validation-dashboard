@@ -97,10 +97,12 @@ onSubmit() {
       },
       error: (error) => {
         this.isLoading = false;
-        this.errorMessage = 'Invalid credentials, please try again.';
+        if (error.error?.errorMessage) {
+          this.errorMessage = error.error.errorMessage; 
+        } 
         this.loginError = true;
         this.autoDismissError();
-      }
+      },
     });
   }
   
