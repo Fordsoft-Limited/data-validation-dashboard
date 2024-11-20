@@ -55,19 +55,7 @@ export class SettingsComponent {
   }
 
   handlePasswordChange() {
-    const token = this.authService.getToken();
-    console.log(token);
-  
-    if (!token) {
-      this.loading = false;
-      this.hasErrors = true;
-      this.errorMessage = 'No authentication token found. Please log in again.';
-      setTimeout(() => {
-        this.userAddedError = false;
-      }, 3000);
-      return; // Exit the function early
-    }
-  
+    
     this.loading = true;
   
     if (this.passwordForm.valid) {
@@ -78,7 +66,7 @@ export class SettingsComponent {
       };
   
       // Call the service to change the password, passing the token as a header
-      this.userService.changePassword(passwordData, token).subscribe({
+      this.userService.changePassword(passwordData).subscribe({
         next: (response) => {
           console.log('Password change response', response);
   

@@ -41,7 +41,7 @@ export interface DropdownOption {
 
 export class ApprovedAssetComponent implements OnInit{
   approvedRecords !: any[];
-
+  display: boolean = false;
   filteredRecords  : any[]=[];
   regions: DropdownOption[] = [];
   businessUnits: DropdownOption[] = [];
@@ -94,17 +94,10 @@ export class ApprovedAssetComponent implements OnInit{
   }
 
   loadCustomers(page: number, pageSize: number): void {
-    const token = this.authService.getToken();
-    console.log(token);
-    
-    if (!token) {
-      this.loading = false;
-    //  this.errorMessage = 'No authentication token found. Please log in again.';
-      return; // Exit the function early
-    }
+  
   
     this.loading = true; 
-    this.customerService.getCustomersWithApprovedOrRejectedStatus(page, pageSize, token)
+    this.customerService.getCustomersWithApprovedOrRejectedStatus(page, pageSize)
     .subscribe(
       (response) => {
         this.approvedRecords =  response.data?.results || [];;

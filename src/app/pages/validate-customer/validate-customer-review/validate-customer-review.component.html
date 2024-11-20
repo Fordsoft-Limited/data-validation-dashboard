@@ -1,6 +1,6 @@
-<div class="card">
+<div class="card base">
 
-    <div class="flex justify-content-between  pb-3 mb-2 border-300  border-bottom-1">
+    <div class="flex justify-content-between  pb-3 mb-4 border-300  border-bottom-1">
   
       <div class="flex flex-column p-0 m-0">
         <h5 class="-mt-1">Review</h5>
@@ -8,7 +8,7 @@
       </div>
   
   
-      <div class="flex flex-wrap gap-3">
+      <div class="flex flex-wrap gap-3"> 
         <p-toast />
         <p-confirmPopup />
         <button pButton label="Review Selection" class="p-button-primary" [outlined]="true"
@@ -20,16 +20,16 @@
     </div>
     <div class="grid max-h-33rem">
    
-      <div class="col-12 md:col-4 h-auto">
+      <div class="col-2 h-auto overflow-x-hidden   p-0 m-0 pl-5">
         <div class="selected-records-list">
           <p-table #dt [value]="selectedRecords" (onRowSelect)="onSelectedRecordChange($event.data)"  [globalFilterFields]="['customer_no']" 
-            [rows]="100"  styleClass="p-datatable-striped" [scrollable]="true" 
+            [rows]="100"  styleClass="p-datatable-striped overflow-x-hidden" [scrollable]="true" 
             scrollHeight="400px" >
   
             <ng-template pTemplate="header">
               <tr>
   
-                <th pSortableColumn="customer_no" style="min-width:20rem">Customer No <p-sortIcon field="customer_no"></p-sortIcon></th>
+                <th pSortableColumn="customer_no" style="min-width:5rem">Customer No  </th>
                
               </tr>
             </ng-template>
@@ -44,12 +44,44 @@
             </ng-template>
           </p-table>
         </div>
+        
       </div>
-      <div class="col-none md:col-1">
+      <div class="col-none md:col-1 m-0 p-0">
         <p-divider layout="vertical" />
       </div>
+
+      <div class="col-4">
+        <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
+          <ng-template pTemplate="marker" let-event>
+            <span
+              class="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1"
+              [style]="{ 'background-color': event.status === 'Rejected' ? '#ff0000' : '#00ff00'}">
+              <i class="pi pi-inbox"></i>
+            </span>
+          </ng-template>
   
-      <div class="col-12 md:col-7 ">
+          <ng-template pTemplate="content" let-event>
+           
+            <div class="card w-100%">
+           
+              <!-- <div class="card w-100%"> -->
+                <p class="text-xs">  <b>Category: </b>{{ event.category  }}</p>
+                <p class="text-xs"> <b>Status: </b>{{ event.status }}</p>
+                <p class="text-xs"> <b>Description: </b>{{ event.description }}</p>
+                <p class="text-xs">  <b>Posted by: </b>{{ event.posted_by.name }}</p>
+                <p class="text-xs"> <b>Date: </b>{{event.event_date | date: 'MM/dd/yyyy HH:mm'}}</p>
+              <!-- </div> -->
+         
+            </div>
+  
+  
+          </ng-template>
+        </p-timeline>
+       
+      </div>
+      
+      <div class="col-5 ">
+        
         <div *ngIf="currentRecord"  class="p-formgrid grid h-30rem overflow-scroll overflow-x-hidden">
          
           <div *ngFor="let field of customerFields" class="field col-6 flex flex-column gap-2 field-container">

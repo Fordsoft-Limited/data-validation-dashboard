@@ -25,7 +25,7 @@ import { DividerModule } from 'primeng/divider';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DataVerificationComponent } from './data-verification/data-verification.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-
+import { TimelineModule } from 'primeng/timeline';
 
 export const dataValidationRoutes: Routes = [
   {
@@ -33,7 +33,7 @@ export const dataValidationRoutes: Routes = [
     component: DataValidationComponent,
   },
   {
-    path: 'data-verification',
+    path: 'data-verification/:uid',
     data:{breadcrum: 'Data Verification'},
     component: DataVerificationComponent, 
   }
@@ -54,6 +54,7 @@ export const dataValidationRoutes: Routes = [
     SharedModule,
     TableModule,
     ConfirmDialogModule,
+    TimelineModule,
     ProgressSpinnerModule,
     ButtonModule,
     ConfirmPopupModule,

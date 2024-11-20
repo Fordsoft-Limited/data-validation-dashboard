@@ -25,6 +25,8 @@ import { DividerModule } from 'primeng/divider';
 import { ValidateCustomerReviewComponent } from './validate-customer-review/validate-customer-review.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
+import { TimelineModule } from 'primeng/timeline';
+
 export const validateRoutes: Routes = [
   {
     path: '',
@@ -52,6 +54,7 @@ export const validateRoutes: Routes = [
     TableModule,
     ConfirmDialogModule,
     ButtonModule,
+    TimelineModule,
     InputTextModule,
     SelectButtonModule,
     ToggleButtonModule,

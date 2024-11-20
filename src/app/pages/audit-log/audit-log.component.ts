@@ -61,19 +61,10 @@ export class AuditLogComponent implements OnInit {
   
 
   loadAuditLog(page: number, pageSize: number): void {
-    const token = this.authService.getToken(); // Retrieve the token from the auth service
-    if (!token) {
-      this.loading = false;
-      this.hasErrors = true;
-      this.errorMessage = 'No authentication token found. Please log in again.';
-      setTimeout(() => {
-        this.userAddedError = false;
-      }, 3000);
-      return; // Exit the function early if no token
-    }
+    
 
     this.loading = true;
-    this.customerService.getAuditLog(page, pageSize, token).subscribe(
+    this.customerService.getAuditLog(page, pageSize).subscribe(
       (response) => {
         this.loading = false;
         if (response && response.data && response.data.results) {

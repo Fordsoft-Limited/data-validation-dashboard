@@ -106,15 +106,10 @@ export class BulkCustomerValidationComponent implements OnInit {
       console.log('Mapped Customers Payload:', customers);
 
       // Get the authentication token
-      const token = this.authService.getToken();
-      if (!token) {
-        this.uploadError = 'User is not authenticated. Please log in again.';
-        return;
-      }
-      console.log(token);
+      
 
       // Start the upload by calling the service
-      this.service.saveBulkCustomers(customers, token).subscribe({
+      this.service.saveBulkCustomers(customers).subscribe({
         next: (response) => {
           this.isUploading = false;
           this.isProcessing = false;

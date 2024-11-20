@@ -8,7 +8,7 @@ import { Customer } from '../../shared/model/customer';
 import { CustomerService } from '../../api/customer.service';
 import { AuthService } from '../../auth/service/auth.service';
 import { CUSTOMER_REGION } from '../../shared/constants';
-import { UtilsService } from '../../shared/services/utils.service';
+import { UtilsService } from '../../shared/services/utils.service'; 
 
 export interface ServiceCentre {
   name: string;
@@ -142,7 +142,7 @@ export class ValidateCustomerComponent implements OnInit {
 
     this.loading = true; // Start loading before the request
 
-    this.customerService.getCustomerFilterByPages(page, pageSize).subscribe(
+    this.customerService.getCustomerFilterByPages(page, pageSize).subscribe( 
       (response) => {
         console.log('Data loaded:', response); // Debugging check
         this.customers = response.data?.results || []; // Handle cases where results might be undefined

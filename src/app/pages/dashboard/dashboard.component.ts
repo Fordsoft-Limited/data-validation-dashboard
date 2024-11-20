@@ -100,20 +100,10 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchCustomersByStatus(status: string): void {
-    const token = this.authService.getToken();
-    console.log(token);
-    if (!token) {
-      this.loading = false;
-      this.hasErrors = true;
-      this.errorMessage = 'No authentication token found. Please log in again.';
-      setTimeout(() => {
-        this.userAddedError = false;
-      }, 3000);
-      return; // Exit the function early
-    }
+    
     this.loading = true;
 
-    this.customerService.getCustomerAwaitingReviewStatus(status, token).subscribe({
+    this.customerService.getCustomerAwaitingReviewStatus(status).subscribe({
       next: (response) => {
         this.totalAwaitingReviewStatus = response.data.count; // Set total count
         this.loading = false;
@@ -127,20 +117,10 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchCustomersRejectStatus(status: string): void {
-    const token = this.authService.getToken();
-    console.log(token);
-    if (!token) {
-      this.loading = false;
-      this.hasErrors = true;
-      this.errorMessage = 'No authentication token found. Please log in again.';
-      setTimeout(() => {
-        this.userAddedError = false;
-      }, 3000);
-      return; // Exit the function early
-    }
+   
     this.loading = true;
 
-    this.customerService.getCustomerRejectStatus(status, token).subscribe({
+    this.customerService.getCustomerRejectStatus(status).subscribe({
       next: (response) => {
         this.totalRejectStatus = response.data.count; // Set total count
         this.loading = false;
@@ -154,19 +134,9 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchApprovalStatus(status: string): void {
-    const token = this.authService.getToken();
-    console.log(token);
-    if (!token) {
-      this.loading = false;
-      this.hasErrors = true;
-      this.errorMessage = 'No authentication token found. Please log in again.';
-      setTimeout(() => {
-        this.userAddedError = false;
-      }, 3000);
-      return; // Exit the function early
-    }
+    
     this.loading = true;
-    this.customerService.getCustomerApprovalStatus(status, token).subscribe({
+    this.customerService.getCustomerApprovalStatus(status).subscribe({
       next: (response) => {
         this.totalApprovalStatus = response.data.count; // Set total count
         this.loading = false;

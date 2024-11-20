@@ -78,18 +78,8 @@ onSubmit() {
       role: this.userForm.value.role,
       password: this.userForm.value.password
     };
-    const token = this.authService.getToken();
-    console.log(token);
-  if (!token) {
-    this.isLoading = false;
-    this.userAddedError = true;
-    this.errorMessage = 'No authentication token found. Please log in again.';
-    setTimeout(() => {
-      this.userAddedError = false;
-    }, 3000);
-    return; 
-  }
-    this.userService.createUser(payload,token).subscribe({
+    
+    this.userService.createUser(payload).subscribe({
       next: (response) => {
         this.userAddedSuccess = true;
         this.successMessage = 'Success! Your account has been successfully created!';

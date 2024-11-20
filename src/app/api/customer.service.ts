@@ -56,9 +56,9 @@ export class CustomerService {
     );
   }
 
-  getCustomersWithApprovedOrRejectedStatus(page: number, pageSize: number, token: string): Observable<any> {
+  getCustomersWithApprovedOrRejectedStatus(page: number, pageSize: number): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,  // Include the token in the header
+       // Include the token in the header
       'Content-Type': 'application/json'
     });
 
@@ -119,9 +119,9 @@ export class CustomerService {
 
 
 
-  getNewCustomerFilterByPages(page: number, pageSize: number, token: string): Observable<any> {
+  getNewCustomerFilterByPages(page: number, pageSize: number, ): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+     
       'Content-Type': 'application/json'
     });
 
@@ -152,9 +152,9 @@ export class CustomerService {
   }
 
   
-  getCustomerStatusByReViewed(page: number, pageSize: number, token: string): Observable<any> {
+  getCustomerStatusByReViewed(page: number, pageSize: number): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+      // 'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
     
@@ -260,9 +260,9 @@ export class CustomerService {
     });
     return this.http.get<any>(`${this.baseUrl}/qrcode/${customerNo}/`, { headers })
   }
-  getCustomersWithAwaitingReview(page: number, pageSize: number, token: string): Observable<any> {
+  getCustomersWithAwaitingReview(page: number, pageSize: number): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+     
       'Content-Type': 'application/json'
     });
 
@@ -280,7 +280,7 @@ export class CustomerService {
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
-  saveBulkCustomers(customers: validateCustomer[], token: string): Observable<any> {
+  saveBulkCustomers(customers: validateCustomer[]): Observable<any> {
     // Create a Blob from the workbook
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet(customers);
@@ -295,7 +295,7 @@ export class CustomerService {
 
     // Set up headers
     const headers = new HttpHeaders({
-      'Authorization': token ? `Bearer ${token}` : '',
+      // 'Authorization': token ? `Bearer ${token}` : '',
       'Accept': 'application/json'
     });
 
@@ -316,9 +316,9 @@ export class CustomerService {
 
 
 
-  getCustomerAwaitingReviewStatus(status: string, token: string): Observable<any> {
+  getCustomerAwaitingReviewStatus(status: string, ): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+      
       'Content-Type': 'application/json'
     });
     const params = new HttpParams().set('approval_status', status);
@@ -331,9 +331,9 @@ export class CustomerService {
     );
   }
 
-  getCustomerRejectStatus(status: string, token: string): Observable<any> {
+  getCustomerRejectStatus(status: string): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+     
       'Content-Type': 'application/json'
     });
     const params = new HttpParams().set('approval_status', status);
@@ -347,9 +347,9 @@ export class CustomerService {
   }
 
 
-  getCustomerApprovalStatus(status: string, token: string): Observable<any> {
+  getCustomerApprovalStatus(status: string): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+     
       'Content-Type': 'application/json'
     });
     const params = new HttpParams().set('approval_status', status);
@@ -408,9 +408,9 @@ export class CustomerService {
   }
 
   // Define the return type as AuditLogResponse
-  getAuditLog(page: number, pageSize: number, token: string): Observable<any> {
+  getAuditLog(page: number, pageSize: number): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+      
       'Content-Type': 'application/json',
     });
 
