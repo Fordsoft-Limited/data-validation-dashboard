@@ -54,17 +54,11 @@ export class UserComponent implements OnInit {
   }
 
   loadUsers(page: number, pageSize: number) {
-    const token = this.authService.getToken();
-    if (!token) {
-      this.loading = false;
-      this.hasErrors = true;
-      this.errorMessage = 'No authentication token found. Please log in again.';
-      return;
-    }
+   
   
     this.loading = true;
   
-    this.userService.getUserList(page, pageSize, token).subscribe(
+    this.userService.getUserList(page, pageSize).subscribe(
       (response) => {
         this.loading = false;
         if (response && response.data && response.data.results) {
@@ -209,14 +203,7 @@ getSeverityStatus(status: string) {
 
 
 toggleUserStatus(user: any, event: any) {
-  const token = this.authService.getToken();
-  if (!token) {
-    this.loading = false;
-    this.hasErrors = true;
-    this.errorMessage = 'No authentication token found. Please log in again.';
-    return;
-  }
-
+  
   this.loading = true;
   const currentStatus = user.is_active;
   // The toggled value comes from the 'event' object
@@ -236,7 +223,7 @@ toggleUserStatus(user: any, event: any) {
   });
 
   // Call the update service with the new toggled value
-  this.userService.updateUserStatus(user.uid, newStatus, token).subscribe(
+  this.userService.updateUserStatus(user.uid, newStatus).subscribe(
     (response) => {
       this.loading = false;
       if (response.code === 200 && response.status === 'Success') {

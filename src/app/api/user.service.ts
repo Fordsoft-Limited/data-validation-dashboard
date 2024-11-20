@@ -17,9 +17,9 @@ export class UserService {
   constructor(private http: HttpClient, private base: BaseService) { }
 
 
-  changePassword(paylod: { old_password: string; new_password: string }, token: string): Observable<any> {
+  changePassword(paylod: { old_password: string; new_password: string }): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+     
       'Content-Type': 'application/json', // Add any other headers if necessary
     });
   
@@ -30,9 +30,9 @@ export class UserService {
   }
   
 
-  createUser(payload: addUser, token: string): Observable<any> {
+  createUser(payload: addUser): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+      
       'Content-Type': 'application/json' // Add any other headers if necessary
     });
 
@@ -40,9 +40,9 @@ export class UserService {
   }
  
 
-  getUserList(page: number, pageSize: number, token: string): Observable<any> {
+  getUserList(page: number, pageSize: number): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+      
       'Content-Type': 'application/json'
     });
     const params = new HttpParams()
@@ -56,9 +56,9 @@ export class UserService {
   }
 
 
-  updateUserStatus(uid: string, isActive: boolean, token: string): Observable<any> {
+  updateUserStatus(uid: string, isActive: boolean): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+      
       'Content-Type': 'application/json'
     });
   
@@ -91,9 +91,9 @@ export class UserService {
   }
 
 
-  logOutUser(payload: Logout, token: string): Observable<any> {
+  logOutUser(payload: Logout): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+     
       'Content-Type': 'application/json'
     });
   
@@ -115,9 +115,9 @@ export class UserService {
 // Fetch user data with pagination support
 
 
-getAuditLog(page: number, pageSize: number, token: string): Observable<any> {
+getAuditLog(page: number, pageSize: number): Observable<any> {
   const headers = new HttpHeaders({
-    'Authorization': `Bearer ${token}`,
+   
     'Content-Type': 'application/json',
   });
 
