@@ -172,12 +172,11 @@ filterData() {
   // Now, call the service to get filtered customers
   this.customerService
     .getNewCustomerFilter(
-      token,
       selectedRegion,  // Only pass region name here
       selectedBusinessHub,
       selectedFeeder,
       dateCreatedFrom,
-      dateCreatedTo
+      dateCreatedTo,
     )
     .subscribe(
       (response) => {

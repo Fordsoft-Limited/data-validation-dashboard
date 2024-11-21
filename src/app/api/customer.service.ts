@@ -11,6 +11,7 @@ import * as XLSX from 'xlsx';
 export class CustomerService {
   private baseUrl = `${this.base._baseUrl}/customer`;
   private cancelSubject = new Subject<void>();
+  SUCCESS: any;
 
   constructor(private http: HttpClient, private base: BaseService) { }
 
@@ -46,28 +47,26 @@ export class CustomerService {
   }
 
 
-
-
   getCustomerList(): Observable<number> {
     return this.http.get<any>(`${this.baseUrl}/list`).pipe(
-      map(response => response.data?.count || 0),  // Safely access 'count' and return 0 if not available
+      map(response => response.data?.count || 0),
       catchError(err => {
         this.base.errorHandler(err);
-        return of(0);  // Return 0 in case of error
+        return of(0);
       })
     );
   }
 
   getCustomersWithApprovedOrRejectedStatus(page: number, pageSize: number, token: string): Observable<any> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,  // Include the token in the header
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
 
     const params = new HttpParams()
       .set('page', page.toString())
       .set('page_size', pageSize.toString())
-      .set('approval_status', 'Approved,Rejected'); // Set to only show Approved and Rejected
+      .set('approval_status', 'Approved,Rejected');
 
     return this.http.get<any>(`${this.baseUrl}/status/`, { headers, params })
       .pipe(
@@ -137,40 +136,22 @@ export class CustomerService {
   }
 
   getNewCustomerFilter(
-    token: string,
-    region: string,
-    businessHub: string,
-    serviceCenter: string,
-    dateCreatedFrom: string,
-    dateCreatedTo: string
-  ): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+    region: string, businessHub: string, serviceCenter: string, dateCreatedFrom: string, dateCreatedTo: string): Observable<any> {
 
-    // Prepare the query parameters for filtering
     const params = new HttpParams()
       .set('region', region)
       .set('business_hub', businessHub)
       .set('service_center', serviceCenter)
       .set('date_created_from', dateCreatedFrom)
       .set('date_created_to', dateCreatedTo)
-    // Make the GET request with headers and query parameters
-    return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { params })
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
-  getNewCustomerFilter2(payload: any): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${payload.token}`,
-      'Content-Type': 'application/json',
-    });
 
-    // Initialize query parameters
+  getNewCustomerFilter2(payload: any): Observable<any> {
     let params = new HttpParams();
 
-    // Add parameters only if they exist in the payload
     if (payload.region) {
       params = params.set('region', payload.region);
     }
@@ -186,12 +167,27 @@ export class CustomerService {
     if (payload.dateCreatedTo) {
       params = params.set('date_created_to', payload.dateCreatedTo);
     }
+    if (payload.status) {
+      params = params.set('status_code', payload.status);
+    }
+    if (payload.createdBy) {
+      params = params.set('created_By', payload.createdBy);
+    }
+    if (payload.updatedBy) {
+      params = params.set('updated_By', payload.updatedBy);
+    }
+    if (payload.approvedBy) {
+      params = params.set('approved_By', payload.approvedBy);
+    }
+    if (payload.aplicationDate) {
+      params = params.set('application_date', payload.aplicationDate);
+    }
 
-    // Make the GET request with headers and query parameters
-    return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
+    console.log('Payload in Service:', payload);
+
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { params })
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
-
 
 
 
@@ -204,12 +200,7 @@ export class CustomerService {
     dateCreatedFrom: string,
     dateCreatedTo: string
   ): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
 
-    // Prepare the query parameters for filtering
     const params = new HttpParams()
       .set('region', region)
       .set('business_hub', businessHub)
@@ -217,25 +208,21 @@ export class CustomerService {
       .set('date_created_from', dateCreatedFrom)
       .set('date_created_to', dateCreatedTo)
       .set('approval_status', 'Approved,Rejected');
-    // Make the GET request with headers and query parameters
-    return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { params })
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
-  getCustomersWithAwaitingReview(page: number, pageSize: number, token: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+  getCustomersWithAwaitingReview(page: number, pageSize: number): Observable<any> {
 
     const params = new HttpParams()
       .set('page', page.toString())
       .set('page_size', pageSize.toString())
       .set('approval_status', 'Awaiting review');
 
-    return this.http.get<any>(`${this.baseUrl}/status/`, { headers, params })
+    return this.http.get<any>(`${this.baseUrl}/status/`, { params })
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
+
 
   getCustomerValidateBatchesByUuid(uid: string): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/validate/batches/uid?uid=${uid}`)

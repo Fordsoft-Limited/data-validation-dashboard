@@ -147,7 +147,7 @@ export class DataValidationComponent implements OnInit {
   
     this.loading = true; // Start loading before the request
   
-    this.customerService.getCustomersWithAwaitingReview(page, pageSize, token).subscribe(
+    this.customerService.getCustomersWithAwaitingReview(page, pageSize,).subscribe(
       (response) => {
         console.log('Data loaded:', response); // Debugging check
         this.customers = response.data?.results || []; // Handle cases where results might be undefined
@@ -193,7 +193,6 @@ export class DataValidationComponent implements OnInit {
     // Now, call the service to get filtered customers
     this.customerService
       .getNewCustomerFilter(
-        token,
         selectedRegion,  // Only pass region name here
         selectedBusinessHub,
         selectedFeeder,
