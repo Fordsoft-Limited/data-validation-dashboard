@@ -159,7 +159,7 @@ filterData() {
       selectedBusinessHub,
       selectedFeeder,
       dateCreatedFrom,
-      dateCreatedTo
+      dateCreatedTo,
     )
     .subscribe(
       (response) => {
