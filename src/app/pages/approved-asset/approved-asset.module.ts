@@ -25,6 +25,7 @@ import { DividerModule } from 'primeng/divider';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { CustomerDetailsComponent } from '../customer-details/customer-details.component';
 import { CalendarModule } from 'primeng/calendar';
+import { TreeModule } from 'primeng/tree';
 
 export const approvedAssetRoutes: Routes = [
   {
@@ -50,6 +51,7 @@ export const approvedAssetRoutes: Routes = [
     ConfirmDialogModule,
     ButtonModule,
     ConfirmPopupModule,
+    TreeModule,
     InputTextModule,
     SharedModule,
     ToggleButtonModule,
