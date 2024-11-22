@@ -103,14 +103,13 @@ export class FilterComponent {
   }
 
   loadCustomers(page: number, pageSize: number): void {
-<<<<<<< HEAD
+
   
   
     this.loading = true;
   
-=======
+
     this.loading = true;
->>>>>>> origin/abbey
     this.service.getCustomersWithAwaitingReview(page, pageSize).subscribe(
       (response) => {
         this.customers = response.data?.results || [];
@@ -120,32 +119,9 @@ export class FilterComponent {
         // Populate dropdown filters
         this.statuses = Array.from(
           new Set(this.customers.map((customer: any) => customer.status_code))
-<<<<<<< HEAD
-        ).map((statusCode) => ({ name: statusCode, value: statusCode }));
-  
-        // this.createdBys = Array.from(
-        //   new Set(this.customers.map((customer: any) => customer.created_by))
-        // ).map((createdBy) => ({ name: createdBy, value: createdBy }));
-  
-        // this.updatedBys = Array.from(
-        //   new Set(this.customers.map((customer: any) => customer.updated_by))
-        // ).map((updatedBy) => ({ name: updatedBy, value: updatedBy }));
-  
-        this.approvedBys = Array.from(
-          new Set(this.customers.map((customer: any) => customer.approved_by))
-        ).map((approvedBy) => ({ name: approvedBy, value: approvedBy }));
-  
-        console.log('Dropdown Data:', { 
-          statuses: this.statuses,
-          createdBys: this.createdBys,
-          updatedBys: this.updatedBys,
-          approvedBys: this.approvedBys,
-        });
-=======
         ).map((status) => ({ name: status, value: status }));
 
         console.log('Customer Data Loaded:', this.customers);
->>>>>>> origin/abbey
       },
       (error) => {
         console.error('Error loading customers:', error);

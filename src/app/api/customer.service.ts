@@ -57,10 +57,6 @@ export class CustomerService {
 
   getCustomersWithApprovedOrRejectedStatus(page: number, pageSize: number): Observable<any> {
     const headers = new HttpHeaders({
-
-       // Include the token in the header
-
-     // 'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
 
@@ -103,11 +99,7 @@ export class CustomerService {
     return this.http.get<any>(requestUrl, { headers, params })
       .pipe(
         catchError(err => {
-          // Log the error to console
           console.error('Error in service:', err);
-
-          // Handle the error gracefully by returning a fallback object
-          // You can customize this fallback object as needed
           return of({
             data: {
               results: [],
@@ -169,27 +161,26 @@ export class CustomerService {
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
-  // getNewCustomerFilter(
-  //   region: string,
-  //   businessHub: string,
-  //   serviceCenter: string,
-  //   dateCreatedFrom: string,
-  //   dateCreatedTo: string
-  // ): Observable<any> {
-  //   const headers = new HttpHeaders({
-  //     'Content-Type': 'application/json'
-  //   });
-  //   region: string, businessHub: string, serviceCenter: string, dateCreatedFrom: string, dateCreatedTo: string): Observable<any> {
-
-  //   const params = new HttpParams()
-  //     .set('region', region)
-  //     .set('business_hub', businessHub)
-  //     .set('service_center', serviceCenter)
-  //     .set('date_created_from', dateCreatedFrom)
-  //     .set('date_created_to', dateCreatedTo)
-  //   return this.http.get<any>(`${this.baseUrl}/filter/`, { params })
-  //     .pipe(catchError(err => this.base.errorHandler(err)));
-  // }
+  getNewCustomerFilter(
+    region: string,
+    businessHub: string,
+    serviceCenter: string,
+    dateCreatedFrom: string,
+    dateCreatedTo: string
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+ 
+    const params = new HttpParams()
+      .set('region', region)
+      .set('business_hub', businessHub)
+      .set('service_center', serviceCenter)
+      .set('date_created_from', dateCreatedFrom)
+      .set('date_created_to', dateCreatedTo)
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { params })
+      .pipe(catchError(err => this.base.errorHandler(err)));
+  }
 
 
   getNewCustomerFilter2(payload: any): Observable<any> {

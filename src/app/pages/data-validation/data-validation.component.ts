@@ -145,9 +145,6 @@ export class DataValidationComponent implements OnInit {
    
 
     this.loading = true; // Start loading before the request
-<<<<<<< HEAD
-
-    this.customerService.getCustomerStatusByReViewed(page, pageSize).subscribe( 
 
   
     this.customerService.getCustomersWithAwaitingReview(page, pageSize,).subscribe(
@@ -187,10 +184,7 @@ export class DataValidationComponent implements OnInit {
 
     this.customerService
       .getNewCustomerFilter(
-<<<<<<< HEAD
-       
-=======
->>>>>>> origin/abbey
+
         selectedRegion,  // Only pass region name here
         selectedBusinessHub,
         selectedFeeder,
