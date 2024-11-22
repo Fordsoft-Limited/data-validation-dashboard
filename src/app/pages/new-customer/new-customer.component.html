@@ -1,11 +1,10 @@
 <div class="card">
-    <form [formGroup]="filterForm" (ngSubmit)="filterData()">
+    <!-- <form [formGroup]="filterForm" (ngSubmit)="filterData()">
       <div class="flex gap-5 mb-4 justify-content-center flex-wrap">
 
         <div class="flex flex-column gap-2">
           <label for="region">Region:</label>
-          <!-- <input type="text" formControlName="region" pInputText placeholder="Enter Region" class="region-input" /> -->
-          <p-dropdown formControlName="region" [options]="regions"[editable]="true" (onChange)="onRegionChange($event)" placeholder="Enter Region"></p-dropdown>
+             <p-dropdown formControlName="region" [options]="regions"[editable]="true" (onChange)="onRegionChange($event)" placeholder="Enter Region"></p-dropdown>
         </div>
 
         <div class="flex flex-column gap-2">
@@ -28,10 +27,9 @@
   
         <div class="flex gap-2 mt-5">
           <p-button type="submit" [loading]="loading" label="Filter"></p-button>
-          <!-- <p-button type="button" [loading]="isResetLoading" label="Reset Filter" [outlined]="true" (click)="resetFilter()" severity="danger"></p-button> -->
-        </div>
+              </div>
       </div>
-    </form>
+    </form> -->
   
     <p-table #dt1 [value]="filteredNewCustomers" dataKey="uid" [(selection)]="selectedNewCustomer" [rows]="100" 
              [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"

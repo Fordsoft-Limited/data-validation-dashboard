@@ -1,10 +1,9 @@
 <div class="card">
-  <form [formGroup]="filterForm" (ngSubmit)="filterData()">
+  <!-- <form [formGroup]="filterForm" (ngSubmit)="filterData()">
     <div class="flex gap-5 mb-4 justify-content-center flex-wrap">
       <div class="flex flex-column gap-2">
         <label for="region">Region:</label>
-        <!-- <input type="text" formControlName="region" pInputText placeholder="Enter Region" class="region-input" /> -->
-        <p-dropdown formControlName="region" [options]="regions" [editable]="true" (onChange)="onRegionChange($event)"
+         <p-dropdown formControlName="region" [options]="regions" [editable]="true" (onChange)="onRegionChange($event)"
           placeholder="Enter Region"></p-dropdown>
       </div>
 
@@ -32,7 +31,7 @@
 
       </div>
     </div>
-  </form>
+  </form> -->
 
   <p-table [value]="filteredRecords" [loading]="loading" [paginator]="true" [rows]="100"
     (onRowSelect)="showDetails($event.data)" [scrollable]="true" scrollHeight="400px">

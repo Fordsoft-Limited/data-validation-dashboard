@@ -26,6 +26,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DataVerificationComponent } from './data-verification/data-verification.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TimelineModule } from 'primeng/timeline';
+import { FilterComponent } from '../filter/filter.component';
 
 export const dataValidationRoutes: Routes = [
   {
@@ -42,6 +43,7 @@ export const dataValidationRoutes: Routes = [
 
 
 @NgModule({
+  
   declarations: [
     DataValidationComponent,
     DataVerificationComponent

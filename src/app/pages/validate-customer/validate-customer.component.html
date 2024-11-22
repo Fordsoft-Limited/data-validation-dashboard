@@ -1,11 +1,10 @@
 <div class="card">
-    <form [formGroup]="filterForm" (ngSubmit)="filterData()">
+    <!-- <form [formGroup]="filterForm" (ngSubmit)="filterData()">
         <div class="flex gap-5 mb-4 justify-content-center flex-wrap">
   
           <div class="flex flex-column gap-2">
               <label for="region">Region:</label>
-              <!-- <input type="text" formControlName="region" pInputText placeholder="Enter Region" class="region-input" /> -->
-              <p-dropdown formControlName="region" [options]="regions"[editable]="true" (onChange)="onRegionChange($event)" placeholder="Enter Region"></p-dropdown>
+                 <p-dropdown formControlName="region" [options]="regions"[editable]="true" (onChange)="onRegionChange($event)" placeholder="Enter Region"></p-dropdown>
             </div>
   
             <div class="flex flex-column gap-2">
@@ -29,10 +28,9 @@
     
           <div class="flex gap-2 mt-5">
             <p-button type="submit" label="Filter"></p-button>
-            <!-- <p-button type="button" [loading]="isResetLoading" label="Reset Filter" [outlined]="true" (click)="resetFilter()" severity="danger"></p-button> -->
-          </div>
+             </div>
         </div>
-      </form>
+      </form> -->
   
     <p-table #dt1 [value]="filteredNewCustomers" dataKey="uid" [(selection)]="selectedNewCustomer" [rows]="100" 
              [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading" [paginator]="true"
@@ -40,13 +38,10 @@
              scrollHeight="400px">
         <ng-template pTemplate="caption">
             <div class="flex">
-                <!-- <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (onClick)="clear(dt1)" /> -->
-  
-                <p-button label="Review" [loading]="loading" (click)="navigateToDetails()" 
+                   <p-button label="Review" [loading]="loading" (click)="navigateToDetails()" 
                           [disabled]="selectedNewCustomer.length === 0" class="ml-3"></p-button>
                 
-                <!-- <p-button label="Show Details" (click)="navigateToDetails()"   class="ml-3"></p-button> -->
-                <span class="p-input-icon-left ml-auto">
+                  <span class="p-input-icon-left ml-auto">
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" [(ngModel)]="searchValue" #filter
                         (input)="onGlobalFilter(dt1, $event)" placeholder="Keyword Search">
