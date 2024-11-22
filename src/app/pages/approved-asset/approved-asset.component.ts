@@ -11,6 +11,7 @@ import { Location } from '@angular/common';
 import { AuthService } from '../../auth/service/auth.service';
 import { CUSTOMER_REGION } from '../../shared/constants';
 import { MessageService } from 'primeng/api';
+import { TreeNode } from 'primeng/api';
 
 export interface ServiceCentre {
   name: string;
@@ -63,7 +64,9 @@ export class ApprovedAssetComponent implements OnInit{
   selectedApprovedRecord: any | null = null
 
   filterForm!: FormGroup;
-  
+  nodes: TreeNode[] = [];
+  selectedNode: TreeNode | null = null;
+
     constructor(private authService: AuthService ,private fb: FormBuilder, private customerService:CustomerService,private router: Router,  private loadingService: LoadingService,
       private messageService: MessageService
     ){
@@ -91,7 +94,31 @@ export class ApprovedAssetComponent implements OnInit{
 
 
   this.loadCustomers(this.currentPage,this.pageSize)
+
+  this.nodes = [
+    {
+     label: 'Download',
+    icon: 'pi pi-download', 
+    data:{method: () => this.exportData()},
+    children: [
+      {
+        label: 'Export',
+        icon: 'pi pi-download', 
+        data:{method: () => this.exportData()},
+      }
+    ]
   }
+];
+  }
+
+
+  handleNodeSelect(event: any) {
+    const node = event.node;
+    if (node.data?.method) {
+      node.data.method(); 
+    }
+  }
+  
 
   loadCustomers(page: number, pageSize: number): void {
   
