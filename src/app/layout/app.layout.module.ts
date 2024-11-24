@@ -184,6 +184,16 @@ export const layoutRoutes: Routes = [
                 (m) => m.FilterModule
               ),
           },
+          {
+            path:'download',
+            data:{breadcrumb: 'Download Reports'},
+
+            loadChildren: () =>
+              import('../pages/download/download.module').then(
+                (m) => m.DownloadModule
+              ),
+          },
+
 
 
     ]

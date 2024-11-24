@@ -161,6 +161,21 @@ export class CustomerService {
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
+  getCustomerScheduleReportList(page: number, pageSize: number): Observable<any> {
+    const headers = new HttpHeaders({
+      // 'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    
+    const params = new HttpParams()
+      //.set('category', 'New Customer') // Ensure the category matches the intended filter
+      .set('page', page.toString())
+      .set('page_size', pageSize.toString())
+     
+    return this.http.get<any>(`${this.baseUrl}/schedule_report/list/`, { headers, params })
+      .pipe(catchError(err => this.base.errorHandler(err)));
+  }
+
   getNewCustomerFilter(
     region: string,
     businessHub: string,
