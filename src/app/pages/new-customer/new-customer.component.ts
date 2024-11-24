@@ -77,8 +77,8 @@ export class NewCustomerComponent implements OnInit {
     });
 
     this.regions = CUSTOMER_REGION.map(region => ({
-      label: region.name,  // Display the region name
-      value: region        // Store the entire region object as value
+      label: region.name,  
+      value: region       
     }));
 
     this.reload()
