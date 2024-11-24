@@ -37,15 +37,29 @@
              [globalFilterFields]="['feeder', 'meterNo', 'date', 'status']" (onRowSelect)="showDetails($event.data)"  [scrollable]="true" 
              scrollHeight="400px">
         <ng-template pTemplate="caption">
-            <div class="flex">
+            <div class="flex" style="display: flex; justify-content: space-between;">
                    <p-button label="Review" [loading]="loading" (click)="navigateToDetails()" 
                           [disabled]="selectedNewCustomer.length === 0" class="ml-3"></p-button>
+
+
+
+                          <div style="display: flex; justify-content: flex-end; gap: 20px;"> <!-- Add gap to space elements -->
+                            <a class="p-button p-button-outlined font-bold p-button-help custom-button">
+                                <i class="pi pi-filter"></i>
+                            </a>  
+                                          
+                            <a class="p-button p-button-outlined font-bold p-button-help custom-button">
+                                <i class="pi pi-refresh"></i>
+                            </a>  
+                        
+                            <span class="p-input-icon-left ml-auto">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" [(ngModel)]="searchValue" #filter
+                                    (input)="onGlobalFilter(dt1, $event)" placeholder="Keyword Search">
+                            </span>
+                        </div>      
                 
-                  <span class="p-input-icon-left ml-auto">
-                    <i class="pi pi-search"></i>
-                    <input pInputText type="text" [(ngModel)]="searchValue" #filter
-                        (input)="onGlobalFilter(dt1, $event)" placeholder="Keyword Search">
-                </span>
+                  
             </div>
         </ng-template>
         <ng-template pTemplate="header">
