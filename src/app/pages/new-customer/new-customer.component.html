@@ -37,22 +37,27 @@
              scrollHeight="400px">
   
       <ng-template pTemplate="caption">
-          <div class="flex" style="display: flex; justify-content: space-between;">
-              <!-- <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="resetFilter()"/> -->
-              <p-button label="Review" [loading]="loading" (click)="navigateToDetails()" 
+        <div class="flex" style="display: flex; justify-content: space-between;">
+          <!-- Review Button -->
+          <p-button label="Review" [loading]="loading" (click)="navigateToDetails()" 
               [disabled]="selectedNewCustomer.length === 0" class="ml-3"></p-button>
-
-              <div style="display: flex; justify-content: flex-end; gap: 20px;"> <!-- Add gap to space elements -->
-                <a class="p-button p-button-outlined font-bold p-button-help custom-button">
-                    <i class="pi pi-filter"></i>
-                </a>  
-                              
-                <a class="p-button p-button-outlined font-bold p-button-help custom-button">
-                    <i class="pi pi-refresh"></i>
-                </a>  
-            
-                
-            </div>
+      
+          <!-- Button Group with Tooltip -->
+          <div style="display: flex; justify-content: flex-end; gap: 20px;">
+              <!-- Filter Button with Tooltip -->
+              <a class="p-button p-button-outlined font-bold p-button-help custom-button"
+                  pTooltip="Filter" tooltipPosition="bottom">
+                  <i class="pi pi-filter"></i>
+              </a>  
+      
+              <!-- Refresh Button with Tooltip -->
+              <a class="p-button p-button-outlined font-bold p-button-help custom-button"
+                  pTooltip="Refresh" tooltipPosition="bottom">
+                  <i class="pi pi-refresh"></i>
+              </a>  
+          </div>
+      
+      
               
               
           </div>

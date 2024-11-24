@@ -24,6 +24,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
 import { ValidateCustomerReviewComponent } from './validate-customer-review/validate-customer-review.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { TimelineModule } from 'primeng/timeline';
 
@@ -52,6 +53,7 @@ export const validateRoutes: Routes = [
     ReactiveFormsModule,
     FormsModule,
     TableModule,
+    TooltipModule,
     ConfirmDialogModule,
     ButtonModule,
     TimelineModule,

@@ -22,6 +22,7 @@ import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';
 import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
+import { TooltipModule } from 'primeng/tooltip';
 
 export const newCustomerRoute: Routes = [
   {
@@ -40,6 +41,7 @@ export const newCustomerRoute: Routes = [
     RouterModule.forChild(newCustomerRoute),
     ReactiveFormsModule,
     FormsModule,
+    TooltipModule,
     TableModule,
     ConfirmDialogModule,
     ButtonModule,
