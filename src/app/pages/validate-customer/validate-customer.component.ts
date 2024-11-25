@@ -54,6 +54,7 @@ export class ValidateCustomerComponent implements OnInit {
   pageSize: number = 200;
   newCustomers !: Customer[];
   isResetLoading: boolean = false;
+  totalRecords:number=0
 
   constructor(
     private customerService: CustomerService,
@@ -76,6 +77,20 @@ export class ValidateCustomerComponent implements OnInit {
   }
   reload() {
     this.loadCustomers(this.currentPage, this.pageSize);
+  }
+  openSearch() {
+    this.showDetailsDialog = true;
+  }
+  filterApplied(response: any): void {
+    console.log(response)
+    this.filteredNewCustomers = response?.results;
+    this.totalRecords = response?.count;
+  }
+  onClearFilters(): void {
+    this.reload()
+  }
+  onDialogClosed(event: boolean) {
+    this.showDetailsDialog = event;
   }
   initializeForm() {
 
@@ -138,16 +153,13 @@ export class ValidateCustomerComponent implements OnInit {
   }
 
   loadCustomers(page: number, pageSize: number): void {
-   
-
     this.loading = true; // Start loading before the request
 
     this.customerService.getCustomerFilterByPages(page, pageSize).subscribe( 
       (response) => {
-        console.log('Data loaded:', response); // Debugging check
-        this.customers = response.data?.results || []; // Handle cases where results might be undefined
-        this.filteredNewCustomers = [...this.customers]; // Keep a copy for filtering
-        this.loading = false; // Stop loading
+        this.filteredNewCustomers = response.data?.results || []; 
+        this.totalRecords = response?.data?.count
+        this.loading = false; 
       },
       (error) => {
         console.error('Error loading customers:', error);
@@ -161,7 +173,6 @@ export class ValidateCustomerComponent implements OnInit {
 
 
   applyStatusFilter() {
-    // Filter customers based on status
     this.filteredNewCustomers = this.customers.filter(
       customer => customer.aproval_status === 'Awaiting Review'
     );

@@ -56,6 +56,7 @@ export class DataValidationComponent implements OnInit {
   newCustomers !: Customer[];
   isResetLoading: boolean = false;
   filteredNewCustomers  : Customer[]=[];
+  totalRecords:number=0;
 
   @ViewChild('filter') filter!: ElementRef;
 
@@ -103,11 +104,10 @@ export class DataValidationComponent implements OnInit {
     this.filterForm.get('feeder')?.reset(); // Reset the service dropdown
   }
 
-  // On business hub change, update the feeders (service centres)
   onBusinessHubChange(event: any): void {
     const selectedHub = event.value;
     this.updateFeeders(selectedHub);
-    this.filterForm.get('feeder')?.reset(); // Reset the service dropdown
+    this.filterForm.get('feeder')?.reset(); 
   }
 
   // Update the business hubs based on selected region
@@ -130,6 +130,20 @@ export class DataValidationComponent implements OnInit {
     }
   }
 
+  openSearch() {
+    this.showDetailsDialog = true;
+  }
+  filterApplied(response: any): void {
+    console.log(response)
+    this.filteredNewCustomers = response?.results;
+    this.totalRecords = response?.count;
+  }
+  onClearFilters(): void {
+    this.reload()
+  }
+  onDialogClosed(event: boolean) {
+    this.showDetailsDialog = event;
+  }
 
   resetFilter() {
     this.isResetLoading = true;

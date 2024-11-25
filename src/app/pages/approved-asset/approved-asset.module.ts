@@ -26,6 +26,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { CustomerDetailsComponent } from '../customer-details/customer-details.component';
 import { CalendarModule } from 'primeng/calendar';
 import { TreeModule } from 'primeng/tree';
+import { FilterModule } from '../filter/filter.module';
 
 export const approvedAssetRoutes: Routes = [
   {
@@ -72,8 +73,9 @@ export const approvedAssetRoutes: Routes = [
     BadgeModule,
     RouterModule.forChild(approvedAssetRoutes),
 
-   ReactiveFormsModule,
-   FormsModule,
+    ReactiveFormsModule,
+    FormsModule,
+    FilterModule
   ]
 })
 export class ApprovedAssetModule { }

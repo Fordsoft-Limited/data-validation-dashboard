@@ -1,200 +1,194 @@
-import { Component, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { Table } from 'primeng/table';
+import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { CustomerService } from '../../api/customer.service';
-import { MessageService } from 'primeng/api/messageservice';
-import { AuthService } from '../../auth/service/auth.service';
 import { DatePipe } from '@angular/common';
 import { CUSTOMER_REGION } from '../../shared/constants';
+import { NgModel } from '@angular/forms';
+import { UserService } from '../../api/user.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
-  providers: [DatePipe], // Provide DatePipe if not globally available
+  providers: [DatePipe],
 })
 export class FilterComponent {
-  @ViewChild('dt') table: Table | undefined;
-
-  display = false;
-  pageloading = false;
-  errOccured = false;
-  customers: any[] = []; // Adjust type to match customer structure
-  filteredCustomers: any[] = []; // For displaying in the table
-  statuses: any[] = [];
-  approvedBys: any[] = [];
-  activityValues: number[] = [0, 100];
+  @Input() display = false;
+  @Input() statusVisible =false;
+  @Output() filterApplied = new EventEmitter<any>(); 
+  @Output() clearFiltersEvent = new EventEmitter<void>(); 
+  @Output() closeFiltersEvent = new EventEmitter<boolean>(); 
+  
+  @ViewChildren(NgModel) formControls!: QueryList<NgModel>;
   loading = false;
-  errorMessage = '';
-  custloading = false;
 
   regions = CUSTOMER_REGION;
   businessHubs: any[] = [];
   serviceCenters: any[] = [];
-
-  // Temporary filter values
-  tempRegion: any = null;
-  tempBusinessHub: any = null;
-  tempServiceCenter: any = null;
-  tempDateCreatedFrom!: string;
-  tempDateCreatedTo!: string;
-  tempStatus!: string;
-  tempApproveBy!: string;
-  tempAplicationDates!: string;
+  statuses: string[] = ["Approved", "Rejected", "Awaiting review", "Reviewed"];
+  userList: any[] = [];
 
   // Applied filter values
   region = '';
-  businessHub = '';
-  serviceCenter = '';
-  dateCreatedFrom: string | null = null;
-  dateCreatedTo: string | null = null;
-  status = '';
-  approvedBy = '';
-  aplicationDate = '';
-
-  currentPage = 1;
-  pageSize = 100;
-  selectedCustomer: any;
+  business_hub = '';
+  service_center = '';
+  date_created_from: string | null = null;
+  date_created_to: string | null = null;
+  approval_status = '';
+  approved_by: string = '';
+  reviewed_by: string=''
+  created_by: string=''
+  application_date_from = '';
+  application_date_to = '';
+  setup_date_from = '';
+  setup_date_to = '';
 
   constructor(
     private service: CustomerService,
-    private route: Router,
-    private authService: AuthService,
-    private datePipe: DatePipe
+    private userService: UserService,
+    private datePipe: DatePipe,
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
-    this.loadCustomers(this.currentPage, this.pageSize);
-    this.businessHubs = this.getAllBusinessHubs();
-    this.serviceCenters = this.getAllServiceCenters();
+    this.listUsers()
+  }
+  /**
+     * Returns business hubs for a given region name.
+     * @param regionName The name of the region.
+     * @returns An array of business hubs or an empty array if not found.
+     */
+  getBusinessHubsByRegion(regionName: string): { name: string, serviceCentres: { name: string }[] }[] {
+    const region = CUSTOMER_REGION.find(r => r.name.toLowerCase() === regionName.toLowerCase());
+    return region ? region.businessHubs : [];
   }
 
-  getAllBusinessHubs(): any[] {
-    return this.regions.flatMap((region) => region.businessHubs);
-  }
-
-  getAllServiceCenters(): any[] {
-    return this.getAllBusinessHubs().flatMap((hub) => hub.serviceCentres);
-  }
-
-  onRegionChange(): void {
-    const selectedRegion = this.regions.find(
-      (region) => region.name === this.tempRegion
-    );
-    this.businessHubs =
-      selectedRegion?.businessHubs || this.getAllBusinessHubs();
-
-    if (this.tempBusinessHub) {
-      const selectedHub = this.businessHubs.find(
-        (hub) => hub.name === this.tempBusinessHub
-      );
-      this.serviceCenters = selectedHub?.serviceCentres || [];
-    } else {
-      this.serviceCenters = this.getAllServiceCenters();
+  /**
+   * Returns service centres for a given business hub name.
+   * @param hubName The name of the business hub.
+   * @returns An array of service centres or an empty array if not found.
+   */
+  getServiceCentresByBusinessHub(hubName: string): { name: string }[] {
+    for (const region of CUSTOMER_REGION) {
+      const businessHub = region.businessHubs.find(hub => hub.name.toLowerCase() === hubName.toLowerCase());
+      if (businessHub) {
+        return businessHub.serviceCentres;
+      }
     }
+    return [];
   }
 
-  onBusinessHubChange(): void {
-    const selectedHub = this.businessHubs.find(
-      (hub) => hub.name === this.tempBusinessHub
-    );
-    this.serviceCenters =
-      selectedHub?.serviceCentres || this.getAllServiceCenters();
+  onRegionChange(item: any): void {
+    this.businessHubs = this.getBusinessHubsByRegion(item)
   }
   
 
-  loadCustomers(page: number, pageSize: number): void {
+  onBusinessHubChange(item: any): void {
+    this.serviceCenters = this.getServiceCentresByBusinessHub(item)
+  }
+  clearFilters(): void {
+    this.formControls.forEach((control) => control.reset());
+    this.clearFiltersEvent.emit();
+  }
+  download(): void {
+    const queryParams: any = {};
+    this.formControls.forEach((control) => {
+      const key = control.name;
+      const value = control.value;
+
+      if (value) {
+        if (
+          key === 'date_created_from' ||
+          key === 'date_created_to' ||
+          key === 'applidation_date_from'
+          ||
+          key === 'applidation_date_to'
+          ||
+          key === 'setup_date_from'
+          ||
+          key === 'setup_date_to'
+        ) {
+          queryParams[key] = this.datePipe.transform(value, 'yyyy-MM-dd');
+        } else {
+          queryParams[key] = value;
+        }
+      }
+    });
+    const queryString = new URLSearchParams(queryParams).toString();
     this.loading = true;
-  
-    this.loading = true;
-    this.service.getCustomersWithAwaitingReview(page, pageSize).subscribe(
+    this.service.scheduleReportDownload(queryString).subscribe(
       (response) => {
-        this.customers = response.data?.results || [];
-        this.filteredCustomers = [...this.customers];
-        this.loading = false;
-
-        // Populate dropdown filters
-        this.statuses = Array.from(
-          new Set(this.customers.map((customer: any) => customer.status_code))
-        ).map((status) => ({ name: status, value: status }));
-
-        console.log('Customer Data Loaded:', this.customers);
+        if (response.code == 200 && response.status == 'Success') {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Download Scheduled',
+            detail: 'Your report download has been scheduled successfully.',
+          });
+          this.loading=false;
+        }
       },
       (error) => {
-        console.error('Error loading customers:', error);
-        this.errorMessage = 'Failed to load customers. Please try again later.';
+        console.error('Error filtering customers:', error);
         this.loading = false;
       }
     );
   }
-
-  getFilterCustomer(): void {
-    const payload = {
-      region: this.region || '',
-      businessHub: this.businessHub || '',
-      serviceCenter: this.serviceCenter || '',
-      dateCreatedFrom:
-        this.datePipe.transform(this.dateCreatedFrom, 'yyyy-MM-dd') || '',
-      dateCreatedTo:
-        this.datePipe.transform(this.dateCreatedTo, 'yyyy-MM-dd') || '',
-      status: this.status || '',
-      approvedBy: this.approvedBy || '',
-      aplicationDate:
-        this.datePipe.transform(this.aplicationDate, 'yyyy-MM-dd') || '',
-    };
-
-    console.log('Filter Payload:', payload);
-
-    this.loading = true;
-    this.service.getNewCustomerFilter2(payload).subscribe(
+  onDialogClose(): void {
+   this.closeFiltersEvent.emit(false)
+  }
+  listUsers(): void {
+    this.userService.getUserList(1, 150).subscribe(
       (response) => {
-        if (response.code === 200 && response.status === 'Success') {
-          this.filteredCustomers = response.data || [];
-          console.log('Filtered Data:', this.filteredCustomers);
-        } else {
-          this.filteredCustomers = [];
-          console.warn('Unexpected response:', response);
+        if (response.code == 200 && response.status === 'Success') {
+          this.userList = response?.data?.results
         }
-        this.loading = false;
       },
       (error) => {
-        console.error('Error filtering customers:', error);
-        this.errorMessage = 'Failed to apply filters. Please try again later.';
-        this.filteredCustomers = [];
         this.loading = false;
+        this.filterApplied.emit({});
       }
     );
   }
 
   onFilterButtonClick(): void {
-    this.filteredCustomers = this.customers.filter((customer) => {
-      const matchesRegion =
-        !this.tempRegion || customer.region === this.tempRegion;
-      const matchesBusinessHub =
-        !this.tempBusinessHub || customer.businessHub === this.tempBusinessHub;
-      const matchesServiceCenter =
-        !this.tempServiceCenter ||
-        customer.serviceCenter === this.tempServiceCenter;
-      const matchesStatus =
-        !this.tempStatus || customer.status_code === this.tempStatus;
-      const matchesDateFrom =
-        !this.tempDateCreatedFrom ||
-        new Date(customer.dateCreated) >= new Date(this.tempDateCreatedFrom);
-      const matchesDateTo =
-        !this.tempDateCreatedTo ||
-        new Date(customer.dateCreated) <= new Date(this.tempDateCreatedTo);
+    const queryParams: any = {};
+    this.formControls.forEach((control) => {
+      const key = control.name;
+      const value = control.value;
 
-      return (
-        matchesRegion &&
-        matchesBusinessHub &&
-        matchesServiceCenter &&
-        matchesStatus &&
-        matchesDateFrom &&
-        matchesDateTo
-      );
+      if (value) {
+        if (
+          key === 'date_created_from' ||
+          key === 'date_created_to' ||
+          key === 'applidation_date_from'
+          ||
+          key === 'applidation_date_to'
+          ||
+          key === 'setup_date_from'
+          ||
+          key === 'setup_date_to'
+        ) {
+          queryParams[key] = this.datePipe.transform(value, 'yyyy-MM-dd');
+        } else {
+          queryParams[key] = value;
+        }
+      }
     });
-
-    this.hideDialog();
+    const queryString = new URLSearchParams(queryParams).toString();
+    this.loading = true;
+    this.service.filterAll(queryString).subscribe(
+      (response) => {
+        if (response.code == 200 && response.status == 'Success') {
+          this.filterApplied.emit(response.data);
+          this.loading=false;
+        }
+      },
+      (error) => {
+        console.error('Error filtering customers:', error);
+        this.loading = false;
+        this.filterApplied.emit({});
+      }
+    );
   }
   
 
@@ -203,28 +197,7 @@ export class FilterComponent {
   }
 
   hideDialog(): void {
-    this.display = false;
     this.clearFilters();
   }
 
-  clearFilters(): void {
-    // Clear temporary and applied filters
-    this.tempRegion = null;
-    this.tempBusinessHub = null;
-    this.tempServiceCenter = null;
-    this.tempDateCreatedFrom = '';
-    this.tempDateCreatedTo = '';
-    this.tempStatus = '';
-    this.tempApproveBy = '';
-    this.tempAplicationDates = '';
-
-    this.region = '';
-    this.businessHub = '';
-    this.serviceCenter = '';
-    this.dateCreatedFrom = '';
-    this.dateCreatedTo = '';
-    this.status = '';
-    this.approvedBy = '';
-    this.aplicationDate = '';
-  }
 }

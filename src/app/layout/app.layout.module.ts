@@ -1,15 +1,7 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { InputTextModule } from 'primeng/inputtext';
 import { SidebarModule } from 'primeng/sidebar';
-import { BadgeModule } from 'primeng/badge';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { TooltipModule } from 'primeng/tooltip';
-import { RippleModule } from 'primeng/ripple';
 import { AppConfigModule } from './config/app.config.module';
 import { AppLayoutComponent } from './app.layout.component';
 import { AppBreadcrumbComponent } from './app.breadcrumb.component';
@@ -21,9 +13,6 @@ import { AppMenuitemComponent } from './app.menuitem.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AppSidebarComponent } from './app.sidebar.component';
 import { AppFooterComponent } from './app.footer.component';
-import { MegaMenuModule } from 'primeng/megamenu';
-import { ButtonModule } from 'primeng/button';
-import { MenuModule } from 'primeng/menu';
 import { StyleClassModule } from 'primeng/styleclass';
 import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
@@ -43,14 +32,7 @@ export const layoutRoutes: Routes = [
                 (m) => m.DashboardModule
               ),
           },
-          // {
-          //   path: 'reports',
-          //   data:{breadcrumb: 'Reports'},
-          //   loadChildren: () =>
-          //     import('../pages/reports/reports.module').then(
-          //       (m) => m.ReportsModule
-          //     ),
-          // },
+          
           {
             path: 'customer-information',
             data:{breadcrumb: 'Customer Information'},
@@ -59,15 +41,6 @@ export const layoutRoutes: Routes = [
                 (m) => m.CustomerInformationModule
               ),
           },
-
-          // {
-          //   path: 'checkers',
-          //   data:{breadcrumb: 'Checkers'},
-          //   loadChildren: () =>
-          //     import('../pages/filter/filter.module').then(
-          //       (m) => m.CheckerModule
-          //     ),
-          // },
 
           {
             path: 'user-management',
@@ -175,15 +148,6 @@ export const layoutRoutes: Routes = [
               ),
           },
 
-          {
-            path:'filter',
-            data:{breadcrumb: 'filter'},
-
-            loadChildren: () =>
-              import('../pages/filter/filter.module').then(
-                (m) => m.FilterModule
-              ),
-          },
           {
             path:'download',
             data:{breadcrumb: 'Download Reports'},

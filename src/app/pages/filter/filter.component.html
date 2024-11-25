@@ -1,99 +1,179 @@
-<p-dialog header="Select Category to Filter" [(visible)]="display" modal="modal" showEffect="fade"
-  [style]="{ width: '550px' }" [contentStyle]="{ height: '290px' }">
+<p-dialog 
+  header="Advance Filter" 
+  [(visible)]="display" 
+  [modal]="false" 
+  showEffect="fade"
+  [position]="'top'" 
+  (onHide)="onDialogClose()" 
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
+  [style]="{ width: '50vw' }" 
+  [draggable]="false" 
+  [resizable]="false">
+  
   <div class="p-fluid">
-    <div class="p-grid" style="margin-bottom: 1rem;">
-      <div class="p-col-12" style="display: flex; gap: 3rem; margin-bottom: 1rem;">
-        <div>
-          <p-dropdown id="region" [options]="regions" [(ngModel)]="tempRegion" placeholder="Select Region"
-            optionValue="name" optionLabel="name" [style]="{ width: '230px' }"
-            (onChange)="onRegionChange()"></p-dropdown>
-        </div>
+    <div class="flex align-items-center gap-3 mb-3">
+      <p-dropdown 
+        name="region" 
+        [options]="regions" 
+        [(ngModel)]="region" 
+        placeholder="Region"
+        optionValue="name" 
+        optionLabel="name" 
+        class="flex-1" 
+        (onChange)="onRegionChange($event.value)" 
+        appendTo="body">
+      </p-dropdown>
 
-        <div *ngIf="businessHubs.length">
-          <p-dropdown id="businessHub" [options]="businessHubs" [(ngModel)]="tempBusinessHub"
-            placeholder="Select Business Hub" optionValue="name" optionLabel="name" [style]="{ width: '230px' }"
-            (onChange)="onBusinessHubChange()"></p-dropdown>
-        </div>
-      </div>
+      <p-dropdown 
+        name="businessHub" 
+        [options]="businessHubs" 
+        [(ngModel)]="business_hub"
+        placeholder="Business Hub"
+        optionValue="name" 
+        optionLabel="name" 
+        class="flex-1" 
+        (onChange)="onBusinessHubChange($event.value)" 
+        appendTo="body">
+      </p-dropdown>
 
-      <div class="p-col-12" style="display: flex; gap: 3rem; margin-bottom: 1rem;">
-        <div *ngIf="serviceCenters.length">
-          <p-dropdown id="serviceCenter" [options]="serviceCenters" [(ngModel)]="tempServiceCenter"
-            placeholder="Select Service Center" optionValue="name" optionLabel="name"
-            [style]="{ width: '230px' }"></p-dropdown>
-        </div>
-
-        <p-dropdown id="status" [options]="statuses" [(ngModel)]="tempStatus" placeholder="Select Status"
-          optionValue="name" optionLabel="name" [style]="{ width: '230px' }"></p-dropdown>
-      </div>
-
-      <div class="p-col-12" style="display: flex; gap: 3rem; margin-bottom: 1rem;">
-        <p-calendar id="dateCreatedFrom" [(ngModel)]="tempDateCreatedFrom" placeholder="Start Date" appendTo="body"
-          [style]="{ width: '230px' }"></p-calendar>
-
-        <p-calendar id="dateCreatedTo" [(ngModel)]="tempDateCreatedTo" placeholder="End Date" appendTo="body"
-          [style]="{ width: '230px' }"></p-calendar>
-      </div>
-
-      <div class="p-col-12" style="display: flex; gap: 3rem; margin-bottom: 1rem;">
-        <p-calendar id="aplicationDate" [(ngModel)]="tempAplicationDates" placeholder="Application Date" appendTo="body"
-          [style]="{ width: '230px' }"></p-calendar>
-
-        <p-dropdown id="approvedBy" [options]="approvedBys" [(ngModel)]="tempApproveBy" placeholder="Approved By"
-          optionValue="name" optionLabel="name" [style]="{ width: '230px' }"></p-dropdown>
-      </div>
+      <p-dropdown 
+        name="serviceCenter" 
+        [options]="serviceCenters" 
+        [(ngModel)]="service_center"
+        placeholder="Service Center" 
+        optionValue="name" 
+        optionLabel="name" 
+        class="flex-1" 
+        appendTo="body">
+      </p-dropdown>
     </div>
 
-    <div class="p-grid p-justify-center">
-      <button pButton type="button" label="Filter" (click)="onFilterButtonClick()"></button>
+    <!-- Second Row: Status, Date Created From, Date Created To -->
+    <div class="flex align-items-center gap-3 mb-3">
+      <p-dropdown *ngIf="statusVisible"
+        name="approval_status" 
+        [options]="statuses" 
+        [(ngModel)]="approval_status" 
+        placeholder="Status" 
+        class="flex-1" 
+        appendTo="body">
+      </p-dropdown>
+
+      <p-calendar 
+        name="date_created_from" 
+        [(ngModel)]="date_created_from" 
+        placeholder="Created From" 
+        appendTo="body" 
+        class="flex-1">
+      </p-calendar>
+
+      <p-calendar 
+        name="date_created_to" 
+        [(ngModel)]="date_created_to" 
+        placeholder="Created To" 
+        appendTo="body" 
+        class="flex-1">
+      </p-calendar>
+    </div>
+
+    <!-- Third Row: Application Date From, Application Date To, Approved By -->
+    <div class="flex align-items-center gap-3 mb-3">
+      <p-calendar 
+        name="application_date_from" 
+        [(ngModel)]="application_date_from" 
+        placeholder="Application From" 
+        appendTo="body" 
+        class="flex-1">
+      </p-calendar>
+
+      <p-calendar 
+        name="application_date_to" 
+        [(ngModel)]="application_date_to" 
+        placeholder="Application To" 
+        appendTo="body" 
+        class="flex-1">
+      </p-calendar>
+
+      <p-dropdown 
+        name="approved_by" 
+        [options]="userList" 
+        [(ngModel)]="approved_by" 
+        placeholder="Approved By"
+        optionValue="uid" 
+        optionLabel="name" 
+        class="flex-1" 
+        appendTo="body">
+      </p-dropdown>
+    </div>
+
+    <!-- Fourth Row: Created By, Reviewed By -->
+    <div class="flex align-items-center gap-3 mb-3">
+      <p-dropdown 
+        name="created_by" 
+        [options]="userList" 
+        [(ngModel)]="created_by" 
+        placeholder="Created By"
+        optionValue="uid" 
+        optionLabel="name" 
+        class="flex-1" 
+        appendTo="body">
+      </p-dropdown>
+
+      <p-dropdown 
+        name="reviewed_by" 
+        [options]="userList" 
+        [(ngModel)]="reviewed_by" 
+        placeholder="Reviewed By"
+        optionValue="uid" 
+        optionLabel="name" 
+        class="flex-1" 
+        appendTo="body">
+      </p-dropdown>
+    </div>
+
+    <!-- Fifth Row: Setup Date From, Setup Date To -->
+    <div class="flex align-items-center gap-3 mb-5">
+      <p-calendar 
+        name="setup_date_from" 
+        [(ngModel)]="setup_date_from" 
+        placeholder="Setup From" 
+        appendTo="body" 
+        class="flex-1">
+      </p-calendar>
+
+      <p-calendar 
+        name="setup_date_to" 
+        [(ngModel)]="setup_date_to" 
+        placeholder="Setup To" 
+        appendTo="body" 
+        class="flex-1">
+      </p-calendar>
     </div>
   </div>
+
+  <div class="flex justify-content-end gap-2">
+    <p-button 
+    [loading]="loading"
+      label="Search" 
+      [outlined]="true" 
+      severity="secondary" 
+      (onClick)="onFilterButtonClick()">
+    </p-button>
+    <p-button 
+    [loading]="loading"
+      label="Clear" 
+      [text]="true" 
+      severity="secondary" 
+      (onClick)="clearFilters()">
+    </p-button>
+    <p-button 
+    [loading]="loading"
+      label="Schedule Download" 
+      [text]="true" 
+      severity="secondary" 
+      (onClick)="download()">
+    </p-button>
+  </div>
+  <p-toast></p-toast>
+
 </p-dialog>
-
-<div class="card">
-  <div class="p-grid">
-    <div class="p-col-12">
-      <div *ngIf="!pageloading && customers && !errOccured">
-        <p-table #dt [value]="filteredCustomers" [(selection)]="selectedCustomer" dataKey="id"
-          styleClass="p-datatable-customers" [rowHover]="true" [rows]="10" [paginator]="true" [filterDelay]="0"
-          [globalFilterFields]="['fullname','email','cin','customerNo','approvedBy']">
-          <ng-template pTemplate="caption">
-            <div class="p-d-flex p-jc-between p-ai-center table-header">
-              <div class="customer-records">Customer Records</div>
-              <div class="group-right">
-                <button pButton pRipple type="button" label="Advance Filter" (click)="showDialog()" icon="pi pi-plus"
-                  class="p-button-rounded p-button-text"></button>
-              </div>
-            </div>
-          </ng-template>
-
-          <ng-template pTemplate="header">
-            <tr>
-              <th style="width: 23rem;">Customer No</th>
-              <th>Customer Name</th>
-              <th pSortableColumn="phone">Feeder</th>
-              <th pSortableColumn="Form Number">Status</th>
-              <th pSortableColumn="approveddept">Date Modified</th>
-            </tr>
-          </ng-template>
-
-          <ng-template pTemplate="body" let-customer>
-            <tr class="p-selectable-row">
-              <td>{{ customer.cin }}</td>
-              <td>{{ customer.customer_full_name }}</td>
-              <td>{{ customer.feeder }}</td>
-              <td>{{ customer.status_code }}</td>
-              <td>{{ customer.last_modified | date: 'MM/dd/yyyy' }}</td>
-            </tr>
-          </ng-template>
-
-          <ng-template pTemplate="emptymessage">
-            <tr>
-              <td colspan="8">No customer found.</td>
-            </tr>
-          </ng-template>
-        </p-table>
-      </div>
-    </div>
-  </div>
-</div>

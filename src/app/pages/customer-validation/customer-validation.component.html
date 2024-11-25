@@ -42,20 +42,30 @@
           </ng-container>
         
           <ng-template pTemplate="right">
-            <button 
-  [loading]="loading"
-  pButton
-  pRipple
-  class="p-button p-button-outlined font-bold p-button-help custom-button"
-  icon="pi pi-download"
-  (click)="exportData()"
-  pTooltip="Export to Excel"
-  tooltipPosition="bottom"
-  style="width: 100px;"
->
-</button>
-            
-          </ng-template>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                <a class="p-button p-button-outlined font-bold p-button-help custom-button">
+                    <i class="pi pi-filter"></i>
+                </a>  
+        
+                <a class="p-button p-button-outlined font-bold p-button-help custom-button">
+                    <i class="pi pi-refresh"></i>
+                </a>  
+        
+                <button 
+                    [loading]="loading"
+                    pButton
+                    pRipple
+                    class="p-button p-button-outlined font-bold p-button-help custom-button"
+                    icon="pi pi-download"
+                    (click)="exportData()"
+                    pTooltip="Export to Excel"
+                    tooltipPosition="bottom"
+                    style="width: 100px;"
+                >
+                </button>
+            </div>
+        </ng-template>
+        
         </p-toolbar>
         
           
