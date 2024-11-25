@@ -26,6 +26,7 @@ import { ValidateCustomerReviewComponent } from './validate-customer-review/vali
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 import { TimelineModule } from 'primeng/timeline';
+import { FilterModule } from '../filter/filter.module';
 
 export const validateRoutes: Routes = [
   {
@@ -70,7 +71,8 @@ export const validateRoutes: Routes = [
     SliderModule,
     RatingModule,
     DialogModule,
-    ConfirmPopupModule
+    ConfirmPopupModule,
+    FilterModule
   ]
 })
 export class ValidateCustomerModule { }

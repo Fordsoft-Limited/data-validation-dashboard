@@ -27,6 +27,7 @@ import { DataVerificationComponent } from './data-verification/data-verification
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TimelineModule } from 'primeng/timeline';
 import { FilterComponent } from '../filter/filter.component';
+import { FilterModule } from '../filter/filter.module';
 
 export const dataValidationRoutes: Routes = [
   {
@@ -35,24 +36,24 @@ export const dataValidationRoutes: Routes = [
   },
   {
     path: 'data-verification/:uid',
-    data:{breadcrum: 'Data Verification'},
-    component: DataVerificationComponent, 
+    data: { breadcrum: 'Data Verification' },
+    component: DataVerificationComponent,
   }
 
 ];
 
 
 @NgModule({
-  
+
   declarations: [
     DataValidationComponent,
     DataVerificationComponent
   ],
   imports: [
 
-  CommonModule,
-   SharedModule,
-   CommonModule,
+    CommonModule,
+    SharedModule,
+    CommonModule,
     SharedModule,
     TableModule,
     ConfirmDialogModule,
@@ -78,9 +79,9 @@ export const dataValidationRoutes: Routes = [
     TagModule,
     BadgeModule,
     RouterModule.forChild(dataValidationRoutes),
-
-   ReactiveFormsModule,
-   FormsModule,
+    ReactiveFormsModule,
+    FormsModule,
+    FilterModule
 
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

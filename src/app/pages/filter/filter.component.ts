@@ -12,11 +12,12 @@ import { UserService } from '../../api/user.service';
   providers: [DatePipe],
 })
 export class FilterComponent {
-  @Input() display = false; // Controlled by parent component
-  @Output() filterApplied = new EventEmitter<any>(); // Emits filtered results to parent
+  @Input() display = false;
+  @Input() statusVisible =false;
+  @Output() filterApplied = new EventEmitter<any>(); 
   @Output() clearFiltersEvent = new EventEmitter<void>(); 
   @Output() closeFiltersEvent = new EventEmitter<boolean>(); 
-
+  
   @ViewChildren(NgModel) formControls!: QueryList<NgModel>;
   loading = false;
 
@@ -91,7 +92,6 @@ export class FilterComponent {
   }
   onDialogClose(): void {
    this.closeFiltersEvent.emit(false)
-   
   }
   listUsers(): void {
     this.userService.getUserList(1, 150).subscribe(
@@ -133,20 +133,16 @@ export class FilterComponent {
     });
     const queryString = new URLSearchParams(queryParams).toString();
     this.loading = true;
-
-    // Call the filter service with dynamic query params
     this.service.filterAll(queryString).subscribe(
       (response) => {
-        console.log(response)
         if (response.code == 200 && response.status == 'Success') {
           this.filterApplied.emit(response.data);
+          this.loading=false;
         }
       },
       (error) => {
         console.error('Error filtering customers:', error);
         this.loading = false;
-
-        // Emit an empty result set in case of error
         this.filterApplied.emit({});
       }
     );

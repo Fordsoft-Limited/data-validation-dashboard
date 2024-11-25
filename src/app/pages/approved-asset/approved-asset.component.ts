@@ -13,24 +13,6 @@ import { CUSTOMER_REGION } from '../../shared/constants';
 import { MessageService } from 'primeng/api';
 import { TreeNode } from 'primeng/api';
 
-export interface ServiceCentre {
-  name: string;
-}
-
-export interface BusinessHub {
-  name: string;
-  serviceCentres: ServiceCentre[];
-}
-
-export interface Region {
-  name: string;
-  businessHubs: BusinessHub[];
-}
-
-export interface DropdownOption {
-  label: string;
-  value: any; // Can be BusinessHub or ServiceCentre, depending on the context
-}
 @Component({ 
   selector: 'app-approved-asset',
   templateUrl: './approved-asset.component.html',
@@ -44,9 +26,6 @@ export class ApprovedAssetComponent implements OnInit{
   approvedRecords !: any[];
   display: boolean = false;
   filteredRecords  : any[]=[];
-  regions: DropdownOption[] = [];
-  businessUnits: DropdownOption[] = [];
-  feeders: DropdownOption[] = [];  
   loading: boolean = false;
   isFilterLoading: boolean = false;
   isResetLoading: boolean = false;
@@ -62,7 +41,7 @@ export class ApprovedAssetComponent implements OnInit{
   exportLoading = false;
   errorMessage:string =""
   selectedApprovedRecord: any | null = null
-
+  totalRecords:number=0
   filterForm!: FormGroup;
   nodes: TreeNode[] = [];
   selectedNode: TreeNode | null = null;
@@ -77,39 +56,25 @@ export class ApprovedAssetComponent implements OnInit{
       });
     }
   ngOnInit(): void {
-   // this.loadData();
+   this.reload()
 
-   this.filterForm = this.fb.group({
-    region: [null],
-    businessUnit: [null],
-    feeder: [null],
-    dateCreatedFrom: [null],  // Start date control
-    dateCreatedTo: [null] 
-  });
-
-  this.regions = CUSTOMER_REGION.map(region => ({
-    label: region.name,  // Display the region name
-    value: region        // Store the entire region object as value
-  }));
-
-
+  }
+reload(){
   this.loadCustomers(this.currentPage,this.pageSize)
-
-  this.nodes = [
-    {
-     label: 'Download',
-    icon: 'pi pi-download', 
-    data:{method: () => this.exportData()},
-    children: [
-      {
-        label: 'Export',
-        icon: 'pi pi-download', 
-        data:{method: () => this.exportData()},
-      }
-    ]
-  }
-];
-  }
+}
+openSearch() {
+  this.showDetailsDialog = true;
+}
+filterApplied(response: any): void {
+  this.filteredRecords = response?.results;
+  this.totalRecords = response?.count;
+}
+onClearFilters(): void {
+  this.reload()
+}
+onDialogClosed(event: boolean) {
+  this.showDetailsDialog = event;
+}
 
 
   handleNodeSelect(event: any) {
@@ -121,14 +86,11 @@ export class ApprovedAssetComponent implements OnInit{
   
 
   loadCustomers(page: number, pageSize: number): void {
-  
-  
     this.loading = true; 
     this.customerService.getCustomersWithApprovedOrRejectedStatus(page, pageSize)
     .subscribe(
       (response) => {
-        this.approvedRecords =  response.data?.results || [];;
-        this.filteredRecords =  [...this.approvedRecords]; // Initially display all records
+        this.filteredRecords =  response.data?.results || [];
         this.loading = false;
       },
       (error) => {
@@ -139,101 +101,6 @@ export class ApprovedAssetComponent implements OnInit{
 
   }
 
-
-  filterData() {
-    this.loading = true;
-    const { dateCreatedFrom, dateCreatedTo, feeder, businessUnit, region } = this.filterForm.value;
-
-    const selectedRegion = region ? region.name : null;  // Get the region name
-  
-    const selectedBusinessHub = businessUnit ? businessUnit.name : null;
-    const selectedFeeder = feeder ? feeder.name : null;
-  
-    const token = this.authService.getToken();
-  
-    if (!token) {
-      this.loading = false;
-      this.errorMessage = 'No authentication token found. Please log in again.';
-      return;
-    }
-  
-    // Now, call the service to get filtered customers
-    this.customerService
-      .getNewCustomerFilterApproveRegion(
-        token,
-        selectedRegion,  // Only pass region name here
-        selectedBusinessHub,
-        selectedFeeder,
-        dateCreatedFrom,
-        dateCreatedTo
-      )
-      .subscribe(
-        (response) => {
-          console.log('Filtered customers:', response);
-          this.approvedRecords = response.data?.results || [];
-          this.filteredRecords = [...this.approvedRecords];
-          this.loading = false;
-        },
-        (error) => {
-          console.error('Error loading customers:', error);
-          this.errorMessage = 'Failed to load customers. Please try again later.';
-          this.loading = false;
-        }
-      );
-  }
-  
-  onRegionChange(event: any): void {
-    const selectedRegion = event.value;
-    this.updateBusinessUnits(selectedRegion);
-    this.filterForm.get('businessUnit')?.reset(); // Reset the business unit dropdown
-    this.filterForm.get('feeder')?.reset(); // Reset the service dropdown
-  }
-  
-  // On business hub change, update the feeders (service centres)
-  onBusinessHubChange(event: any): void {
-    const selectedHub = event.value;
-    this.updateFeeders(selectedHub);
-    this.filterForm.get('feeder')?.reset(); // Reset the service dropdown
-  }
-  
-  // Update the business hubs based on selected region
-  private updateBusinessUnits(region: Region): void {
-    this.businessUnits = region.businessHubs.map(hub => ({
-      label: hub.name,
-      value: hub
-    }));
-  }
-  
-  // Update the service centres (feeders) based on selected business hub
-  private updateFeeders(businessHub: BusinessHub): void {
-    if (businessHub && businessHub.serviceCentres) {
-      this.feeders = businessHub.serviceCentres.map((service: ServiceCentre) => ({
-        label: service.name,
-        value: service
-      }));
-    } else {
-      this.feeders = [];
-    }
-  }
-  resetFilter() {
-    this.isResetLoading=true;
-    setTimeout(() => {
-      this.isResetLoading=false;
-      this.filterForm.reset();  // Reset the form fields
-      this.filteredRecords = [...this.approvedRecords];  // Restore the original list
-    },2000)
-    
-  }
-
-  private isWithinDateRange(recordDate: string | Date, dateRange: [string, string]): boolean {
-    const [startDate, endDate] = dateRange;
-    const recordTime = new Date(recordDate).getTime();  
-    const startTime = new Date(startDate).getTime();
-    const endTime = new Date(endDate).getTime();
-  
-    return recordTime >= startTime && recordTime <= endTime;
-  }
-  
   showDetails(record: Customer) {
     // Implement the function to show record details
     this.selectedApprovedRecord = {...record};

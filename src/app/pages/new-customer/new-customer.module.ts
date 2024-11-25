@@ -22,6 +22,7 @@ import { BadgeModule } from 'primeng/badge';
 import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
 import { FilterModule } from '../filter/filter.module';
+import { SharedModule } from 'primeng/api';
 
 export const newCustomerRoute: Routes = [
   {
@@ -57,8 +58,8 @@ export const newCustomerRoute: Routes = [
     ToastModule,
     SliderModule,
     RatingModule,
-    DialogModule,
-    FilterModule    
+    DialogModule, 
+    FilterModule
   ]
 })
 export class NewCustomerModule { }

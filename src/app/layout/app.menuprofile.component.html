@@ -10,7 +10,7 @@
 
     <ul *ngIf="menuProfileActive" [@menu]="isHorizontal ? 'overlay' : 'inline'">
         <li pTooltip="Settings" [tooltipDisabled]="isTooltipDisabled">
-            <button class="p-link" [routerLink]="['/profile/create']">
+            <button class="p-link" [routerLink]="['/app/settings']">
                 <i class="pi pi-cog pi-fw"></i>
                 <span>Settings</span>
             </button>

@@ -10,10 +10,7 @@
   [draggable]="false" 
   [resizable]="false">
   
-  <span class="p-text-secondary block mb-3">Use the fields below to filter data.</span>
-
   <div class="p-fluid">
-    <!-- First Row: Region, Business Hub, Service Center -->
     <div class="flex align-items-center gap-3 mb-3">
       <p-dropdown 
         name="region" 
@@ -53,7 +50,7 @@
 
     <!-- Second Row: Status, Date Created From, Date Created To -->
     <div class="flex align-items-center gap-3 mb-3">
-      <p-dropdown 
+      <p-dropdown *ngIf="statusVisible"
         name="approval_status" 
         [options]="statuses" 
         [(ngModel)]="approval_status" 
