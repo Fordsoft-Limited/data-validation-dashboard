@@ -25,6 +25,7 @@ export class ValidateCustomerReviewComponent implements OnInit {
   events: any | null = null;
   comments: string = ' Well done ';
   rejectDialog: boolean = false;
+  isLoading:boolean = false;
   reviewDialog: boolean = false;
   rejectReason: string = '';
   reviewReason: string = '';
@@ -96,31 +97,38 @@ export class ValidateCustomerReviewComponent implements OnInit {
   }
 
   confirmReView() {
-    const updatePayload: customerApproveOrReject = {
-      uid: this.currentRecord.newData.uid,
-      approval_status: 'Reviewed',
-      approval_comments: this.reviewReason,
-    };
+    this.isLoading=true
 
-    this.customerService.customerApproveOrReject(updatePayload).subscribe(
-      (response) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Record Reviewed',
-          detail: 'Customer record has been reviwed.',
-        });
-        this.reviewDialog = false; 
-        this.reviewReason = ''; 
-        this.removeCurrentRecordAndRedirectIfEmpty();
-      },
-      (error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: error.error.errorMessage || 'Error updating the customer approval status.',
-        });
-      }
-    );
+    setTimeout(() => {
+      const updatePayload: customerApproveOrReject = {
+        uid: this.currentRecord.newData.uid,
+        approval_status: 'Reviewed',
+        approval_comments: this.reviewReason,
+      };
+  
+      this.customerService.customerApproveOrReject(updatePayload).subscribe(
+        (response) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Record Reviewed',
+            detail: 'Customer record has been reviwed.',
+          });
+          this.reviewDialog = false; 
+          this.reviewReason = ''; 
+          this.removeCurrentRecordAndRedirectIfEmpty();
+        },
+        (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error.errorMessage || 'Error updating the customer approval status.',
+          });
+        }
+      );
+
+      this.isLoading=false;
+    } , 2000)
+   
   }
 
   private removeCurrentRecordAndRedirectIfEmpty() {

@@ -155,13 +155,13 @@ export class DataValidationComponent implements OnInit {
 
   }
 
-  loadCustomers(page: number, pageSize: number): void {
+  loadCustomers(page: number, pageSize: number): void { 
    
 
     this.loading = true; // Start loading before the request
 
   
-    this.customerService.getCustomersWithAwaitingReview(page, pageSize,).subscribe(
+    this.customerService.getCustomerStatusByReViewed(page, pageSize,).subscribe(
 
       (response) => {
         console.log('Data loaded:', response); // Debugging check

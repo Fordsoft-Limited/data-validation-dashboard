@@ -144,7 +144,7 @@
     <small *ngIf="!reviewReason && reviewDialog" class="p-error">Reviewed reason is required.</small>
   </div>
   <div class="p-mt-2 flex gap-4 justify-content-end">
-    <button pButton label="Submit" class="p-button-primary" (click)="confirmReView()" [disabled]="!reviewReason"></button>
+    <button pButton label="Submit" class="p-button-primary" (click)="confirmReView()" [loading]="isLoading" [disabled]="!reviewReason"></button>
     <button pButton label="Cancel" class="p-button-secondary" (click)="cancelReject()"></button>
   </div>
 </p-dialog>
