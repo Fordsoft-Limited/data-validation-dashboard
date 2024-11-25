@@ -176,6 +176,30 @@ export class CustomerService {
       .pipe(catchError(err => this.base.errorHandler(err)));
   }
 
+  getScheduleReportListDownload(uid: string): Observable<any> {
+    const url = `${this.baseUrl}/schedule_report/download_report/${uid}/`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    
+    return this.http.get(url, { headers, responseType: 'blob' }).pipe(
+      catchError(err => {
+        console.error('Download Error:', err);
+        return throwError(err);  // Use throwError to propagate the error properly
+      })
+    );
+  }
+
+  getScheduleReportListDownloadFile(uid: string,fileName:string): Observable<any> {
+    const url = `${this.baseUrl}/schedule_report/download_report/${uid}/${fileName}/`;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    
+    return this.http.get(url, { headers, responseType: 'blob' }).pipe(
+      catchError(err => {
+        console.error('Download Error:', err);
+        return throwError(err);  // Use throwError to propagate the error properly
+      })
+    );
+  }
+
   getNewCustomerFilter(
     region: string,
     businessHub: string,

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { CustomerService } from '../../api/customer.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-download',
@@ -15,7 +16,7 @@ export class DownloadComponent implements OnInit {
   selectedNode: any = {};
   currentPage: number = 1;
   pageSize: number = 20;
-  constructor(private messageService: MessageService, private customerService: CustomerService) { }
+  constructor(private messageService: MessageService, private customerService: CustomerService,private http: HttpClient) { }
 
   ngOnInit(): void {
 
@@ -32,17 +33,83 @@ export class DownloadComponent implements OnInit {
 
 
   }
+  parentDownload(uid: string, fileNames: string): void {
+    this.customerService.getScheduleReportListDownload(uid).subscribe({
+      next: (response: any) => {
+         const fileName = fileNames || 'default_report.zip'; 
+
+
+        const blob = new Blob([response], { type: 'application/zip' });
+  
+        
+        const blobUrl = URL.createObjectURL(blob);
+        console.log(blobUrl);
+       
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = fileName; 
+        a.click(); 
+  
+        
+        URL.revokeObjectURL(blobUrl);
+      },
+      error: (err) => {
+        console.error('Error during download:', err);
+        alert('An error occurred while downloading the file. Please try again.');
+      }
+    });
+  }
+  
+  childDownloaded(uid: string, fileNames: string) {
+    this.customerService.getScheduleReportListDownloadFile(uid, fileNames).subscribe({
+      next: (response: any) => {
+        const fileName = fileNames || 'default_report.xlsx'; 
+
+
+       const blob = new Blob([response], { type: 'application/xlsx' });
+ 
+       
+       const blobUrl = URL.createObjectURL(blob);
+       console.log(blobUrl);
+      
+       const a = document.createElement('a');
+       a.href = blobUrl;
+       a.download = fileName; 
+       a.click(); 
+ 
+       
+       URL.revokeObjectURL(blobUrl);
+     },
+     error: (err) => {
+       console.error('Error during download:', err);
+       alert('An error occurred while downloading the file. Please try again.');
+     }
+    })
+  }
   delete(item:any){
   console.log(item)
   }
+
+  // getChildReportNames(node: any): string[] {
+  //   if (node?.children?.length > 0) {
+  //     return node.children.map((child: any) => child.data.reportName);
+  //   }
+  //   return [];
+  // }
 
   download(item:any){
     const node = item?.node
     const nodeName = node?.data.reportName
     const uid = node?.data.uid
+    const childNames = node?.children?.map((child: any) => child.data.reportName) || [];
+    // const child = node?.children?.data.reportName;
+    // console.log(child)
+    console.log("Child Report Names:", childNames);
     if(item.level==0){
+      this.parentDownload(uid,nodeName)
       console.log("This is parent node with ", nodeName, uid)
     }else{
+      this.childDownloaded(uid,nodeName)
       console.log("This is a child node", nodeName, uid)
     }
   }

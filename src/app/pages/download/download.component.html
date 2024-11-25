@@ -27,9 +27,10 @@
                         <p-button *ngIf="rowData['downloadVisible']"
                           icon="pi pi-file-excel" 
                           rounded="true" 
-                          [style]="{ 'margin-left': '.5em','margin-right': '2px', 'width': '2.5em', 'height': '2.5em' }" 
+                          [style]="{ 'margin-left': '1em','margin-right': '2px', 'width': '2.5em', 'height': '2.5em','margin-top': '1em' }" 
                           severity="info" 
                           pTooltip="Download Excel" 
+                          
                           tooltipPosition="top"
                           (click)="download(rowNode)"
                           >
@@ -38,7 +39,7 @@
                         <p-button *ngIf="rowData['deleteVisible']"
                           icon="pi pi-trash" 
                           rounded="true" 
-                          [style]="{ 'width': '2.5em', 'height': '2.5em' }" 
+                          [style]="{ 'width': '2.5em', 'height': '2.5em' , 'margin-left': '1em','margin-top': '1em'}" 
                           severity="danger" 
                           pTooltip="Delete Item" 
                           (click)="delete(rowNode.node.data.uid)"
