@@ -3,21 +3,36 @@
     <form>
         <div class="flex gap-5 mb-4 justify-content-end flex-wrap">
           <div class="flex flex-column gap-2">
-            <label for="region">Filter By User :</label>
-            <p-dropdown formControlName="user" placeholder="Enter username"></p-dropdown>
+            <label for="username">Filter By Username :</label>
+            <p-dropdown id="username" [options]="usernames" [(ngModel)]="tempusername" 
+             placeholder="Enter username"  optionValue="name" optionLabel="name"></p-dropdown>
           </div>
       
           <div class="flex flex-column gap-2">
-            <label for="businessUnit">Filter By Category :</label>
-            <p-dropdown formControlName="category" placeholder="Select Category"></p-dropdown>
+            <label for="category">Filter By Category :</label>
+            <p-dropdown id="category" [options]="categories" [(ngModel)]="tempCategory" 
+             placeholder="Select Category" optionValue="name" optionLabel="name" ></p-dropdown>
           </div>
       
           <div class="flex flex-column gap-2">
-            <label for="dateRange">Filter By Date:</label>
+            <label for="dateFrom">Filter Date From:</label>
             <div class="flex gap-2">
-              <input type="date" formControlName="dateRange" pInputText class="date-range" />
+              <input type="date" [(ngModel)]="tempDateFrom" pInputText class="date-range" />
             </div>
-          </div>  
+          </div>
+
+          <div class="flex flex-column gap-2">
+            <label for="dateTo">Filter Date To:</label>
+            <div class="flex gap-2">
+              <input type="date" [(ngModel)]="tempDateTo" pInputText class="date-range" />
+            </div>
+          </div>
+
+          <div class="flex flex-column gap-2">
+          <button pButton type="button" label="Filter" (click)="onFilterButtonClick()"></button>
+          </div>
+          
+          
         </div>
       </form>
       
@@ -89,7 +104,7 @@
           </td>
           <td>
             <!-- Display the event date, format it if needed -->
-            {{ user.event_date | date: 'short' || 'No date available' }}
+            {{ user.event_date  }}
         </td>
         </tr>
     </ng-template>

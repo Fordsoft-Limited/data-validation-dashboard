@@ -416,4 +416,28 @@ export class CustomerService {
     );
   }
 
+
+  getAuditLogFilter(payload: any): Observable<any> {
+    let params = new HttpParams();
+
+    if (payload.username) {
+      params = params.set('username', payload.username);
+    }
+    if (payload.category) {
+      params = params.set('category', payload.category);
+    }
+    if (payload.dateFrom) {
+      params = params.set('dateFrom', payload.dateFrom);
+    }
+    if (payload.dateTo) {
+      params = params.set('dateTo', payload.dateTo);
+    }
+    
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { params })
+    .pipe(catchError(err => this.base.errorHandler(err)));
+  }
+
+
+
+
 }

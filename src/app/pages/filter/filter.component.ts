@@ -101,14 +101,11 @@ export class FilterComponent {
     this.serviceCenters =
       selectedHub?.serviceCentres || this.getAllServiceCenters();
   }
+  
 
   loadCustomers(page: number, pageSize: number): void {
-
-  
-  
     this.loading = true;
   
-
     this.loading = true;
     this.service.getCustomersWithAwaitingReview(page, pageSize).subscribe(
       (response) => {
@@ -198,8 +195,8 @@ export class FilterComponent {
     });
 
     this.hideDialog();
-    console.log('Filtered Customers:', this.filteredCustomers);
   }
+  
 
   showDialog(): void {
     this.display = true;
