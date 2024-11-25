@@ -350,7 +350,7 @@ export class CustomerService {
       }),
       catchError((err) => {
         console.error('Error occurred:', err);
-        throw err; // Handle the error accordingly
+        throw err; 
       })
     );
   }
@@ -359,23 +359,21 @@ export class CustomerService {
   getRecentActivities(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/dashboard/`).pipe(
       map((response) => {
-        // Extract recent_event_logs
         return response.data.recent_event_logs.map((log: { description: any; category: any; status: any; posted_by: { username: any; }; }) => ({
           description: log.description,
-          postedBy: log.posted_by.username, // Pick the username only
+          postedBy: log.posted_by.username, 
           status: log.status,
           category: log.category,
-          createdDate: new Date().toLocaleDateString() // Assuming you get a created date, use it here
+          createdDate: new Date().toLocaleDateString()
         }));
       }),
       catchError((err) => {
         console.error('Error occurred:', err);
-        throw err; // Handle the error accordingly
+        throw err; 
       })
     );
   }
 
-  // Define the return type as AuditLogResponse
   getAuditLog(page: number, pageSize: number): Observable<any> {
     const headers = new HttpHeaders({
       
@@ -387,7 +385,7 @@ export class CustomerService {
       .set('page_size', pageSize.toString());
 
     return this.http.get<any>(`${this.baseUrl}/events/`, { headers, params }).pipe(
-      catchError(err => this.base.errorHandler(err)) // Assuming you have a base error handler
+      catchError(err => this.base.errorHandler(err)) 
     );
   }
 

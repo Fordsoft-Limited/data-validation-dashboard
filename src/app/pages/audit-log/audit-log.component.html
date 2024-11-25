@@ -37,8 +37,6 @@
       </form>
       
 
-    <!-- audit-log.component.html -->
-<!-- audit-log.component.html -->
 <p-table *ngIf="users && users.length" [value]="users" dataKey="event_uid" editMode="row"
     #dt1 [(selection)]="selectedUsers" [rowHover]="true" [rows]="pageSize" [paginator]="true"
     [totalRecords]="totalRecords" (onPage)="onPageChange($event)"
@@ -55,7 +53,7 @@
             <th>Status</th>
             <th>Date</th>
             
-            <th></th> <!-- Save button column -->
+            <th></th>
         </tr>
     </ng-template>
 
@@ -103,7 +101,6 @@
               </p-cellEditor>
           </td>
           <td>
-            <!-- Display the event date, format it if needed -->
             {{ user.event_date  }}
         </td>
         </tr>

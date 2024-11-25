@@ -70,7 +70,6 @@ export class AuditLogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Load users data
     this.loadAuditLog(this.currentPage, this.pageSize);
   }
 
@@ -166,15 +165,13 @@ export class AuditLogComponent implements OnInit {
 
 
 
-  // Pagination handler: when the user changes page in the table
   onPageChange(event: any): void {
-    this.currentPage = event.page + 1; // API is 1-indexed, so add 1
+    this.currentPage = event.page + 1; 
     this.pageSize = event.rows;
-    this.loadAuditLog(this.currentPage, this.pageSize); // Fetch new data based on the new page
+    this.loadAuditLog(this.currentPage, this.pageSize); 
   }
 
 
-  // Pagination handler: when the user changes page in the table
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal(
@@ -184,12 +181,10 @@ export class AuditLogComponent implements OnInit {
   }
 
 
-  // Show success message
   showSuccessMessage(message: string): void {
     this.messageService.add({ severity: 'success', summary: 'Success', detail: message });
   }
 
-  // Show error message
   showErrorMessage(message: string): void {
     this.messageService.add({ severity: 'error', summary: 'Error', detail: message });
   }
