@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { SharedModule } from './../../shared/shared.module';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToggleButtonModule } from 'primeng/togglebutton';
@@ -22,6 +21,7 @@ import { TagModule } from 'primeng/tag';
 import { BadgeModule } from 'primeng/badge';
 import { DropdownModule } from 'primeng/dropdown';
 import { DividerModule } from 'primeng/divider';
+import { FilterModule } from '../filter/filter.module';
 
 export const newCustomerRoute: Routes = [
   {
@@ -58,7 +58,7 @@ export const newCustomerRoute: Routes = [
     SliderModule,
     RatingModule,
     DialogModule,
-    
+    FilterModule    
   ]
 })
 export class NewCustomerModule { }

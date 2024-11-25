@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Table } from 'primeng/table';
+import { Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { CustomerService } from '../../api/customer.service';
 import { DatePipe } from '@angular/common';
 import { CUSTOMER_REGION } from '../../shared/constants';
@@ -10,31 +9,33 @@ import { UserService } from '../../api/user.service';
   selector: 'app-filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
-  providers: [DatePipe], // Provide DatePipe if not globally available
+  providers: [DatePipe],
 })
 export class FilterComponent {
   @Input() display = false; // Controlled by parent component
   @Output() filterApplied = new EventEmitter<any>(); // Emits filtered results to parent
-  @Output() clearFiltersEvent = new EventEmitter<void>(); // Notifies parent of cleared filters
+  @Output() clearFiltersEvent = new EventEmitter<void>(); 
+  @Output() closeFiltersEvent = new EventEmitter<boolean>(); 
 
   @ViewChildren(NgModel) formControls!: QueryList<NgModel>;
-  filteredCustomers: any[] = [];
   loading = false;
 
   regions = CUSTOMER_REGION;
   businessHubs: any[] = [];
   serviceCenters: any[] = [];
-  statuses: string[] = ["Approved","Rejected","Awaiting Review", "Reviewed"];
+  statuses: string[] = ["Approved", "Rejected", "Awaiting review", "Reviewed"];
   userList: any[] = [];
 
   // Applied filter values
   region = '';
-  businessHub = '';
-  serviceCenter = '';
+  business_hub = '';
+  service_center = '';
   date_created_from: string | null = null;
   date_created_to: string | null = null;
-  status = '';
-  approvedBy:string = '';
+  approval_status = '';
+  approved_by: string = '';
+  reviewed_by: string=''
+  created_by: string=''
   application_date_from = '';
   application_date_to = '';
   setup_date_from = '';
@@ -47,7 +48,7 @@ export class FilterComponent {
   ) { }
 
   ngOnInit(): void {
-this.listUsers()
+    this.listUsers()
   }
   /**
      * Returns business hubs for a given region name.
@@ -85,10 +86,25 @@ this.listUsers()
     this.formControls.forEach((control) => control.reset());
     this.clearFiltersEvent.emit();
   }
+  download(): void {
+    
+  }
+  onDialogClose(): void {
+   this.closeFiltersEvent.emit(false)
+   
+  }
   listUsers(): void {
-    this.userService.getUserList(0,200).subscribe((users) => {
-      this.userList = users;
-    });
+    this.userService.getUserList(1, 150).subscribe(
+      (response) => {
+        if (response.code == 200 && response.status === 'Success') {
+          this.userList = response?.data?.results
+        }
+      },
+      (error) => {
+        this.loading = false;
+        this.filterApplied.emit({});
+      }
+    );
   }
 
   onFilterButtonClick(): void {
@@ -102,6 +118,12 @@ this.listUsers()
           key === 'date_created_from' ||
           key === 'date_created_to' ||
           key === 'applidation_date_from'
+          ||
+          key === 'applidation_date_to'
+          ||
+          key === 'setup_date_from'
+          ||
+          key === 'setup_date_to'
         ) {
           queryParams[key] = this.datePipe.transform(value, 'yyyy-MM-dd');
         } else {
@@ -109,29 +131,23 @@ this.listUsers()
         }
       }
     });
-
+    const queryString = new URLSearchParams(queryParams).toString();
     this.loading = true;
 
     // Call the filter service with dynamic query params
-    this.service.filterAll(queryParams).subscribe(
+    this.service.filterAll(queryString).subscribe(
       (response) => {
-        if (response.code === 200 && response.status === 'Success') {
-          this.filteredCustomers = response.data || [];
-        } else {
-          this.filteredCustomers = [];
+        console.log(response)
+        if (response.code == 200 && response.status == 'Success') {
+          this.filterApplied.emit(response.data);
         }
-        this.loading = false;
-
-        // Emit the filtered results to the parent component
-        this.filterApplied.emit(this.filteredCustomers);
       },
       (error) => {
         console.error('Error filtering customers:', error);
-        this.filteredCustomers = [];
         this.loading = false;
 
         // Emit an empty result set in case of error
-        this.filterApplied.emit([]);
+        this.filterApplied.emit({});
       }
     );
   }
@@ -141,7 +157,6 @@ this.listUsers()
   }
 
   hideDialog(): void {
-    this.display = false;
     this.clearFilters();
   }
 

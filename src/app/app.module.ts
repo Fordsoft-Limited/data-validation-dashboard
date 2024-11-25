@@ -8,6 +8,8 @@ import { AppLayoutModule } from './layout/app.layout.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthGuardInterceptor } from './auth-guard.interceptor';
+import { FilterModule } from './pages/filter/filter.module';
+import { FilterComponent } from './pages/filter/filter.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,7 @@ import { AuthGuardInterceptor } from './auth-guard.interceptor';
     HttpClientModule,
     BrowserModule,
     ProgressSpinnerModule,
-    BrowserAnimationsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {

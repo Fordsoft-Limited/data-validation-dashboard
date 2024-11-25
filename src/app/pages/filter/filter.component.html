@@ -1,130 +1,177 @@
-<p-dialog header="Select Category to Filter" [(visible)]="display" modal="modal" showEffect="fade"
-  [style]="{ width: '600px' }" [contentStyle]="{ height: 'auto' }">
+<p-dialog 
+  header="Advance Filter" 
+  [(visible)]="display" 
+  [modal]="false" 
+  showEffect="fade"
+  [position]="'top'" 
+  (onHide)="onDialogClose()" 
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
+  [style]="{ width: '50vw' }" 
+  [draggable]="false" 
+  [resizable]="false">
+  
+  <span class="p-text-secondary block mb-3">Use the fields below to filter data.</span>
+
   <div class="p-fluid">
-    <div class="p-grid" style="margin-bottom: 1rem;">
-      <!-- Region Dropdown -->
-      <div class="p-col-12" style="display: flex; gap: 1.5rem;">
-        <p-dropdown 
-          name="region" 
-          [options]="regions" 
-          [(ngModel)]="region" 
-          placeholder="Select Region" 
-          optionValue="name" 
-          optionLabel="name" 
-          [style]="{ width: '250px' }"
-          (onChange)="onRegionChange($event.value)">
-        </p-dropdown>
+    <!-- First Row: Region, Business Hub, Service Center -->
+    <div class="flex align-items-center gap-3 mb-3">
+      <p-dropdown 
+        name="region" 
+        [options]="regions" 
+        [(ngModel)]="region" 
+        placeholder="Region"
+        optionValue="name" 
+        optionLabel="name" 
+        class="flex-1" 
+        (onChange)="onRegionChange($event.value)" 
+        appendTo="body">
+      </p-dropdown>
 
-        <!-- Business Hub Dropdown -->
-        <p-dropdown 
-          name="businessHub" 
-          [options]="businessHubs" 
-          [(ngModel)]="businessHub" 
-          placeholder="Select Business Hub" 
-          optionValue="name" 
-          optionLabel="name" 
-          [style]="{ width: '250px' }"
-          (onChange)="onBusinessHubChange($event.value)">
-        </p-dropdown>
-      </div>
+      <p-dropdown 
+        name="businessHub" 
+        [options]="businessHubs" 
+        [(ngModel)]="business_hub"
+        placeholder="Business Hub"
+        optionValue="name" 
+        optionLabel="name" 
+        class="flex-1" 
+        (onChange)="onBusinessHubChange($event.value)" 
+        appendTo="body">
+      </p-dropdown>
 
-      <!-- Service Center Dropdown -->
-      <div class="p-col-12" style="display: flex; gap: 1.5rem;">
-        <p-dropdown 
-          name="serviceCenter" 
-          [options]="serviceCenters" 
-          [(ngModel)]="serviceCenter" 
-          placeholder="Select Service Center" 
-          optionValue="name" 
-          optionLabel="name" 
-          [style]="{ width: '250px' }">
-        </p-dropdown>
-
-        <!-- Status Dropdown -->
-        <p-dropdown 
-          name="status" 
-          [options]="statuses" 
-          [(ngModel)]="status" 
-          placeholder="Select Status" 
-          [style]="{ width: '250px' }">
-        </p-dropdown>
-      </div>
-
-      <!-- Date Created Range -->
-      <div class="p-col-12" style="display: flex; gap: 1.5rem;">
-        <p-calendar 
-          name="date_created_from" 
-          [(ngModel)]="date_created_from" 
-          placeholder="Date Created From" 
-          appendTo="body" 
-          [style]="{ width: '250px' }">
-        </p-calendar>
-
-        <p-calendar 
-          name="date_created_to" 
-          [(ngModel)]="date_created_to" 
-          placeholder="Date Created To" 
-          appendTo="body" 
-          [style]="{ width: '250px' }">
-        </p-calendar>
-      </div>
-
-      <!-- Application Date Range -->
-      <div class="p-col-12" style="display: flex; gap: 1.5rem;">
-        <p-calendar 
-          name="application_date_from" 
-          [(ngModel)]="application_date_from" 
-          placeholder="Application Date From" 
-          appendTo="body" 
-          [style]="{ width: '250px' }">
-        </p-calendar>
-
-        <p-calendar 
-          name="application_date_to" 
-          [(ngModel)]="application_date_to" 
-          placeholder="Application Date To" 
-          appendTo="body" 
-          [style]="{ width: '250px' }">
-        </p-calendar>
-      </div>
-
-      <!-- Setup Date Range -->
-      <div class="p-col-12" style="display: flex; gap: 1.5rem;">
-        <p-calendar 
-          name="setup_date_from" 
-          [(ngModel)]="setup_date_from" 
-          placeholder="Setup Date From" 
-          appendTo="body" 
-          [style]="{ width: '250px' }">
-        </p-calendar>
-
-        <p-calendar 
-          name="setup_date_to" 
-          [(ngModel)]="setup_date_to" 
-          placeholder="Setup Date To" 
-          appendTo="body" 
-          [style]="{ width: '250px' }">
-        </p-calendar>
-      </div>
-
-      <!-- Approved By Dropdown -->
-      <div class="p-col-12" style="display: flex; gap: 1.5rem;">
-        <p-dropdown 
-          name="approvedBy" 
-          [options]="userList" 
-          [(ngModel)]="approvedBy" 
-          placeholder="Approved By" 
-          optionValue="id" 
-          optionLabel="name" 
-          [style]="{ width: '250px' }">
-        </p-dropdown>
-      </div>
+      <p-dropdown 
+        name="serviceCenter" 
+        [options]="serviceCenters" 
+        [(ngModel)]="service_center"
+        placeholder="Service Center" 
+        optionValue="name" 
+        optionLabel="name" 
+        class="flex-1" 
+        appendTo="body">
+      </p-dropdown>
     </div>
 
-    <!-- Buttons -->
-    <div class="p-grid p-justify-center" style="gap: 1rem;">
-      <button pButton type="button" label="Filter" (click)="onFilterButtonClick()"></button>
-      <button pButton type="button" label="Clear Filters" (click)="clearFilters()"></button>
+    <!-- Second Row: Status, Date Created From, Date Created To -->
+    <div class="flex align-items-center gap-3 mb-3">
+      <p-dropdown 
+        name="approval_status" 
+        [options]="statuses" 
+        [(ngModel)]="approval_status" 
+        placeholder="Status" 
+        class="flex-1" 
+        appendTo="body">
+      </p-dropdown>
+
+      <p-calendar 
+        name="date_created_from" 
+        [(ngModel)]="date_created_from" 
+        placeholder="Created From" 
+        appendTo="body" 
+        class="flex-1">
+      </p-calendar>
+
+      <p-calendar 
+        name="date_created_to" 
+        [(ngModel)]="date_created_to" 
+        placeholder="Created To" 
+        appendTo="body" 
+        class="flex-1">
+      </p-calendar>
     </div>
+
+    <!-- Third Row: Application Date From, Application Date To, Approved By -->
+    <div class="flex align-items-center gap-3 mb-3">
+      <p-calendar 
+        name="application_date_from" 
+        [(ngModel)]="application_date_from" 
+        placeholder="Application From" 
+        appendTo="body" 
+        class="flex-1">
+      </p-calendar>
+
+      <p-calendar 
+        name="application_date_to" 
+        [(ngModel)]="application_date_to" 
+        placeholder="Application To" 
+        appendTo="body" 
+        class="flex-1">
+      </p-calendar>
+
+      <p-dropdown 
+        name="approved_by" 
+        [options]="userList" 
+        [(ngModel)]="approved_by" 
+        placeholder="Approved By"
+        optionValue="uid" 
+        optionLabel="name" 
+        class="flex-1" 
+        appendTo="body">
+      </p-dropdown>
+    </div>
+
+    <!-- Fourth Row: Created By, Reviewed By -->
+    <div class="flex align-items-center gap-3 mb-3">
+      <p-dropdown 
+        name="created_by" 
+        [options]="userList" 
+        [(ngModel)]="created_by" 
+        placeholder="Created By"
+        optionValue="uid" 
+        optionLabel="name" 
+        class="flex-1" 
+        appendTo="body">
+      </p-dropdown>
+
+      <p-dropdown 
+        name="reviewed_by" 
+        [options]="userList" 
+        [(ngModel)]="reviewed_by" 
+        placeholder="Reviewed By"
+        optionValue="uid" 
+        optionLabel="name" 
+        class="flex-1" 
+        appendTo="body">
+      </p-dropdown>
+    </div>
+
+    <!-- Fifth Row: Setup Date From, Setup Date To -->
+    <div class="flex align-items-center gap-3 mb-5">
+      <p-calendar 
+        name="setup_date_from" 
+        [(ngModel)]="setup_date_from" 
+        placeholder="Setup From" 
+        appendTo="body" 
+        class="flex-1">
+      </p-calendar>
+
+      <p-calendar 
+        name="setup_date_to" 
+        [(ngModel)]="setup_date_to" 
+        placeholder="Setup To" 
+        appendTo="body" 
+        class="flex-1">
+      </p-calendar>
+    </div>
+  </div>
+
+  <div class="flex justify-content-end gap-2">
+    <p-button 
+      label="Search" 
+      [outlined]="true" 
+      severity="secondary" 
+      (onClick)="onFilterButtonClick()">
+    </p-button>
+    <p-button 
+      label="Clear" 
+      [text]="true" 
+      severity="secondary" 
+      (onClick)="clearFilters()">
+    </p-button>
+    <p-button 
+      label="Schedule Download" 
+      [text]="true" 
+      severity="secondary" 
+      (onClick)="download()">
+    </p-button>
   </div>
 </p-dialog>
