@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { CUSTOMER_REGION } from '../../shared/constants';
 import { NgModel } from '@angular/forms';
 import { UserService } from '../../api/user.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-filter',
@@ -45,7 +46,8 @@ export class FilterComponent {
   constructor(
     private service: CustomerService,
     private userService: UserService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
@@ -88,7 +90,47 @@ export class FilterComponent {
     this.clearFiltersEvent.emit();
   }
   download(): void {
-    
+    const queryParams: any = {};
+    this.formControls.forEach((control) => {
+      const key = control.name;
+      const value = control.value;
+
+      if (value) {
+        if (
+          key === 'date_created_from' ||
+          key === 'date_created_to' ||
+          key === 'applidation_date_from'
+          ||
+          key === 'applidation_date_to'
+          ||
+          key === 'setup_date_from'
+          ||
+          key === 'setup_date_to'
+        ) {
+          queryParams[key] = this.datePipe.transform(value, 'yyyy-MM-dd');
+        } else {
+          queryParams[key] = value;
+        }
+      }
+    });
+    const queryString = new URLSearchParams(queryParams).toString();
+    this.loading = true;
+    this.service.scheduleReportDownload(queryString).subscribe(
+      (response) => {
+        if (response.code == 200 && response.status == 'Success') {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Download Scheduled',
+            detail: 'Your report download has been scheduled successfully.',
+          });
+          this.loading=false;
+        }
+      },
+      (error) => {
+        console.error('Error filtering customers:', error);
+        this.loading = false;
+      }
+    );
   }
   onDialogClose(): void {
    this.closeFiltersEvent.emit(false)

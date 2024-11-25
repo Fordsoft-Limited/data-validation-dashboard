@@ -47,7 +47,7 @@ export class DownloadComponent implements OnInit {
     }
   }
   convertToTree(results: any[]) {
-    return results.map((report: any) => {
+    return results?.map((report: any) => {
       return {
         data: {
           reportName: report.report_name,
@@ -59,7 +59,7 @@ export class DownloadComponent implements OnInit {
           downloadVisible: true,
           uid: report.uid
         },
-        children: report.files_metadata.map((file: any) => {
+        children: (report.files_metadata || []).map((file: any) => {
           return {
             data: {
               deleteVisible: false,
@@ -76,12 +76,21 @@ export class DownloadComponent implements OnInit {
       };
     });
   }
+  
   fetchReports(): void {
-    this.customerService.getCustomerScheduleReportList(this.currentPage, this.pageSize).subscribe((response) => {
-      if (response && response.data && response.data.results) {
-        this.files = this.convertToTree(response.data.results)
-      }
-    })
+    this.customerService
+      .getCustomerScheduleReportList(this.currentPage, this.pageSize)
+      .subscribe({
+        next: (response) => {
+          if (response?.code == 200 && response?.status == 'Success') {
+            this.files = this.convertToTree(response.data?.results || []);
+          }
+        },
+        error: (err) => {
+          console.error('Failed to fetch reports:', err);
+          // Optionally, add a toast notification or other error-handling logic
+        },
+      });
   }
 
   // Event handler for node selection

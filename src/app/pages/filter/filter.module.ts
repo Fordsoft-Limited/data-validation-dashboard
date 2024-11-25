@@ -7,6 +7,8 @@ import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 
 export const filterRoutes: Routes = [
@@ -29,10 +31,11 @@ export const filterRoutes: Routes = [
     DropdownModule,
     ButtonModule,
     CalendarModule, 
+    ToastModule
   ],
   exports: [FilterComponent],
   providers: [
-    DatePipe, // Add DatePipe here
+    DatePipe, MessageService
   ],
 
 })

@@ -202,6 +202,10 @@ export class CustomerService {
     return this.http.get<any>(`${this.baseUrl}/filter/?${params}`)
     .pipe(catchError(err => this.base.errorHandler(err)));
   }
+  scheduleReportDownload(params: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/schedule_report/?${params}`,{})
+    .pipe(catchError(err => this.base.errorHandler(err)));
+  }
   getNewCustomerFilterApproveRegion(
     token: string,
     region: string,
