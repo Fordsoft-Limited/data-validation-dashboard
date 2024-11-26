@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { CustomerService } from '../../api/customer.service';
 import { HttpClient } from '@angular/common/http';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-download',
@@ -16,7 +17,11 @@ export class DownloadComponent implements OnInit {
   selectedNode: any = {};
   currentPage: number = 1;
   pageSize: number = 20;
-  constructor(private messageService: MessageService, private customerService: CustomerService,private http: HttpClient) { }
+  constructor(private messageService: MessageService, 
+    private customerService: CustomerService,
+    private http: HttpClient,
+    private confirmationService: ConfirmationService
+  ) { }
 
   ngOnInit(): void {
 
@@ -86,10 +91,47 @@ export class DownloadComponent implements OnInit {
      }
     })
   }
-  delete(item:any){
-  console.log(item)
+  delete(item: any) {
+    const node = item?.node;
+    const uid = node?.data?.uid; // Safely access uid
+  
+    // if (!uid) {
+    //   console.error('UID is missing in the item data.');
+    //   return;
+    // }
+  
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this report?',
+      accept: () => {
+        this.deleteParent(item);
+      },
+      reject: () => {
+        console.log('Report deletion cancelled.'); // Replace with toast if needed
+      }
+    });
   }
-
+  
+  deleteParent(uid: string) {
+    this.customerService.getScheduleReportListDelete(uid).subscribe(
+      (response) => {
+        if (response.code === 200) {
+          // Show success message
+          console.log('Response:', response.data);
+          alert(response.data); // Replace with a toast if desired
+        } else {
+          // Handle non-200 responses
+          console.error('Error response:', response);
+          alert('Failed to delete the report.'); // Replace with toast
+        }
+      },
+      (error) => {
+        // Handle errors from the service
+        console.error('Error occurred:', error);
+        alert('An error occurred while deleting the report.'); // Replace with toast
+      }
+    );
+  }
+  
   // getChildReportNames(node: any): string[] {
   //   if (node?.children?.length > 0) {
   //     return node.children.map((child: any) => child.data.reportName);

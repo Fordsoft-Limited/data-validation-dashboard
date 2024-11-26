@@ -188,6 +188,21 @@ export class CustomerService {
     );
   }
 
+  getScheduleReportListDelete(uid: string): Observable<any> {
+    const headers = new HttpHeaders({
+      // 'Authorization': `Bearer ${token}`,
+     // 'Content-Type': 'application/json'
+    });
+
+    return this.http.delete<any>(`${this.baseUrl}/schedule_report/delete/${uid}/`)
+    .pipe(catchError(err => this.base.errorHandler(err)));
+  }
+
+  
+
+
+
+
   getScheduleReportListDownloadFile(uid: string,fileName:string): Observable<any> {
     const url = `${this.baseUrl}/schedule_report/download_report/${uid}/${fileName}/`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });

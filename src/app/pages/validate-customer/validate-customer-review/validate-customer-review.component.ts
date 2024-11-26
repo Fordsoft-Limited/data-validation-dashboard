@@ -150,7 +150,7 @@ export class ValidateCustomerReviewComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(params => {
       const uid = params.get('uid');
       if (uid) {
-        this.loadCustomerByUid(uid)
+        this.loadCustomerByUid(uid) 
       }
     });
   }
@@ -163,7 +163,7 @@ export class ValidateCustomerReviewComponent implements OnInit {
             oldData: response.data.old,
           };
           this.events=this.currentRecord.newData.events;
-
+          this.qrCode=this.currentRecord.newData.qr_code;
         }
        
 
@@ -175,23 +175,23 @@ export class ValidateCustomerReviewComponent implements OnInit {
       }
     );
   }
-  loadQrCode(customerId: string): void {
+  // loadQrCode(customerId: string): void {
    
-    this.customerService.getCustomerQrCode(customerId).subscribe({
-      next: (response: any) => {
-        if (response.code === 200) {
-          this.qrCode = response.data?.qr_code; // Ensure safe access
-          console.log('QR Code URL:', this.qrCode);
-        } else {
-          console.error('Failed to fetch QR code:', response.message || response);
-          alert('Failed to retrieve the QR code. Please try again.');
-        }
-      },
-      error: (error) => {
-        console.error('Error retrieving QR code:', error);
-      }
-    });
-  }
+  //   this.customerService.getCustomerQrCode(customerId).subscribe({
+  //     next: (response: any) => {
+  //       if (response.code === 200) {
+  //         this.qrCode = response.data?.qr_code; // Ensure safe access
+  //         console.log('QR Code URL:', this.qrCode);
+  //       } else {
+  //         console.error('Failed to fetch QR code:', response.message || response);
+  //         alert('Failed to retrieve the QR code. Please try again.');
+  //       }
+  //     },
+  //     error: (error) => {
+  //       console.error('Error retrieving QR code:', error);
+  //     }
+  //   });
+  // }
 
 
 

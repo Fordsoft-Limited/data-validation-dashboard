@@ -307,12 +307,13 @@ export class DataVerificationComponent implements OnInit {
       const uid = params.get('uid');
       if (uid) {
         this.loadCustomerByUid(uid)
+        console.log(uid)
       }
     });
   }
   loadCustomerByUid(uid: string) {
 
-    this.customerService.getCustomerById(uid,).subscribe(
+    this.customerService.getCustomerById(uid).subscribe(
       (response: any) => {
         if (response.code === 200) {
           this.currentRecord = {
@@ -320,15 +321,13 @@ export class DataVerificationComponent implements OnInit {
             oldData: response.data.old,
           };
           this.events=this.currentRecord.newData.events;
+          this.qrCode = this.currentRecord.newData.qr_code;
+
         }
-        const customerNo = this.currentRecord.newData.customer_no;
-        if (customerNo) {
-          this.loadQrCode(customerNo); // Fetch QR code using customerNo
-          console.log(customerNo);
-        } else {
-          console.error('Customer number is not available.');
-        }
-        console.log(this.currentRecord.newData.customer_full_name);
+       
+
+
+       
       },
       (error) => {
         console.error('Error fetching customer data:', error);
@@ -336,23 +335,23 @@ export class DataVerificationComponent implements OnInit {
     );
   }
 
-  loadQrCode(customerId: string): void {
+  // loadQrCode(customerId: string): void {
   
-    this.customerService.getCustomerQrCode(customerId).subscribe({
-      next: (response: any) => {
-        if (response.code === 200) {
-          this.qrCode = response.data?.qr_code; // Ensure safe access
-          console.log('QR Code URL:', this.qrCode);
-        } else {
-          console.error('Failed to fetch QR code:', response.message || response);
-          alert('Failed to retrieve the QR code. Please try again.');
-        }
-      },
-      error: (error) => {
-        console.error('Error retrieving QR code:', error);
-      }
-    });
-  }
+  //   this.customerService.getCustomerQrCode(customerId).subscribe({
+  //     next: (response: any) => {
+  //       if (response.code === 200) {
+  //         this.qrCode = response.data?.qr_code; // Ensure safe access
+  //         console.log('QR Code URL:', this.qrCode);
+  //       } else {
+  //         console.error('Failed to fetch QR code:', response.message || response);
+  //         alert('Failed to retrieve the QR code. Please try again.');
+  //       }
+  //     },
+  //     error: (error) => {
+  //       console.error('Error retrieving QR code:', error);
+  //     }
+  //   });
+  // }
   
 
   // onSelectedRecordChange(selectedRecord: any) {

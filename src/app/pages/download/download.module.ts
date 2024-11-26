@@ -6,6 +6,8 @@ import { TreeTableModule } from 'primeng/treetable';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 export const downloadRoutes: Routes = [
   {
@@ -25,7 +27,9 @@ export const downloadRoutes: Routes = [
     TreeTableModule,
     CheckboxModule,
     ButtonModule,
-    ToastModule
-  ]
+    ToastModule,
+    ConfirmDialogModule
+  ],
+  providers: [ConfirmationService],
 })
 export class DownloadModule { }
