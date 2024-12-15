@@ -245,6 +245,16 @@ export class CustomerService {
     return this.http.post<any>(`${this.baseUrl}/schedule_report/?${params}`,{})
     .pipe(catchError(err => this.base.errorHandler(err)));
   }
+
+  draftValidate(payload:any){
+    return this.http.post<any>(`${this.baseUrl}/draft/validate/`,payload).
+    pipe(catchError(err => this.base.errorHandler(err)));
+  }
+
+  draftNewValidate(payload:any){
+    return this.http.post<any>(`${this.baseUrl}/draft/new/`,payload).
+    pipe(catchError(err => this.base.errorHandler(err)));
+  }
   getNewCustomerFilterApproveRegion(
     token: string,
     region: string,

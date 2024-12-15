@@ -68,3 +68,35 @@ export interface ValidationError {
     approval_status: string
     approval_comments: string
   }
+
+
+  export interface CustomerDraft {
+    customer_name: string;
+    address: string;
+    meter_number: string;
+    account_number: string;
+    business_unit: string;
+    undertaking: string;
+    phone_number: string;
+    email: string;
+    business_unit_id: string;
+    last_transaction_date: string | null;
+    minimum_purchase: string;
+    tariff_code: string;
+    customer_arrears: string;
+    tariff: string;
+    service_band: string;
+    feeder_name: string;
+    dss_name: string;
+    band_adjustment: string;
+    tin: string;
+    krn1: string;
+    krn2: string;
+    tariff_id: number;
+    sgc: string;
+    old_ti: number;
+    old_sgc: string;
+    status: string;
+    account_type: string;
+  }
+  

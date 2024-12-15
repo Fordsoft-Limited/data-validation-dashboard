@@ -17,6 +17,8 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { authGuard } from '../auth/service/auth.guard';
+import { roleGuard } from '../auth/service/role.guard';
 
 
 export const layoutRoutes: Routes = [
@@ -26,25 +28,27 @@ export const layoutRoutes: Routes = [
       children: [
         {
             path: '',
-            data:{breadcrumb: 'Dashboard'},
+            canActivate: [roleGuard],
+            data:{breadcrumb: 'Dashboard', roles: ['ADMIN', 'USER', 'APPROVAL','REVIEWER']},
             loadChildren: () =>
               import('../pages/dashboard/dashboard.module').then(
                 (m) => m.DashboardModule
               ),
           },
           
-          {
-            path: 'customer-information',
-            data:{breadcrumb: 'Customer Information'},
-            loadChildren: () =>
-              import('../pages/customer-information/customer-information.module').then(
-                (m) => m.CustomerInformationModule
-              ),
-          },
+          // {
+          //   path: 'customer-information',
+          //   data:{breadcrumb: 'Customer Information'},
+          //   loadChildren: () =>
+          //     import('../pages/customer-information/customer-information.module').then(
+          //       (m) => m.CustomerInformationModule
+          //     ),
+          // },
 
           {
             path: 'user-management',
-            data:{breadcrumb: 'User Management'},
+            canActivate: [roleGuard],
+            data:{breadcrumb: 'User Management', roles: ['ADMIN'] },
             loadChildren: () =>
               import('../pages/user/user.module').then(
                 (m) => m.UserModule
@@ -52,7 +56,9 @@ export const layoutRoutes: Routes = [
           },
           {
             path: 'data-validation',
-            data:{breadcrumb: 'Maker/checker'},
+            canActivate: [roleGuard],
+            data:{breadcrumb: 'Maker/checker', roles: ['ADMIN','REVIEWER'] },
+
             loadChildren: () =>
               import('../pages/data-validation/data-validation.module').then(
                 (m) => m.DataValidationModule
@@ -61,7 +67,8 @@ export const layoutRoutes: Routes = [
           
           {
             path: 'customer-validation',
-            data:{breadcrumb: 'Customer Validation'},
+            canActivate: [roleGuard],
+            data:{breadcrumb: 'Customer Validation', roles: ['ADMIN', 'APPROVAL']},
             loadChildren: () =>
               import('../pages/customer-validation/customer-validation.module').then(
                 (m) => m.CustomerValidationModule
@@ -70,7 +77,8 @@ export const layoutRoutes: Routes = [
            
           {
             path: 'reports',
-            data:{breadcrumb: 'Reports'},
+            canActivate: [roleGuard],
+            data:{breadcrumb: 'Reports', roles: ['ADMIN', 'REVIEWER', 'APPROVAL']},
             loadChildren: () =>
               import('../pages/approved-asset/approved-asset.module').then(
                 (m) => m.ApprovedAssetModule
@@ -84,30 +92,32 @@ export const layoutRoutes: Routes = [
                 (m) => m.CustomerDetailsModule
               ),
           },
-          {
-            path: 'bulk-customer-validation',
-            data:{breadcrumb: 'Bulk Customer Validation'},
-            loadChildren: () =>
-              import('../pages/bulk-customer-validation/bulk-customer-validation.module').then(
-                (m) => m.BulkCustomerValidationModule
-              ),
-          },
+          // {
+          //   path: 'bulk-customer-validation',
+            
+          //   data:{breadcrumb: 'Bulk Customer Validation'},
+          //   loadChildren: () =>
+          //     import('../pages/bulk-customer-validation/bulk-customer-validation.module').then(
+          //       (m) => m.BulkCustomerValidationModule
+          //     ),
+          // },
           {
             path: 'manage-user',
-            data:{breadcrumb: 'Manage User'},
+            canActivate: [roleGuard],
+            data:{breadcrumb: 'Manage User', roles: ['ADMIN']},
             loadChildren: () =>
               import('../pages/manage-user/manage-user.module').then(
                 (m) => m.ManageUserModule
               ),
           },
-          {
-            path: 'data-table',
-            data:{breadcrumb: 'Data Table'},
-            loadChildren: () =>
-              import('../pages/test-data-table/test-data-table.module').then(
-                (m) => m.TestDataTableModule
-              ),
-          },
+          // {
+          //   path: 'data-table',
+          //   data:{breadcrumb: 'Data Table'},
+          //   loadChildren: () =>
+          //     import('../pages/test-data-table/test-data-table.module').then(
+          //       (m) => m.TestDataTableModule
+          //     ),
+          // },
 
           {
             path:'settings',
@@ -120,7 +130,8 @@ export const layoutRoutes: Routes = [
 
           {
             path:'new-customer',
-            data:{breadcrumb: 'New  Customer'},
+            canActivate: [roleGuard],
+            data:{breadcrumb: 'New  Customer', roles: ['ADMIN',"APPROVAL"]},
 
             loadChildren: () =>
               import('../pages/new-customer/new-customer.module').then(
@@ -130,7 +141,8 @@ export const layoutRoutes: Routes = [
 
           {
             path:'audit-log',
-            data:{breadcrumb: 'Audit  Log'},
+            canActivate: [roleGuard],
+            data:{breadcrumb: 'Audit  Log', roles: ['ADMIN'] },
 
             loadChildren: () =>
               import('../pages/audit-log/audit-log.module').then(
@@ -140,7 +152,8 @@ export const layoutRoutes: Routes = [
 
           {
             path:'validate',
-            data:{breadcrumb: 'Validate Customer'},
+            canActivate: [roleGuard],
+            data:{breadcrumb: 'Validate Customer', roles: ['ADMIN', 'APPROVAL'] },
 
             loadChildren: () =>
               import('../pages/validate-customer/validate-customer.module').then(
@@ -150,7 +163,8 @@ export const layoutRoutes: Routes = [
 
           {
             path:'download',
-            data:{breadcrumb: 'Download Reports'},
+            canActivate: [roleGuard],
+            data:{breadcrumb: 'Download Reports', roles: ['ADMIN', 'APPROVAL', 'REVIEWER']},
 
             loadChildren: () =>
               import('../pages/download/download.module').then(

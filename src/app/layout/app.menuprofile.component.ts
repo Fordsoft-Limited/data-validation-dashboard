@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit,OnDestroy } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { LayoutService } from './service/app.layout.service';
 import { Router } from '@angular/router';
@@ -33,7 +33,7 @@ import { SharedDataService } from '../api/shared-data.service';
     ]),
   ],
 })
-export class AppMenuProfileComponent implements OnInit {
+export class AppMenuProfileComponent implements OnInit,OnDestroy {
   name: string = '';
   role: string = '';
   constructor(
@@ -45,13 +45,38 @@ export class AppMenuProfileComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.sharedDataService.userData$.subscribe((data) => {
-      if (data) {
-        this.name = data.name || 'Guest';
-        this.role = data.role || 'User';
-        console.log(this.name);
-      }
-    });
+   
+
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      // If data exists in localStorage, parse and use it
+      const data = JSON.parse(userData);
+      this.name = data.name || 'Guest';
+      this.role = data.role || 'User';
+      console.log('Data from localStorage:', this.name, this.role);
+    } else {
+      // If no data in localStorage, fallback to SharedDataService
+      this.sharedDataService.userData$.subscribe((data) => {
+        if (data) {
+          localStorage.setItem('userData', JSON.stringify(data)); // Save data to localStorage
+          this.name = data.name || 'Guest';
+          this.role = data.role || 'User';
+          console.log('Data from SharedDataService:', this.name, this.role);
+        }
+      });
+    }
+  }
+
+  
+  ngOnDestroy(): void {
+    // Optionally clear localStorage here as well
+    this.clearLocalStorage();
+  }
+
+  clearLocalStorage(): void {
+    // Clear userData from localStorage
+    localStorage.removeItem('userData');
+    console.log('userData cleared from localStorage');
   }
   toggleMenu() {
     this.layoutService.onMenuProfileToggle();
@@ -75,6 +100,7 @@ export class AppMenuProfileComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+    this.clearLocalStorage();
     this.router.navigate(['/']); // Redirect to login page
   }
 }

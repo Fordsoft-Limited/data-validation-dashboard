@@ -280,15 +280,32 @@ export class DataVerificationComponent implements OnInit {
   //   }
   // }
 
+  // private removeCurrentRecordAndRedirectIfEmpty() {
+  //   this.selectedRecords.shift();
+  //   if (this.selectedRecords.length === 0) {
+  //     this.utilService.clearItems()
+  //     this.redirectToDataValidation();
+  //   } else {
+  //    this.utilService.deleteItem(this.currentRecord.newData.uid)
+  //    this.onSelectedRecordChange(this.selectedRecords[0])
+     
+  //   }
+  // }
+
   private removeCurrentRecordAndRedirectIfEmpty() {
-    this.selectedRecords.shift();
+    // Find and remove the current record from selectedRecords
+    const index = this.selectedRecords.findIndex(record => record.uid === this.currentRecord.newData.uid);
+    if (index !== -1) {
+      this.selectedRecords.splice(index, 1); // Remove the current record
+    }
+  
+    // Check if there are no more records left
     if (this.selectedRecords.length === 0) {
-      this.utilService.clearItems()
+      this.utilService.clearItems();
       this.redirectToDataValidation();
     } else {
-     this.utilService.deleteItem(this.currentRecord.newData.uid)
-     this.onSelectedRecordChange(this.selectedRecords[0])
-     
+      // If there are still records left, move to the next record
+      this.onSelectedRecordChange(this.selectedRecords[0]);
     }
   }
   ngOnInit() {

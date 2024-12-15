@@ -81,5 +81,19 @@ export class AuthService {
     this.clearLoginData();
   }
 
+  getUserRole(): string | null {
+    const token = this.getToken();
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1])); // Decode JWT payload
+        return payload.role; 
+      } catch (error) {
+        console.error('Error decoding token:', error);
+        return null;
+      }
+    }
+    return null;
+  }
+  
 
 }

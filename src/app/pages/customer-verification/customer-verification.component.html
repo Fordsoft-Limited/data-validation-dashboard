@@ -1,0 +1,216 @@
+<div class="contain ">
+    <div class="grid box-content relative">
+        <div class="col-12 ">
+            <div class="flex justify-content-center gap-2 relative md:fixed flex-column md:flex-row text-welcome">
+                <h2 class="welcome  text-2xl text-center">WELCOME BACK,  </h2>
+                <span class=" text-2xl text-center -mt-4 md:mt-0" style="color: blue;" >{{name}} </span>
+            </div>
+        </div>
+        <div class="md:col-6 col-12 hidden image md:flex mt-3 relative overflow-hidden">
+            <img src="../../../assets/demo/images/ibec/world-pana.png" alt="" class="mt-5 fixed ">
+        </div>
+        <div class="md:col-6 col-12    h-full">
+            
+           <div class="grid ">
+            <div class="col-12 flex justify-content-end">
+                <button type="button" pButton label="Logout" [outlined]="true" severity="danger" (click)="logout()"></button>
+            </div>
+                <div class="col-12 flex gap-2 mb-3 bg-white shadow-1  border-round">
+                    <span class="text-2xl scale">💡</span>
+                    <span class="text-md">This verification form is designed for <b>IBEDC</b> customer validation. After verification, you will be redirected to the <b>ArcGIS Field Map</b>  to proceed. Please ensure the Field Map app is installed on your device. To begin, select your <b>Account Type.</b></span>
+                </div>
+           </div>
+            <form  [formGroup]="modeForm" (ngSubmit)="onSubmit()" class="mb-3 ">
+
+                <div class="grid  bg-white mb-2 border-round shadow-2 mt-2">
+                    <div class="col-12">
+                     
+                        <div class="grid w-full">
+                            <div class="col-12 ml-1">
+                                <label for="">Account Type:</label>
+                            </div>
+                            <div class="col-6 flex align-items-center -mt-3">
+                                
+                                <p-radioButton name="selectMode" [value]="'Prepaid'" formControlName="selectMode"
+                                    inputId="role1" />
+                                <label for="role1" class="ml-2">Prepaid</label>
+                            </div>
+
+                            <div class="col-6 flex align-items-center pr-5 -mt-3" >
+                                
+                                <p-radioButton name="selectMode" [value]="'Postpaid'" formControlName="selectMode"
+                                    inputId="role2" />
+                                <label for="role2" class="ml-2">Postpaid</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="grid ">
+                            <div class="col-6 flex flex-column gap-2" *ngIf="meterVisibility || accountVisibility">
+                                <label for="" class="ml-1" *ngIf="meterVisibility">Meter No</label>
+                                <label for="" class="ml-1" *ngIf="accountVisibility">Account No</label>
+                                <input type="text" pInputText formControlName="meterNo">
+                            </div>
+
+                            <!-- <div class=" col-6 flex flex-column gap-2" *ngIf="accountVisibility">
+                              
+                                <input type="text" pInputText formControlName="accountNo">
+                            </div> -->
+
+                            <div class="col-6 mt-4 " *ngIf="buttonVisibility">
+                                <div class="grid">
+                                    <div class=" col-12" *ngIf="isNewAccount"> <button pButton label="Validate" severity="primary" [loading]="loading" type="submit" class="w-full" [disabled]="!modeForm.valid || isError"></button></div>
+                                    <div class=" col-12" *ngIf="isError || !isNewAccount"> <button pButton label="Proceed" type="button" severity="warning" [loading]="loading" class="w-full" (click)="newValidate()"></button></div>
+                                </div>
+                               
+                            </div>
+
+                           
+                        </div>
+                        <div class="col-12  bg-red-200 mb-4 border-round " *ngIf="errorVisibility">
+                            <span style="color:red">{{errorMessage}}</span>
+                        </div>
+
+                        <div class="col-12  bg-green-200 mb-4 border-round " *ngIf="sucessVisibility">
+                            <span style="color:green">{{successMessage}}</span>
+                        </div>
+                      
+                    </div>
+
+                   
+                   
+
+                </div>
+            </form>
+            <div class="grid bg-white border-round mt-4 shadow-1" *ngIf="customerDetailsVisibility">
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="customerName">Customer Name</label>
+                    <input type="text" id="customerName" [(ngModel)]="customer_name" [disabled]="true" pInputText />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" [(ngModel)]="address" [disabled]="true" pInputText />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="meterNumber">Meter Number</label>
+                    <input type="text" id="meterNumber" class="w-full" [(ngModel)]="meter_number" [disabled]="true" pInputText />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="accountNumber">Account Number</label>
+                    <input type="text" id="accountNumber" [(ngModel)]="account_number" [disabled]="true" pInputText />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="businessUnit">Business Unit</label>
+                    <input type="text" id="businessUnit" [(ngModel)]="business_unit" [disabled]="true" pInputText />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="undertaking">Undertaking</label>
+                    <input type="text" id="undertaking" [(ngModel)]="undertaking" [disabled]="true" pInputText />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="tel" id="phoneNumber" [(ngModel)]="phone_number" [disabled]="true" pInputText />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" [(ngModel)]="email" pInputText [disabled]="true"/>
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="businessUnitId">Business Unit ID</label>
+                    <input type="text" id="businessUnitId" [(ngModel)]="business_unit_id" pInputText [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="lastTransactionDate">Last Transaction Date</label>
+                    <input type="text" id="lastTransactionDate" [(ngModel)]="last_transaction_date" pInputText [disabled]="true"/>
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="minimumPurchase">Minimum Purchase</label>
+                    <input type="number" id="minimumPurchase" [(ngModel)]="minimum_purchase" pInputText [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="tariffCode">Tariff Code</label>
+                    <input type="text" id="tariffCode" [(ngModel)]="tariff_code" pInputText [disabled]="true"/>
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="customerArrears">Customer Arrears</label>
+                    <input type="number" id="customerArrears" [(ngModel)]="customer_arrears" pInputText [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="tariff">Tariff</label>
+                    <input type="text" id="tariff" [(ngModel)]="tariff" pInputText [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="serviceBand">Service Band</label>
+                    <input type="text" id="serviceBand" [(ngModel)]="service_band" pInputText [disabled]="true"  />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="feederName">Feeder Name</label>
+                    <input type="text" id="feederName" [(ngModel)]="feeder_name" pInputText  [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="dssName">DSS Name</label>
+                    <input type="text" id="dssName" [(ngModel)]="dss_name" pInputText [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="bandAdjustment">Band Adjustment</label>
+                    <input type="number" id="bandAdjustment" [(ngModel)]="band_adjustment" pInputText [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="tin">TIN</label>
+                    <input type="text" id="tin" [(ngModel)]="tin" pInputText [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="krn1">KRN1</label>
+                    <input type="text" id="krn1" [(ngModel)]="krn1" pInputText [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="krn2">KRN2</label>
+                    <input type="text" id="krn2" [(ngModel)]="krn2" pInputText [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="tariffId">Tariff ID</label>
+                    <input type="number" id="tariffId" [(ngModel)]="tariff_id" pInputText [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="sgc">SGC</label>
+                    <input type="text" id="sgc" [(ngModel)]="sgc" pInputText [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="oldTi">Old TI</label>
+                    <input type="number" id="oldTi" [(ngModel)]="old_ti" pInputText [disabled]="true" />
+                </div>
+                
+                <div class="col-6 flex flex-column gap-2">
+                    <label for="oldSgc">Old SGC</label>
+                    <input type="text" id="oldSgc" [(ngModel)]="old_sgc" pInputText [disabled]="true" />
+                </div>
+
+               
+                
+            </div>
+        </div>
+    </div>

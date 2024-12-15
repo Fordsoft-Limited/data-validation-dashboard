@@ -10,7 +10,7 @@
                 <!-- [headerStyle]='{"width": "250px"}' -->
                 <div class="settings-container">
                     <div class="profile-content">
-                        <div class="image-upload-section">
+                        <!-- <div class="image-upload-section">
                             <div class="image-container" *ngIf="!imageUrl">
                                 <i class="pi pi-camera" style="font-size: 1.5rem"></i>
                             </div>
@@ -19,14 +19,14 @@
                             </div>
 
 
-                            <!-- PrimeNG FileUpload component -->
+                          
                             <p-fileUpload #fileInput mode="basic" accept="image/*" [maxFileSize]="1000000"
                                 (onSelect)="onImageSelect($event)" [auto]="false" [customUpload]="true"
                                 (uploadHandler)="onUpload($event)" chooseLabel="Upload Image"
                                 class="file-upload"></p-fileUpload>
 
                             <button pButton (click)="cancelUpload()" class="p-button-danger">Cancel Upload</button>
-                        </div>
+                        </div> -->
 
                         <!-- Profile Edit Form -->
                         <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">

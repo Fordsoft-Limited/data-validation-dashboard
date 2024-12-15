@@ -21,6 +21,15 @@ const routes: Routes = [
       ),canActivate:[authGuard]
   },
 
+  {
+    path: 'customer-verification',
+    loadChildren: () =>
+      import('../app/pages/customer-verification/customer-verification.module').then(
+        (m) => m.CustomerVerificationModule
+      ),canActivate:[authGuard]
+  },
+
+
 
 
 
