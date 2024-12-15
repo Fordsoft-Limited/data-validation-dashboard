@@ -10,12 +10,17 @@ import { FormsModule } from '@angular/forms';
 import { RippleModule } from 'primeng/ripple';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
-import { ProgressSpinnerModule } from 'primeng/progressspinner'; // Import ProgressSpinnerModule
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { LoginVerificationComponent } from './login-verification/login-verification.component'; // Import ProgressSpinnerModule
 
 export const securityRoutes: Routes = [
   {
     path: '',
     component: LoginComponent
+  },
+  {
+    path: 'login-validate',
+    component: LoginVerificationComponent
   },
   {
     path: 'auth/forget-password',
@@ -27,7 +32,8 @@ export const securityRoutes: Routes = [
 @NgModule({
   declarations: [
     LoginComponent,
-    ForgetPasswordComponent
+    ForgetPasswordComponent,
+    LoginVerificationComponent
   ],
   imports: [
     CommonModule,

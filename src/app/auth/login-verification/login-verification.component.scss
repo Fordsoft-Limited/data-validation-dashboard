@@ -1,0 +1,22 @@
+.content{
+    padding: 10px;
+    background-image: url(../../../assets//demo//images/ibec/bg-logo.jpg);
+    background-size: cover;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: white;
+    overflow-x: hidden;
+    z-index: 1000;
+}
+
+.box-contain{
+  margin-top: 20px;
+  height: 70vh;
+}
+.box{
+    width: 400px;
+}
+.description{
+    text-align: center;
+}
