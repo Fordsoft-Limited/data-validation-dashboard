@@ -1,0 +1,1 @@
+import{d as r,r as a}from"./chunk-AWEHUNTX.js";var c=(()=>{class t{setUserData(e){this.userDataSource.next(e)}constructor(){this.userDataSource=new r(null),this.userData$=this.userDataSource.asObservable()}static{this.\u0275fac=function(o){return new(o||t)}}static{this.\u0275prov=a({token:t,factory:t.\u0275fac,providedIn:"root"})}}return t})();export{c as a};

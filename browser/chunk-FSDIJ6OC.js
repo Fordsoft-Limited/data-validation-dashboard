@@ -1,0 +1,1 @@
+import{r as e}from"./chunk-AWEHUNTX.js";var c=(()=>{class r{showError(t){throw new Error("Method not implemented.")}showSuccess(t){throw new Error("Method not implemented.")}constructor(){}static{this.\u0275fac=function(o){return new(o||r)}}static{this.\u0275prov=e({token:r,factory:r.\u0275fac,providedIn:"root"})}}return r})();export{c as a};

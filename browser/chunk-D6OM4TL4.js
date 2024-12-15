@@ -1,0 +1,1 @@
+import{ib as n,s as t,y as i}from"./chunk-AWEHUNTX.js";var F=(()=>{class e{static \u0275fac=function(r){return new(r||e)};static \u0275mod=i({type:e});static \u0275inj=t({imports:[n]})}return e})();export{F as a};
