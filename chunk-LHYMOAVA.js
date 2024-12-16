@@ -1,0 +1,1 @@
+import{g as o,r as e}from"./chunk-AWEHUNTX.js";var s=(()=>{class r{constructor(){this._baseUrl="https://server.pmcsolutions.co"}errorHandler(t){return o(t||"Server Error")}static{this.\u0275fac=function(c){return new(c||r)}}static{this.\u0275prov=e({token:r,factory:r.\u0275fac,providedIn:"root"})}}return r})();export{s as a};
