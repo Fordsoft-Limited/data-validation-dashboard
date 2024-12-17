@@ -1,9 +1,8 @@
 {
-    "/api": {
-      "target": "http://208.87.133.54:8000",
-      "secure": false,
-      "changeOrigin": true,
-      "logLevel": "debug"
-    }
+  "/api": {
+    "target": "https://server.pmcsolutions.co",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
-  
+}

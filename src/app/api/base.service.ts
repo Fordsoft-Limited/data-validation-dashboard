@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError } from 'rxjs';
+import { environment } from '../../environments/environment.prod';
 
 
 @Injectable({
@@ -9,7 +10,7 @@ import { throwError } from 'rxjs';
 export class BaseService {
   [x: string]: any;
 
-  public _baseUrl: string = 'http://208.87.133.54:8000'
+  public _baseUrl: string = environment.apiBaseUrl
 
 
   constructor() {}
