@@ -28,7 +28,7 @@ const routes: Routes = [
         (m) => m.CustomerVerificationModule
       ),canActivate:[authGuard]
   },
-
+ 
 
 
 

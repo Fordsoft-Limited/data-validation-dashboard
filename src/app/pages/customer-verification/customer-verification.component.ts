@@ -131,22 +131,7 @@ export class CustomerVerificationComponent implements OnInit , OnDestroy{
 
   }
   
-  // onSubmit(): void {
-  //   this.customerDetailsVisibility=true
-  //   const payload = {
-  //     account_type: this.modeForm.get('selectMode')?.value,
-  //     item_number: this.modeForm.get('meterNo')?.value
-  //   }
-  //   this.customerService.draftValidate(payload).subscribe(
-  //     (response)=>{
-  //       this.customerDetailsVisibility = true;
-  //      this.populateCustomerDetails(response);
-
-  //     }
-  //   )
-   
-  // }
-
+  
 
   onSubmit(): void {
     const meterNo = this.modeForm.get('meterNo')?.value;
@@ -243,11 +228,6 @@ export class CustomerVerificationComponent implements OnInit , OnDestroy{
       },
       (error) => {
         console.error('Error during API call:', error);
-        // if(error.error.status === 'Fail'){
-        //   this.errorVisibility=true
-        //   this.errorMessage = error.error.errorMessage;
-        // }
-        // console.log(this.errorMessage);
       }
     );
   }
@@ -259,10 +239,10 @@ export class CustomerVerificationComponent implements OnInit , OnDestroy{
 
   private redirectToUrl(): void {
    
-      setTimeout(() => {
+      
         window.location.href = this.url;
-      }, 1000); // Add a delay if needed for better UX
-  
+        console.log(this.url)
+    
   }
 
   logout(){

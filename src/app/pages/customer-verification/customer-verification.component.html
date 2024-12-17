@@ -61,7 +61,20 @@
                             <div class="col-6 mt-4 " *ngIf="buttonVisibility">
                                 <div class="grid">
                                     <div class=" col-12" *ngIf="isNewAccount"> <button pButton label="Validate" severity="primary" [loading]="loading" type="submit" class="w-full" [disabled]="!modeForm.valid || isError"></button></div>
-                                    <div class=" col-12" *ngIf="isError || !isNewAccount"> <button pButton label="Proceed" type="button" severity="warning" [loading]="loading" class="w-full" (click)="newValidate()"></button></div>
+                                    <div class=" col-12" *ngIf="isError || !isNewAccount"> 
+                                        <button pButton label="Proceed" type="button"  severity="warning"  [loading]="loading" class="w-full" (click)="newValidate()"     ></button>
+                                        <!-- <a 
+                                        pButton 
+                                        label="Proceed" 
+                                        type="button"  
+                                        severity="warning"  
+                                        [loading]="loading" 
+                                        class="w-full" 
+                                        [attr.href]="url" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer">
+                                      </a> -->
+                                    </div>
                                 </div>
                                
                             </div>
