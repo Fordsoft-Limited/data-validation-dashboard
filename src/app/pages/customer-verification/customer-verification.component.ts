@@ -2,6 +2,7 @@ import { Component,OnInit , OnDestroy} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedDataService } from '../../api/shared-data.service';
 import { CustomerService } from '../../api/customer.service';
+import { AuthService } from '../../auth/service/auth.service';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-customer-verification',
@@ -50,7 +51,7 @@ export class CustomerVerificationComponent implements OnInit , OnDestroy{
   previousItemNo = null;
   code:number=0;
 
-  constructor(private fb: FormBuilder, private sharedDataService: SharedDataService,private customerService: CustomerService,private router: Router) {}
+  constructor(private fb: FormBuilder, private sharedDataService: SharedDataService,private customerService: CustomerService,private router: Router , private authService: AuthService) {}
 
   ngOnInit(): void {
     this.modeForm = this.fb.group({
@@ -246,7 +247,8 @@ export class CustomerVerificationComponent implements OnInit , OnDestroy{
   }
 
   logout(){
+    this.authService.logout();
     localStorage.clear();
-    this.router.navigate(['/']);
+    this.router.navigate(['/login-validate']);
   }
 }
