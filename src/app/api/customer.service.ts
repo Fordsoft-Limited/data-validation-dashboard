@@ -137,6 +137,17 @@ export class CustomerService {
     
     const params = new HttpParams()
       .set('category', 'New Customer') // Ensure the category matches the intended filter
+      .set('page', page)
+      .set('page_size', pageSize)
+    return this.http.get<any>(`${this.baseUrl}/filter/`, { headers, params })
+      .pipe(catchError(err => this.base.errorHandler(err)));
+  }
+  getCustomerFilterByValidated(page: number, pageSize: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    
+    const params = new HttpParams()
       .set('page', page.toString())
       .set('page_size', pageSize.toString())
       .set('approval_status', 'Awaiting review');

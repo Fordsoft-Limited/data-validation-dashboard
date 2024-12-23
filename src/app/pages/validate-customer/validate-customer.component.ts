@@ -155,7 +155,7 @@ export class ValidateCustomerComponent implements OnInit {
   loadCustomers(page: number, pageSize: number): void {
     this.loading = true; // Start loading before the request
 
-    this.customerService.getCustomerFilterByPages(page, pageSize).subscribe( 
+    this.customerService.getCustomerFilterByValidated(page, pageSize).subscribe( 
       (response) => {
         this.filteredNewCustomers = response.data?.results || []; 
         this.totalRecords = response?.data?.count
