@@ -68,7 +68,7 @@ export const layoutRoutes: Routes = [
           {
             path: 'customer-validation',
             canActivate: [roleGuard],
-            data:{breadcrumb: 'Customer Validation', roles: ['ADMIN', 'APPROVAL']},
+            data:{breadcrumb: 'Customer Validation', roles: ['ADMIN', 'APPROVAL','USER']},
             loadChildren: () =>
               import('../pages/customer-validation/customer-validation.module').then(
                 (m) => m.CustomerValidationModule
