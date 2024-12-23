@@ -47,8 +47,9 @@
                     <i class="pi pi-filter"></i>
                 </a>  
         
-                <a class="p-button p-button-outlined font-bold p-button-help custom-button">
-                    <i class="pi pi-refresh"></i>
+                <a class="p-button p-button-outlined font-bold p-button-help custom-button"
+                pTooltip="Download Template"  tooltipPosition="bottom">
+                    <i class="pi pi-download"></i>
                 </a>  
         
                 <button 
@@ -56,7 +57,7 @@
                     pButton
                     pRipple
                     class="p-button p-button-outlined font-bold p-button-help custom-button"
-                    icon="pi pi-download"
+                    icon="pi pi-eject "
                     (click)="exportData()"
                     pTooltip="Export to Excel"
                     tooltipPosition="bottom"
