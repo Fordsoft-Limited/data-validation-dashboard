@@ -7,6 +7,7 @@ import { TableRowCollapseEvent, TableRowExpandEvent } from 'primeng/table';
 import { ProductService } from '../../api/product.service';
 import { Product } from '../../model/user';
 import { catchError, Observable, of, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -46,6 +47,7 @@ export class CustomerValidationComponent {
   constructor(private productService: ProductService, private messageService: MessageService,
     private customerService: CustomerService,
     private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -80,6 +82,7 @@ getStatusSeverity(status: string): 'success' | 'secondary' | 'info' | 'warning' 
           return undefined; // Use undefined instead of 'unknown'
   }
 }
+
 
 
 
