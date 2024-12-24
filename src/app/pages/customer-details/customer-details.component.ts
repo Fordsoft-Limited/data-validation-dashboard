@@ -170,6 +170,7 @@ export class CustomerDetailsComponent implements OnInit {
     { name: 'Account Category', key: 'account_category' },
     { name: 'Connection Type', key: 'connection_type' },
     { name: "Customer's Nature of Business", key: 'cust_nature_of_business' },
+    { name: 'Generated Addresss',key: 'generated_address'},
     { name: 'Customer NIN', key: 'customer_nin' },
     { name: 'Customer Supply Type', key: 'customer_supply_type' },
     { name: 'Customer Estimated Load', key: 'customer_estimated_load' },
